@@ -10,10 +10,31 @@ Target Server Type    : MYSQL
 Target Server Version : 50534
 File Encoding         : 65001
 
-Date: 2018-05-30 14:47:53
+Date: 2018-06-05 16:13:24
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for administrater
+-- ----------------------------
+DROP TABLE IF EXISTS `administrater`;
+CREATE TABLE `administrater` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) DEFAULT NULL COMMENT '管理员账号',
+  `password` varchar(255) DEFAULT NULL COMMENT '管理员密码',
+  `gender` int(11) DEFAULT '0',
+  `phone` varchar(255) DEFAULT NULL COMMENT '手机号',
+  `question` varchar(255) DEFAULT NULL COMMENT '密保问题',
+  `answer` varchar(255) DEFAULT NULL COMMENT '密保问题答案',
+  `identity` int(11) DEFAULT NULL COMMENT '管理员身份 0：信息管理员   1：财务管理员  2：停车场管理员',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of administrater
+-- ----------------------------
+INSERT INTO `administrater` VALUES ('1', '123456', '123456', '0', '15639928163', null, null, null);
 
 -- ----------------------------
 -- Table structure for parklock
