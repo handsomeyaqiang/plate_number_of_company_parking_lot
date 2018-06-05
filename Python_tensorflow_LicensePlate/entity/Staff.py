@@ -48,4 +48,3 @@ class Staff:
 
     def getPhoneNB(self):
         return self._phoneNB
->>>>>>> a42b2f48ec12038f9332c32da8fb33a20569e9e8
