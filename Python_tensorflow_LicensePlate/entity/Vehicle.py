@@ -1,17 +1,16 @@
 
 class Vehicle:
-    def __init__(self, licensePlateNumber, owner,vehicle_identity,staff_id):
-        self.licensePlateNumber = licensePlateNumber
+    def __init__(self, PlateID, owner,vehicle_identity,SID):
+        self.PlateID = PlateID
         self.owner=owner
         self.vehicle_identity=vehicle_identity
-        self.vehicleQuantity = vehicle_identity
-        self.staff_id= staff_id
+        self.SID= SID
 
-    def setLicensePlateNumber(self,  licensePlateNumber):
-        self._licensePlateNumber = licensePlateNumber
+    def setPlateID(self,  PlateID):
+        self._PlateID = PlateID
 
-    def getLicensePlateNumber(self):
-        return self._licensePlateNumber
+    def getPlateID(self):
+        return self._PlateID
 
     def setOwner(self,owner):
         self._owner = owner
@@ -25,9 +24,9 @@ class Vehicle:
     def getVehicle_identity(self):
         return self._vehicle_identity
 
-    def setStaff_id(self,staff_id):
-        self._staff_id = staff_id
+    def setSID(self,SID):
+        self._SID = SID
 
     def getStaff_id(self):
-        return self._staff_id
+        return self._SID
 
