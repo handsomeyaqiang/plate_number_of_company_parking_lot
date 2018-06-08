@@ -1,10 +1,10 @@
 class Staff:
-    def __init__(self, name, staffNumber,vehicleQuantity,phoneNB,departure,gender):
+    def __init__(self, name, SID,vehicleQuantity,phoneNumber,departure,gender):
         self.name = name
-        self.staffNumber=staffNumber
+        self.SID=SID
         self.departure=departure
         self.vehicleQuantity = vehicleQuantity
-        self.phoneNB= phoneNB
+        self.phoneNumber= phoneNumber
         self.gender=gender
 
     def setName(self,  name):
@@ -25,17 +25,11 @@ class Staff:
     def getDeparture(self):
         return self._departure
 
-    def setStaffNumber(self,staffnum):
-        self._staffNumber = staffnum
+    def setSID(self,staffnum):
+        self._SID = staffnum
 
-    def getStaffNumber(self):
-        return self._staffNumber
-
-    def setDrivinglicenseNumber(self,DrivinglicenseNumber):
-        self._drivinglicenseNumber = DrivinglicenseNumber
-
-    def getDrivinglicenseNumber(self):
-        return self._drivinglicenseNumber
+    def getSID(self):
+        return self._SID
 
     def setVehicleQuantity(self,vehicleQuantity):
         self._vehicleQuantity = vehicleQuantity
@@ -43,8 +37,8 @@ class Staff:
     def getVehicleQuantity(self):
         return self._vehicleQuantity
 
-    def setPhoneNB(self,phoneNB):
-        self._phoneNB = phoneNB
+    def setPhoneNumber(self,phoneNumber):
+        self._phoneNumber = phoneNumber
 
-    def getPhoneNB(self):
-        return self._phoneNB
+    def getPhoneNumber(self):
+        return self._phoneNumber
