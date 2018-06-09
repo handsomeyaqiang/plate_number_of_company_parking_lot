@@ -8,21 +8,25 @@ class staffDao(object):
         self.staffDao = ''
 
     @abstractmethod
-    def _addStaff(self):
-            pass
+    def addStaff(self):
+        pass
 
     @abstractmethod
-    def _updateStaff(self,SID):
-            pass
+    def updateStaff(self,SID):
+        pass
 
     @abstractmethod
-    def _findStaffBySid(self,SID):
-            pass
+    def findStaffBySid(self,SID):
+        pass
 
     @abstractmethod
-    def _findStaffByName(self,name):
-            pass
+    def findStaffByName(self,name):
+        pass
 
     @abstractmethod
-    def _deleteStaff(self,SID):
-            pass
+    def showallStaff(self):
+        pass
+
+    @abstractmethod
+    def deleteStaff(self,SID):
+        pass

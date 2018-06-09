@@ -8,21 +8,25 @@ class VehicleDao(object):
         self.VehicleDao = ''
 
     @abstractmethod
-    def _addVehicle(self):
-            pass
+    def addVehicle(self):
+        pass
 
     @abstractmethod
-    def _updateVehicle(self,SID):
-            pass
+    def updateVehicle(self,SID):
+        pass
 
     @abstractmethod
-    def _findVehicleBySID(self,SID):
-            pass
+    def findVehicleBySID(self,SID):
+        pass
 
     @abstractmethod
-    def _findVehicleByPlateID(self,PlateID):
-            pass
+    def findVehicleByPlateID(self,PlateID):
+        pass
 
     @abstractmethod
-    def _deleteVehicle(self,SID):
-            pass
+    def showallVehicle(self):
+        pass
+
+    @abstractmethod
+    def deleteVehicle(self,SID):
+        pass
