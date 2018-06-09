@@ -162,3 +162,65 @@ INSERT INTO `vehicle` VALUES ('京B82343', 'wang', 'SSDFSDFESFS', '0004');
 INSERT INTO `vehicle` VALUES ('豫A55555', 'Tome', 'SDHDSBIEFSH', '0001');
 INSERT INTO `vehicle` VALUES ('豫B82343', 'wang', 'SFDSSESFSDF', '0004');
 INSERT INTO `vehicle` VALUES ('豫B88888', 'Jike', 'SDFHIESEFISS', '0002');
+
+
+SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for chargerules
+-- ----------------------------
+DROP TABLE IF EXISTS `chargerules`;
+CREATE TABLE `chargerules` (
+  `rid` int(11) NOT NULL COMMENT 'id主键',
+  `nightprice` double DEFAULT NULL COMMENT '夜间收费价格',
+  `nightbegintime` time NOT NULL COMMENT '夜间开始时间',
+  `nightendtime` time NOT NULL COMMENT '夜间结束时间',
+  `daybegintime` time DEFAULT NULL COMMENT '白天开始时间',
+  `dayendtime` time DEFAULT NULL COMMENT '白天结束时间',
+  `dayprice` double(10,0) DEFAULT NULL COMMENT '白天收费价格',
+  `dayfirsthourprice` double DEFAULT NULL COMMENT '白天第一个小时收费价格',
+  PRIMARY KEY (`rid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of chargerules
+-- ----------------------------
+INSERT INTO `chargerules` VALUES ('1', '5', '21:00:00', '07:00:00', '07:00:00', '21:00:00', '1', '2');
+
+
+/*
+Navicat MySQL Data Transfer
+
+Source Server         : localhost_3306
+Source Server Version : 50534
+Source Host           : localhost:3306
+Source Database       : company_parking_system
+
+Target Server Type    : MYSQL
+Target Server Version : 50534
+File Encoding         : 65001
+
+Date: 2018-06-09 17:21:10
+*/
+
+SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for financial
+-- ----------------------------
+DROP TABLE IF EXISTS `financial`;
+CREATE TABLE `financial` (
+  `Fid` int(11) NOT NULL AUTO_INCREMENT  COMMENT '主键' ,
+  `ParkPlaceID` int(11) DEFAULT NULL COMMENT '车位号',
+  `chargetime` datetime DEFAULT NULL COMMENT '收费时间',
+  `money` double DEFAULT NULL COMMENT '收费金额',
+  PRIMARY KEY (`Fid`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of financial
+-- ----------------------------
+INSERT INTO `financial` VALUES ('1', '1', '2018-06-09 13:39:26', '12');
+INSERT INTO `financial` VALUES ('2', '2', '2018-06-09 13:40:11', '10');
+INSERT INTO `financial` VALUES ('3', '1', '2018-05-01 13:40:46', '2');
+INSERT INTO `financial` VALUES ('4', '2', '2018-04-18 13:41:11', '3');
