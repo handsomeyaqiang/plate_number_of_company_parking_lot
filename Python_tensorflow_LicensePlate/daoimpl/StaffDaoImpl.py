@@ -7,7 +7,7 @@ class staffDaoImpl(StaffDao):
     def __init__(self):
         self.staffDaoImpl = ''
 
-    def _addStaff(self,Staff):
+    def addStaff(self,Staff):
         py =Pymysql.PyMySQLHelper
         sql = 'insert into staff(SId,vehicleQuantity,name,phoneNumber,gender,department) VALUES ({0},{1},{2},{3},{4},{5})'.format(
             Staff.SID, Staff.vehicleQuantity, Staff.name, Staff.phoneNumber, Staff.gender, Staff._department)
@@ -15,7 +15,7 @@ class staffDaoImpl(StaffDao):
         return count
 
 
-    def _updateStaff(self,Staff):
+    def updateStaff(self,Staff):
         py = Pymysql.PyMySQLHelper
         sql = 'update staff set (VehicleQuantity,name,phoneNumber,' \
               'gender,department) VALUES ({0},{1},{2},{3},{4})' \
@@ -24,14 +24,14 @@ class staffDaoImpl(StaffDao):
         return count
 
 
-    def _deleteStaff(self, SID):
+    def deleteStaff(self, SID):
         py = Pymysql.PyMySQLHelper
         sql = 'delete from staff WHERE SID = {0}'.format(SID)
         count = py.update(sql)
         return count
 
 
-    def _findStaffBySid(self, SID):
+    def findStaffBySid(self, SID):
         py = Pymysql.PyMySQLHelper
         sql = 'select * from staff where SID = {0}'.format(SID)
         result = py.selectalldictcursor(sql)
@@ -47,7 +47,7 @@ class staffDaoImpl(StaffDao):
             list.append(staff)
         return list
 
-    def _findStaffByName(self, name):
+    def findStaffByName(self, name):
         py = Pymysql.PyMySQLHelper
         sql = "select * from staff where name = '%s'"%(name)
         result = py.selectalldictcursor(sql)
@@ -63,7 +63,7 @@ class staffDaoImpl(StaffDao):
             list.append(staff)
         return list
 
-    def _showallStaff(self):
+    def showallStaff(self):
         py = Pymysql.PyMySQLHelper
         sql = 'select * from staff'
         result = py.selectalldictcursor(sql)
