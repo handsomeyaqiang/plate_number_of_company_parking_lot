@@ -110,3 +110,30 @@ class PyMySQLHelper:
             cur.close()
             conn.close()
 
+    def selectalldictcursor(self,sql):
+        """返回所有查找记录列表，且单条记录为字典类型"""
+        try:
+            conn = self.getConnection()
+            cur = conn.cursor(cursor = pymysql.cursors.DictCursor)
+            count = cur.execute(sql)
+            result = cur.fetchall()
+            return result
+        except pymysql.Error as e:
+            print("pymysql Error:%s" % e)
+        finally:
+            cur.close()
+            conn.close()
+
+    def selectOnedictcursor(self, sql):
+        """返回单行记录，且记录的类型为字典类型"""
+        try:
+            conn = self.getConnection()
+            cur = conn.cursor()
+            count = cur.execute(sql)
+            result = cur.fetchone()
+            return result
+        except pymysql.Error as e:
+            print("pymysql Error:%s" % e)
+        finally:
+            cur.close()
+            conn.close()
