@@ -1,8 +1,8 @@
 class Staff:
-    def __init__(self, name, SID,vehicleQuantity,phoneNumber,departure,gender):
+    def __init__(self, name, SID,vehicleQuantity,phoneNumber,department,gender):
         self.name = name
         self.SID=SID
-        self.departure=departure
+        self.department=department
         self.vehicleQuantity = vehicleQuantity
         self.phoneNumber= phoneNumber
         self.gender=gender
@@ -19,11 +19,11 @@ class Staff:
     def getGender(self):
         return self._gender
 
-    def setDeparture(self,departure):
-        self._departure = departure
+    def setDepartment(self,department):
+        self._department = department
 
-    def getDeparture(self):
-        return self._departure
+    def getDepartment(self):
+        return self._department
 
     def setSID(self,staffnum):
         self._SID = staffnum
