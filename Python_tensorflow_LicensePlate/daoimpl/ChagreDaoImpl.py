@@ -22,11 +22,11 @@ class ChargeRulesDaoImpl(ChargeRulesDao):
         rid = result ['rid']
         dayprice = result['dayprice']
         nightprice = result['nightprice']
-        daybegintime = result['daybigintime']
+        daybegintime = result['daybegintime']
         dayendtime = result['dayendtime']
         nightbegintime = result['nightbegintime']
         nightendtime = result['nightendtime']
-        firsthourprice = result['firsthourprice']
+        firsthourprice = result['dayfirsthourprice']
         chargerules = ChargeRules(rid,dayprice, nightprice, daybegintime, dayendtime,
                  nightbegintime, nightendtime, firsthourprice)
         return chargerules
