@@ -128,7 +128,7 @@ class PyMySQLHelper:
         """返回单行记录，且记录的类型为字典类型"""
         try:
             conn = self.getConnection()
-            cur = conn.cursor()
+            cur = conn.cursor(cursor = pymysql.cursors.DictCursor)
             count = cur.execute(sql)
             result = cur.fetchone()
             return result
