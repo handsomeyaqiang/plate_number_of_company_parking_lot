@@ -1,6 +1,7 @@
-from  Python_tensorflow_LicensePlate.entity.Record import Record
 from abc import ABCMeta, abstractmethod
-#抽象类
+
+
+# 抽象类
 class RecordDao(object):
     __metaclass__ = ABCMeta
 
@@ -8,10 +9,12 @@ class RecordDao(object):
         self.staffDao = ''
 
     @abstractmethod
-    def _findRecordByPlateID(self,PlateID):
+    def findRecordByPlateID(self, platenumber):
             pass
 
     @abstractmethod
-    def _findRecordByTime(self,InTime):
+    def findRecordByTime(self, intime):
             pass
-
+    @abstractmethod
+    def insertRecord(self, record):
+        pass

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50534
 File Encoding         : 65001
 
-Date: 2018-06-05 16:13:24
+Date: 2018-06-11 21:02:37
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -37,30 +37,45 @@ CREATE TABLE `administrater` (
 INSERT INTO `administrater` VALUES ('1', '123456', '123456', '0', '15639928163', null, null, null);
 
 -- ----------------------------
--- Table structure for parklock
+-- Table structure for chargerules
 -- ----------------------------
-DROP TABLE IF EXISTS `parklock`;
-CREATE TABLE `parklock` (
-  `ParkLockID` int(11) NOT NULL AUTO_INCREMENT COMMENT '车位锁的id默认自动递增',
-  `status` int(11) DEFAULT '0' COMMENT '车位锁的状态默认是关闭状态 0:关闭  1：打开',
-  PRIMARY KEY (`ParkLockID`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='车位锁表';
+DROP TABLE IF EXISTS `chargerules`;
+CREATE TABLE `chargerules` (
+  `rid` int(11) NOT NULL COMMENT 'id主键',
+  `nightprice` double DEFAULT NULL COMMENT '夜间收费价格',
+  `nightbegintime` time NOT NULL COMMENT '夜间开始时间',
+  `nightendtime` time NOT NULL COMMENT '夜间结束时间',
+  `daybegintime` time DEFAULT NULL COMMENT '白天开始时间',
+  `dayendtime` time DEFAULT NULL COMMENT '白天结束时间',
+  `dayprice` double(10,0) DEFAULT NULL COMMENT '白天收费价格',
+  `dayfirsthourprice` double DEFAULT NULL COMMENT '白天第一个小时收费价格',
+  PRIMARY KEY (`rid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of parklock
+-- Records of chargerules
 -- ----------------------------
-INSERT INTO `parklock` VALUES ('1', '0');
-INSERT INTO `parklock` VALUES ('2', '0');
-INSERT INTO `parklock` VALUES ('3', '0');
-INSERT INTO `parklock` VALUES ('4', '0');
-INSERT INTO `parklock` VALUES ('5', '0');
-INSERT INTO `parklock` VALUES ('6', '0');
-INSERT INTO `parklock` VALUES ('7', '0');
-INSERT INTO `parklock` VALUES ('8', '0');
-INSERT INTO `parklock` VALUES ('9', '0');
-INSERT INTO `parklock` VALUES ('10', '0');
-INSERT INTO `parklock` VALUES ('11', '0');
-INSERT INTO `parklock` VALUES ('12', '0');
+INSERT INTO `chargerules` VALUES ('1', '5', '21:00:00', '07:00:00', '07:00:00', '21:00:00', '1', '2');
+
+-- ----------------------------
+-- Table structure for financial
+-- ----------------------------
+DROP TABLE IF EXISTS `financial`;
+CREATE TABLE `financial` (
+  `Fid` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `ParkPlaceID` int(11) DEFAULT NULL COMMENT '车位号',
+  `chargetime` datetime DEFAULT NULL COMMENT '收费时间',
+  `money` double DEFAULT NULL COMMENT '收费金额',
+  PRIMARY KEY (`Fid`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of financial
+-- ----------------------------
+INSERT INTO `financial` VALUES ('1', '1', '2018-06-09 13:39:26', '12');
+INSERT INTO `financial` VALUES ('2', '2', '2018-06-09 13:40:11', '10');
+INSERT INTO `financial` VALUES ('3', '1', '2018-05-01 13:40:46', '2');
+INSERT INTO `financial` VALUES ('4', '2', '2018-04-18 13:41:11', '3');
 
 -- ----------------------------
 -- Table structure for parkplace
@@ -72,8 +87,7 @@ CREATE TABLE `parkplace` (
   `parkPlaceType` int(11) DEFAULT NULL COMMENT '车位的类型：外部类型：1，内部类型：0',
   `useCarNumber` varchar(255) DEFAULT NULL COMMENT '车位分配的车id车牌号',
   PRIMARY KEY (`parkPlaceID`),
-  KEY `ParkLockID` (`parkLockID`),
-  CONSTRAINT `parkplace_ibfk_1` FOREIGN KEY (`ParkLockID`) REFERENCES `parklock` (`ParkLockID`)
+  KEY `ParkLockID` (`parkLockID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='车位表';
 
 -- ----------------------------
@@ -97,25 +111,24 @@ INSERT INTO `parkplace` VALUES ('12', '12', '1', null);
 -- ----------------------------
 DROP TABLE IF EXISTS `record`;
 CREATE TABLE `record` (
-  `RID` int(11) NOT NULL AUTO_INCREMENT COMMENT '车辆进出记录的id默认自增',
-  `PNumber` varchar(255) DEFAULT NULL COMMENT '车牌号',
-  `inTime` datetime DEFAULT NULL COMMENT '车辆进入时间',
-  `outTime` datetime DEFAULT NULL COMMENT '车辆离开时间',
+  `rid` int(11) NOT NULL AUTO_INCREMENT COMMENT '车辆进出记录的id默认自增',
+  `platenumber` varchar(255) DEFAULT NULL COMMENT '车牌号',
+  `intime` datetime DEFAULT NULL COMMENT '车辆进入时间',
+  `outtime` datetime DEFAULT NULL COMMENT '车辆离开时间',
   `vehicletype` int(11) DEFAULT NULL COMMENT '车辆类型 0：内部车   1:外部车',
-  `fee` double DEFAULT '0' COMMENT '停车所交费用默认为0.0',
-  `feeStatus` int(11) DEFAULT '0' COMMENT '缴费状态默认是没有缴费  0：没交 1：交',
-  PRIMARY KEY (`RID`)
+  `feestatus` int(11) DEFAULT '0' COMMENT '缴费状态默认是没有缴费  0：没交 1：交',
+  PRIMARY KEY (`rid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='车辆进出记录表，有关车辆缴费状态及缴费情况，通过此表可以获取财务记录情况';
 
 -- ----------------------------
 -- Records of record
 -- ----------------------------
-INSERT INTO `record` VALUES ('1', '豫A55555', '2018-05-29 11:17:17', '2018-05-29 11:23:21', '0', '0', '0');
-INSERT INTO `record` VALUES ('2', '豫B55555', '2018-05-28 11:35:48', '2018-05-29 11:35:55', '1', '5.6', '1');
-INSERT INTO `record` VALUES ('3', '京RD34F4', '2018-05-22 15:00:58', '2018-05-22 20:01:19', '1', '15', '1');
-INSERT INTO `record` VALUES ('4', '豫B82343', '2018-05-23 15:01:46', '2018-05-24 15:01:50', '0', '0', '0');
-INSERT INTO `record` VALUES ('5', '豫S34234', '2018-05-08 15:04:45', '2018-05-09 15:04:48', '1', '6.3', '1');
-INSERT INTO `record` VALUES ('6', '京G34553', '2018-05-24 15:05:58', '2018-05-24 18:06:01', '1', '20', '1');
+INSERT INTO `record` VALUES ('1', '豫A55555', '2018-05-29 11:17:17', '2018-05-29 11:23:21', '0', '0');
+INSERT INTO `record` VALUES ('2', '豫B55555', '2018-05-28 11:35:48', '2018-05-29 11:35:55', '1', '1');
+INSERT INTO `record` VALUES ('3', '京RD34F4', '2018-05-22 15:00:58', '2018-05-22 20:01:19', '1', '1');
+INSERT INTO `record` VALUES ('4', '豫B82343', '2018-05-23 15:01:46', '2018-05-24 15:01:50', '0', '0');
+INSERT INTO `record` VALUES ('5', '豫S34234', '2018-05-08 15:04:45', '2018-05-09 15:04:48', '1', '1');
+INSERT INTO `record` VALUES ('6', '京G34553', '2018-05-24 15:05:58', '2018-05-24 18:06:01', '1', '1');
 
 -- ----------------------------
 -- Table structure for staff
@@ -162,65 +175,3 @@ INSERT INTO `vehicle` VALUES ('京B82343', 'wang', 'SSDFSDFESFS', '0004');
 INSERT INTO `vehicle` VALUES ('豫A55555', 'Tome', 'SDHDSBIEFSH', '0001');
 INSERT INTO `vehicle` VALUES ('豫B82343', 'wang', 'SFDSSESFSDF', '0004');
 INSERT INTO `vehicle` VALUES ('豫B88888', 'Jike', 'SDFHIESEFISS', '0002');
-
-
-SET FOREIGN_KEY_CHECKS=0;
-
--- ----------------------------
--- Table structure for chargerules
--- ----------------------------
-DROP TABLE IF EXISTS `chargerules`;
-CREATE TABLE `chargerules` (
-  `rid` int(11) NOT NULL COMMENT 'id主键',
-  `nightprice` double DEFAULT NULL COMMENT '夜间收费价格',
-  `nightbegintime` time NOT NULL COMMENT '夜间开始时间',
-  `nightendtime` time NOT NULL COMMENT '夜间结束时间',
-  `daybegintime` time DEFAULT NULL COMMENT '白天开始时间',
-  `dayendtime` time DEFAULT NULL COMMENT '白天结束时间',
-  `dayprice` double(10,0) DEFAULT NULL COMMENT '白天收费价格',
-  `dayfirsthourprice` double DEFAULT NULL COMMENT '白天第一个小时收费价格',
-  PRIMARY KEY (`rid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of chargerules
--- ----------------------------
-INSERT INTO `chargerules` VALUES ('1', '5', '21:00:00', '07:00:00', '07:00:00', '21:00:00', '1', '2');
-
-
-/*
-Navicat MySQL Data Transfer
-
-Source Server         : localhost_3306
-Source Server Version : 50534
-Source Host           : localhost:3306
-Source Database       : company_parking_system
-
-Target Server Type    : MYSQL
-Target Server Version : 50534
-File Encoding         : 65001
-
-Date: 2018-06-09 17:21:10
-*/
-
-SET FOREIGN_KEY_CHECKS=0;
-
--- ----------------------------
--- Table structure for financial
--- ----------------------------
-DROP TABLE IF EXISTS `financial`;
-CREATE TABLE `financial` (
-  `Fid` int(11) NOT NULL AUTO_INCREMENT  COMMENT '主键' ,
-  `ParkPlaceID` int(11) DEFAULT NULL COMMENT '车位号',
-  `chargetime` datetime DEFAULT NULL COMMENT '收费时间',
-  `money` double DEFAULT NULL COMMENT '收费金额',
-  PRIMARY KEY (`Fid`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of financial
--- ----------------------------
-INSERT INTO `financial` VALUES ('1', '1', '2018-06-09 13:39:26', '12');
-INSERT INTO `financial` VALUES ('2', '2', '2018-06-09 13:40:11', '10');
-INSERT INTO `financial` VALUES ('3', '1', '2018-05-01 13:40:46', '2');
-INSERT INTO `financial` VALUES ('4', '2', '2018-04-18 13:41:11', '3');
