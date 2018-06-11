@@ -1,23 +1,23 @@
-from abc import ABCMeta,abstractclassmethod
+from abc import ABCMeta,abstractmethod
 from Python_tensorflow_LicensePlate.entity.ParkLock import ParkLock
 
 
 class ParkLockDao (object):
     __metaclass__ = ABCMeta
 
-    @abstractclassmethod
+    @abstractmethod
     def findlock(self,parklockid):
         pass
-    @abstractclassmethod
+    @abstractmethod
     def addlock(self, parklock):
         pass
-    @abstractclassmethod
+    @abstractmethod
     def updateparklock(self,parklock):
         pass
-    @abstractclassmethod
+    @abstractmethod
     def deleteparklock(selfself, parklockid):
         pass
-    @abstractclassmethod
+    @abstractmethod
     def listlock(self):
         pass
 

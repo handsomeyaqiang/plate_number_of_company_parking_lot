@@ -1,37 +1,37 @@
 from  Python_tensorflow_LicensePlate.entity.ParkPlace import ParkPlace
-from abc import ABCMeta,abstractclassmethod
+from abc import ABCMeta,abstractmethod
 
 
 class ParkPlaceDao(object):
     """定义车位的操作方法的抽象类
     """
-    __metaclass__ = ABCMeta
+    metaclass = ABCMeta
 
-    @abstractclassmethod
+    @abstractmethod
 
     def find(self,parkplaceid):
         pass
-    @abstractclassmethod
+    @abstractmethod
     def findparkplace(self,parkplace):
         pass
-    @abstractclassmethod
+    @abstractmethod
     def updateparkplace(self,parkplace):
         pass
-    @abstractclassmethod
+    @abstractmethod
     def switchtotemp(self, parkplace):
          pass
-    @abstractclassmethod
+    @abstractmethod
     def switchtoinner(self, parkplace):
          pass
-    @abstractclassmethod
+    @abstractmethod
     def insertparkplace(self,parkplace):
         pass
-    @abstractclassmethod
+    @abstractmethod
     def deleteparkplace(selfself,parkplace):
         pass
-    @abstractclassmethod
+    @abstractmethod
     def updateparkplace(self,parkplace):
         pass
-    @abstractclassmethod
+    @abstractmethod
     def listall(self):
         pass

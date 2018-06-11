@@ -1,34 +1,34 @@
-from abc import ABCMeta, abstractclassmethod
+from abc import ABCMeta, abstractmethod
 
 
-class FinalcialDao(object):
+class FinancialDao(object):
 
     __metaclass__ = ABCMeta
-    @abstractclassmethod
+    @abstractmethod
     def insertfinalcial(self,finalcial):
         pass
-    @abstractclassmethod
+    @abstractmethod
     def deletefinalcial(self,finalcialid):
         pass
-    @abstractclassmethod
+    @abstractmethod
     def updatefinalcial(self,finalcial):
         pass
-    @abstractclassmethod
+    @abstractmethod
     def listfinalcialbyparkplaceid(self,parkplaceid):
         pass
-    @abstractclassmethod
+    @abstractmethod
     def listfinalcialbyyear(self,year):
         pass
-    @abstractclassmethod
+    @abstractmethod
     def listfinalcialbymonth(self,month):
         pass
-    @abstractclassmethod
+    @abstractmethod
     def listfinalcialbyday(self,day):
         pass
-    @abstractclassmethod
+    @abstractmethod
     def listfinalcialbyday(self,week):
         pass
-    @abstractclassmethod
+    @abstractmethod
     def listallfinalcial(self):
         pass
 

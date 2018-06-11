@@ -1,17 +1,17 @@
-from abc import ABCMeta, abstractclassmethod
+from abc import ABCMeta, abstractmethod
 
 from Python_tensorflow_LicensePlate.entity.ChargeRules import ChargeRules
 
 class ChargeRulesDao(object):
     __metaclass__ = ABCMeta
 
-    @abstractclassmethod
+    @abstractmethod
     def insertRules(self,chargerules):
         pass
-    @abstractclassmethod
+    @abstractmethod
     def updateRules(self,chargerules):
         pass
-    @abstractclassmethod
+    @abstractmethod
     def showRules(self):
         pass
 
