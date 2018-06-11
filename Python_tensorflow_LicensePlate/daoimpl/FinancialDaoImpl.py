@@ -37,7 +37,7 @@ class FinancialDaoImpl(FinancialDao):
 
 
     def listfinancialbyyear(self, year):
-        sql = 'select * from financial year(chargetime) = {0}'.format(year)
+        sql = 'select * from financial WHERE year(chargetime) = {0}'.format(year)
         result = PyMySQLHelper().selectalldictcursor(sql)
         list = []
         for rs in result:
@@ -50,7 +50,7 @@ class FinancialDaoImpl(FinancialDao):
         return list
 
     def listfinancialbymonth(self, month):
-        sql = 'select * from financial month(chargetime) = {0}'.format(month)
+        sql = 'select * from financial WHERE month(chargetime) = {0}'.format(month)
         result = PyMySQLHelper().selectalldictcursor(sql)
         list = []
         for rs in result:
@@ -63,7 +63,7 @@ class FinancialDaoImpl(FinancialDao):
         return list
 
     def listfinancialbyday(self, day):
-        sql = 'select * from financial day(chargetime) = {0}'.format(day)
+        sql = 'select * from financial WHERE day(chargetime) = {0}'.format(day)
         result = PyMySQLHelper().selectalldictcursor(sql)
         list = []
         for rs in result:
