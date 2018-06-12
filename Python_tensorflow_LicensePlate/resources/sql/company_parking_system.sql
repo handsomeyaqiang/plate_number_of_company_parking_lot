@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50534
 File Encoding         : 65001
 
-Date: 2018-06-11 21:02:37
+Date: 2018-06-12 14:18:23
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -83,28 +83,27 @@ INSERT INTO `financial` VALUES ('4', '2', '2018-04-18 13:41:11', '3');
 DROP TABLE IF EXISTS `parkplace`;
 CREATE TABLE `parkplace` (
   `parkPlaceID` int(11) NOT NULL AUTO_INCREMENT COMMENT '车位的id作为主键默认自动递增',
-  `parkLockID` int(11) DEFAULT NULL COMMENT '车位的外键指向车位锁的id',
+  `lockStatus` int(11) DEFAULT '0' COMMENT '车位锁状态：0：关闭  1：打开',
   `parkPlaceType` int(11) DEFAULT NULL COMMENT '车位的类型：外部类型：1，内部类型：0',
   `useCarNumber` varchar(255) DEFAULT NULL COMMENT '车位分配的车id车牌号',
-  PRIMARY KEY (`parkPlaceID`),
-  KEY `ParkLockID` (`parkLockID`)
+  PRIMARY KEY (`parkPlaceID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='车位表';
 
 -- ----------------------------
 -- Records of parkplace
 -- ----------------------------
-INSERT INTO `parkplace` VALUES ('1', '1', '0', null);
-INSERT INTO `parkplace` VALUES ('2', '2', '1', null);
-INSERT INTO `parkplace` VALUES ('3', '3', '1', null);
-INSERT INTO `parkplace` VALUES ('4', '4', '0', null);
-INSERT INTO `parkplace` VALUES ('5', '5', '0', null);
-INSERT INTO `parkplace` VALUES ('6', '6', '1', null);
-INSERT INTO `parkplace` VALUES ('7', '7', '1', null);
-INSERT INTO `parkplace` VALUES ('8', '8', '0', null);
-INSERT INTO `parkplace` VALUES ('9', '9', '1', null);
-INSERT INTO `parkplace` VALUES ('10', '10', '0', null);
-INSERT INTO `parkplace` VALUES ('11', '11', '0', null);
-INSERT INTO `parkplace` VALUES ('12', '12', '1', null);
+INSERT INTO `parkplace` VALUES ('1', '0', '0', null);
+INSERT INTO `parkplace` VALUES ('2', '0', '1', null);
+INSERT INTO `parkplace` VALUES ('3', '0', '1', null);
+INSERT INTO `parkplace` VALUES ('4', '0', '0', null);
+INSERT INTO `parkplace` VALUES ('5', '0', '0', null);
+INSERT INTO `parkplace` VALUES ('6', '0', '1', null);
+INSERT INTO `parkplace` VALUES ('7', '0', '1', null);
+INSERT INTO `parkplace` VALUES ('8', '0', '0', null);
+INSERT INTO `parkplace` VALUES ('9', '0', '1', null);
+INSERT INTO `parkplace` VALUES ('10', '0', '0', null);
+INSERT INTO `parkplace` VALUES ('11', '0', '0', null);
+INSERT INTO `parkplace` VALUES ('12', '0', '1', null);
 
 -- ----------------------------
 -- Table structure for record
