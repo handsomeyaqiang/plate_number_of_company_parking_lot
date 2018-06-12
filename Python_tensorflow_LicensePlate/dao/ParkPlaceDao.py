@@ -1,4 +1,3 @@
-from  Python_tensorflow_LicensePlate.entity.ParkPlace import ParkPlace
 from abc import ABCMeta,abstractmethod
 
 
@@ -12,16 +11,16 @@ class ParkPlaceDao(object):
     def find(self,parkplaceid):
         pass
     @abstractmethod
-    def findparkplace(self,parkplace):
+    def updatecarnumber(self, parkplace):
         pass
     @abstractmethod
     def updateparkplace(self,parkplace):
         pass
     @abstractmethod
-    def switchtotemp(self, parkplace):
+    def switchtotemp(self, parkplaceid):
          pass
     @abstractmethod
-    def switchtoinner(self, parkplace):
+    def switchtoinner(self, parkplaceid):
          pass
     @abstractmethod
     def insertparkplace(self,parkplace):
@@ -35,3 +34,16 @@ class ParkPlaceDao(object):
     @abstractmethod
     def listall(self):
         pass
+    @abstractmethod
+    def getcount(self,parkPlaceType):
+        pass
+    @abstractmethod
+    def getemptycount(self,parkPlaceType):
+        pass
+    @abstractmethod
+    def getinusecount(self,parkPlaceType):
+        pass
+    @abstractmethod
+    def updatelockstatus(self,lockstatus,parkPlaceID):
+        pass
+
