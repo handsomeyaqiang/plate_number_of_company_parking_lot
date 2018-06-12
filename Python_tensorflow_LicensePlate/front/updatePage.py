@@ -1,0 +1,100 @@
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file 'updatePage.ui'
+#
+# Created by: PyQt5 UI code generator 5.10.1
+#
+# WARNING! All changes made in this file will be lost!
+import sys
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+class Ui_Form(object):
+    def setupUi(self, Form):
+        Form.setObjectName("Form")
+        Form.resize(400, 300)
+        self.gridLayoutWidget = QtWidgets.QWidget(Form)
+        self.gridLayoutWidget.setGeometry(QtCore.QRect(90, 40, 211, 150))
+        self.gridLayoutWidget.setObjectName("gridLayoutWidget")
+        self.gridLayout = QtWidgets.QGridLayout(self.gridLayoutWidget)
+        self.gridLayout.setContentsMargins(0, 0, 0, 0)
+        self.gridLayout.setObjectName("gridLayout")
+        self.car_lineEdit = QtWidgets.QLineEdit(self.gridLayoutWidget)
+        self.car_lineEdit.setObjectName("car_lineEdit")
+        self.gridLayout.addWidget(self.car_lineEdit, 1, 2, 1, 1)
+        self.label_4 = QtWidgets.QLabel(self.gridLayoutWidget)
+        self.label_4.setObjectName("label_4")
+        self.gridLayout.addWidget(self.label_4, 4, 0, 1, 1)
+        self.label_2 = QtWidgets.QLabel(self.gridLayoutWidget)
+        self.label_2.setObjectName("label_2")
+        self.gridLayout.addWidget(self.label_2, 2, 0, 1, 1)
+        self.label_3 = QtWidgets.QLabel(self.gridLayoutWidget)
+        self.label_3.setObjectName("label_3")
+        self.gridLayout.addWidget(self.label_3, 3, 0, 1, 1)
+        self.label_5 = QtWidgets.QLabel(self.gridLayoutWidget)
+        self.label_5.setObjectName("label_5")
+        self.gridLayout.addWidget(self.label_5, 5, 0, 1, 1)
+        self.label = QtWidgets.QLabel(self.gridLayoutWidget)
+        self.label.setObjectName("label")
+        self.gridLayout.addWidget(self.label, 1, 0, 1, 1)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.radioButton = QtWidgets.QRadioButton(self.gridLayoutWidget)
+        self.radioButton.setObjectName("radioButton")
+        self.horizontalLayout.addWidget(self.radioButton)
+        self.radioButton_2 = QtWidgets.QRadioButton(self.gridLayoutWidget)
+        self.radioButton_2.setObjectName("radioButton_2")
+        self.horizontalLayout.addWidget(self.radioButton_2)
+        self.gridLayout.addLayout(self.horizontalLayout, 4, 2, 1, 1)
+        self.phone_lineEdit = QtWidgets.QLineEdit(self.gridLayoutWidget)
+        self.phone_lineEdit.setObjectName("phone_lineEdit")
+        self.gridLayout.addWidget(self.phone_lineEdit, 3, 2, 1, 1)
+        self.depart_lineEdit = QtWidgets.QLineEdit(self.gridLayoutWidget)
+        self.depart_lineEdit.setObjectName("depart_lineEdit")
+        self.gridLayout.addWidget(self.depart_lineEdit, 5, 2, 1, 1)
+        self.name_lineEdit = QtWidgets.QLineEdit(self.gridLayoutWidget)
+        self.name_lineEdit.setObjectName("name_lineEdit")
+        self.gridLayout.addWidget(self.name_lineEdit, 2, 2, 1, 1)
+        self.label_6 = QtWidgets.QLabel(self.gridLayoutWidget)
+        self.label_6.setObjectName("label_6")
+        self.gridLayout.addWidget(self.label_6, 0, 0, 1, 1)
+        self.lineEdit = QtWidgets.QLineEdit(self.gridLayoutWidget)
+        self.lineEdit.setObjectName("lineEdit")
+        self.gridLayout.addWidget(self.lineEdit, 0, 2, 1, 1)
+        self.horizontalLayoutWidget_2 = QtWidgets.QWidget(Form)
+        self.horizontalLayoutWidget_2.setGeometry(QtCore.QRect(140, 220, 160, 25))
+        self.horizontalLayoutWidget_2.setObjectName("horizontalLayoutWidget_2")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget_2)
+        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.pushButton = QtWidgets.QPushButton(self.horizontalLayoutWidget_2)
+        self.pushButton.setObjectName("pushButton")
+        self.horizontalLayout_2.addWidget(self.pushButton)
+        self.pushButton_2 = QtWidgets.QPushButton(self.horizontalLayoutWidget_2)
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.horizontalLayout_2.addWidget(self.pushButton_2)
+
+        self.retranslateUi(Form)
+        QtCore.QMetaObject.connectSlotsByName(Form)
+
+    def retranslateUi(self, Form):
+        _translate = QtCore.QCoreApplication.translate
+        Form.setWindowTitle(_translate("Form", "Form"))
+        self.label_4.setText(_translate("Form", " 性 别："))
+        self.label_2.setText(_translate("Form", " 姓 名："))
+        self.label_3.setText(_translate("Form", "手机号："))
+        self.label_5.setText(_translate("Form", " 部 门："))
+        self.label.setText(_translate("Form", "车辆数："))
+        self.radioButton.setText(_translate("Form", "女"))
+        self.radioButton_2.setText(_translate("Form", "男"))
+        self.label_6.setText(_translate("Form", " 工 号："))
+        self.pushButton.setText(_translate("Form", "确定"))
+        self.pushButton_2.setText(_translate("Form", "取消"))
+
+if __name__ == '__main__':
+
+    app = QtWidgets.QApplication(sys.argv)
+    mainWindow = QtWidgets.QMainWindow()
+    ui =Ui_Form()
+    ui.setupUi(mainWindow)
+    mainWindow.show()
+    sys.exit(app.exec_())
