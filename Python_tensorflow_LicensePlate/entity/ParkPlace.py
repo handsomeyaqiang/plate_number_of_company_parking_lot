@@ -1,9 +1,9 @@
 class ParkPlace:
     '停车位类'
 
-    def __init__(self, parkPlaceID, parklockID, parkPlaceType,userCarNumber):
+    def __init__(self, parkPlaceID, lockStatus, parkPlaceType,userCarNumber):
         self.parkPlaceID = parkPlaceID
-        self.parklockID = parklockID
+        self.lockStatus = lockStatus
         self.parkPlaceType = parkPlaceType
         self.userCarNumber = userCarNumber
 
