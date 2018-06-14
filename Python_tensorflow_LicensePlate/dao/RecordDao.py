@@ -9,9 +9,20 @@ class RecordDao(object):
     def findRecordByPlateID(self, platenumber):
         pass
 
+
+    def findRecordByYear(self, outTime):
+            pass
+
+
     @abstractmethod
-    def findRecordByTime(self, intime):
-        pass
+    def findRecordByMonth(self, outTime):
+            pass
+
+
+    @abstractmethod
+    def findRecordByDay(self, outTime):
+            pass
+
 
     @abstractmethod
     def insertRecord(self, record):
