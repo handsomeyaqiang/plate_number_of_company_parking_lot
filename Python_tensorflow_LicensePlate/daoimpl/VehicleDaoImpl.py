@@ -2,7 +2,7 @@ from Python_tensorflow_LicensePlate.entity.Vehicle import Vehicle
 from Python_tensorflow_LicensePlate.dao.VehicleDao import VehicleDao
 from ..utils import Pymysql
 #实现类
-class staffDaoImpl(VehicleDao):
+class VehilceDaoImpl(VehicleDao):
     def __init__(self):
         self.VehicleDaoImpl = ''
 
