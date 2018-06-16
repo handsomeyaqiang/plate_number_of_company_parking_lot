@@ -4,31 +4,40 @@ from abc import ABCMeta, abstractmethod
 class FinancialDao(object):
 
     __metaclass__ = ABCMeta
+
     @abstractmethod
-    def insertfinalcial(self,finalcial):
+    def insertfinancial(self,finalcial):
         pass
+
     @abstractmethod
-    def deletefinalcial(self,finalcialid):
+    def deletefinancial(self,finalcialid):
         pass
+
     @abstractmethod
-    def updatefinalcial(self,finalcial):
+    def updatefinancial(self,finalcial):
         pass
+
     @abstractmethod
-    def listfinalcialbyparkplaceid(self,parkplaceid):
+    def listfinancialbyparkplaceid(self,parkplaceid):
         pass
+
     @abstractmethod
-    def listfinalcialbyyear(self,year):
+    def listfinancialbyyear(self,year):
         pass
+
     @abstractmethod
-    def listfinalcialbymonth(self,month):
+    def listfinancialbymonth(self,month):
         pass
+
     @abstractmethod
-    def listfinalcialbyday(self,day):
+    def listfinancialbyday(self,day):
         pass
+
     @abstractmethod
-    def listfinalcialbyday(self,week):
+    def listfinancialbyday(self,week):
         pass
+
     @abstractmethod
-    def listallfinalcial(self):
+    def listallfinancial(self):
         pass
 
