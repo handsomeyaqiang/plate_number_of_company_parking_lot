@@ -36,7 +36,7 @@ class ChargeRulesDaoImpl(ChargeRulesDao):
                                   nightbegintime, nightendtime, firsthourprice)
         return chargerules
 
-    # 转换时间戳
+
 
     def chargemoney(self, rule, starttime, endtime):
         # 第一次的开始时间戳
