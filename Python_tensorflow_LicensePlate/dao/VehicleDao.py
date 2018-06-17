@@ -13,7 +13,7 @@ class VehicleDao(object):
 
     #修改车辆信息
     @abstractmethod
-    def updateVehicle(self,SID):
+    def updateVehicle(self,Vehicle):
         pass
 
     #通过员工号查找车辆信息

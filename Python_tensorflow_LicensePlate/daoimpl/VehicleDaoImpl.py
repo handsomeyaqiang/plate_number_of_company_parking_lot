@@ -15,7 +15,7 @@ class VehilceDaoImpl(VehicleDao):
         return count
 
     # 修改车辆信息
-    def updateVehicle(self,SID):
+    def updateVehicle(self,Vehicle):
         py = Pymysql.PyMySQLHelper
         sql = 'update vehicle set (PlateID,owner,vehicle_identity) VALUES ({0},{1},{2})' \
               ' WHERE SID = {3}'.format(Vehicle.PlateID,Vehicle.owner,Vehicle.vehicle_identity)
