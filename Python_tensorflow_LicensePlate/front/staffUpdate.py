@@ -13,12 +13,15 @@ class Update_Ui(QWidget):
         self.ui = Ui_Form()
         self.ui.setupUi(self)
 
-        self.setWindowTitle("修改信息页面")
+        self.setWindowTitle("修改职工信息页面")
         self.ui.name_lineEdit.setFrame(False)  # 无边框
         self.ui.phone_lineEdit.setFrame(False)
         self.ui.depart_lineEdit.setFrame(False)
         self.ui.car_lineEdit.setFrame(False)
         self.ui.lineEdit.setFrame(False)
+
+        self.ui.pushButton.setIcon(QIcon("sure.png"))
+        self.ui.pushButton_2.setIcon(QIcon("cancle.png"))
 
         # 清除
         self.ui.car_lineEdit.setClearButtonEnabled(True)
@@ -30,6 +33,16 @@ class Update_Ui(QWidget):
         # 槽函数
         self.ui.pushButton.clicked.connect(self.DB_insert)
         self.ui.pushButton_2.clicked.connect(self.clearInput)
+
+    def closeEvent(self, QCloseEvent):
+        reply = QMessageBox.question(self, '提示',
+                                     "确定退出？", QMessageBox.Yes |
+                                     QMessageBox.No, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            QCloseEvent.accept()
+        else:
+            QCloseEvent.ignore()
+
     def clearInput(self):
         self.ui.lineEdit.setText('')
         self.ui.name_lineEdit.setText('')

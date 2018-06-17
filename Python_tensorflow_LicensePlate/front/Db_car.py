@@ -1,7 +1,7 @@
 import sys
 import pymysql
 from CarInformation import *
-from updateCarInfo import *
+from Db_updateCar import *
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
@@ -265,10 +265,10 @@ class carManage(QtWidgets.QMainWindow):
                         # 传入id rows[i][0]
                         self.ui.tableWidget.setCellWidget(i, j + 1, self.buttonForRow(str(rows[i][0])))
 
-            self.ui.statusbar.showMessage("<font color='red'>查询成功</font>")
+            self.ui.statusbar.showMessage("查询成功")
         except Exception:
 
-            self.ui.statusbar.showMessage("<font color='red'>查询异常</font>", 2000)
+            self.ui.statusbar.showMessage("查询异常", 2000)
 
         # 查询语句
 

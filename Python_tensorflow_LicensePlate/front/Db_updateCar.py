@@ -20,7 +20,8 @@ class Update_Ui(QWidget):
         self.ui.car_lineEdit.setFrame(False)
         self.ui.num_lineEdit.setFrame(False)
 
-
+        self.ui.pushButton.setIcon(QIcon("sure.png"))
+        self.ui.clear_pushButton.setIcon(QIcon("cancle.png"))
         # 清除
         self.ui.car_lineEdit.setClearButtonEnabled(True)
         self.ui.Chejia_lineEdit.setClearButtonEnabled(True)
@@ -30,6 +31,16 @@ class Update_Ui(QWidget):
         # 槽函数
         self.ui.pushButton.clicked.connect(self.DB_insert)
         self.ui.clear_pushButton.clicked.connect(self.clearInput)
+
+    def closeEvent(self, QCloseEvent):
+        reply = QMessageBox.question(self, '提示',
+                                     "确定退出？", QMessageBox.Yes |
+                                     QMessageBox.No, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            QCloseEvent.accept()
+        else:
+            QCloseEvent.ignore()
+
     def clearInput(self):
 
         self.ui.name_lineEdit.clear()

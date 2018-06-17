@@ -1,6 +1,6 @@
 import sys
 import pymysql
-from updateP import *
+from staffUpdate import *
 # from updatePage import *    直接调用ui转化来的文件闪退，还是需第三方py文件调用
 from TableAndButton import *
 from PyQt5.QtWidgets import *
@@ -45,6 +45,7 @@ class tableB(QtWidgets.QMainWindow):
         self.ui.pushButton.clicked.connect(self.DB_query) # 查找所有
         self.ui.add_pushButton.clicked.connect(self.DB_add)# 添加员工
         self.ui.pushButton_2.clicked.connect(self.QueryBySid)
+        self.ui.exit_pushButton.clicked.connect(self.close)  # 直接调用closeEvent函数报错，用自带的close方法间接调用
 
     def buttonForRow(self, id):
         widget = QWidget()
@@ -85,7 +86,14 @@ class tableB(QtWidgets.QMainWindow):
         widget.setLayout(hLayout)
         return widget
 
-
+    def closeEvent(self, QCloseEvent):
+        reply = QMessageBox.question(self, '提示',
+                                     "确定退出？", QMessageBox.Yes |
+                                     QMessageBox.No, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            QCloseEvent.accept()
+        else:
+            QCloseEvent.ignore()
     def DeleteTip(self, id):
         reply = QMessageBox.question(self, '提示',
                                      "确定删除吗？", QMessageBox.Yes |
