@@ -37,7 +37,8 @@ class FinancialDaoImpl(FinancialDao):
             ParkPlaceID = rs['ParkPlaceID']
             chargetime = rs['chargetime']
             money = rs['money']
-            financial = Financial(Fid,ParkPlaceID,chargetime,money)
+            financial = Financial(ParkPlaceID,chargetime,money)
+            financial.Fid = Fid
             list.append(financial)
         return list
 
@@ -53,7 +54,8 @@ class FinancialDaoImpl(FinancialDao):
             ParkPlaceID = rs['ParkPlaceID']
             chargetime = rs['chargetime']
             money = rs['money']
-            financial = Financial(Fid, ParkPlaceID, chargetime, money)
+            financial = Financial( ParkPlaceID, chargetime, money)
+            financial.Fid = Fid
             list.append(financial)
         return list
 
@@ -70,7 +72,8 @@ class FinancialDaoImpl(FinancialDao):
             ParkPlaceID = rs['ParkPlaceID']
             chargetime = rs['chargetime']
             money = rs['money']
-            financial = Financial(Fid, ParkPlaceID, chargetime, money)
+            financial = Financial( ParkPlaceID, chargetime, money)
+            financial.Fid = Fid
             list.append(financial)
         return list
 
@@ -87,7 +90,8 @@ class FinancialDaoImpl(FinancialDao):
             ParkPlaceID = rs['ParkPlaceID']
             chargetime = rs['chargetime']
             money = rs['money']
-            financial = Financial(Fid, ParkPlaceID, chargetime, money)
+            financial = Financial( ParkPlaceID, chargetime, money)
+            financial.Fid = Fid
             list.append(financial)
         return list
 
@@ -101,6 +105,7 @@ class FinancialDaoImpl(FinancialDao):
             ParkPlaceID = rs['ParkPlaceID']
             chargetime = rs['chargetime']
             money = rs['money']
-            financial = Financial(Fid, ParkPlaceID, chargetime, money)
+            financial = Financial( ParkPlaceID, chargetime, money)
+            financial.Fid = Fid
             list.append(financial)
         return list

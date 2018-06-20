@@ -11,12 +11,14 @@ class ParkPlaceImpl(ParkPlaceDao):
         :param parkplaceid: 车位id
         :return: ParkPlace对象
         """
-        sql = 'select * from parkplace where parkPlaceID = {0}'.format(parkplaceid)
+        sql = 'select * from parkplace where parkPlaceID = %s' %(parkplaceid)
         result = PyMySQLHelper().selectOnedictcursor(sql)
-        parkplace = ParkPlace(result['parkPlaceID'],result['lockStatus'],result[' parkPlaceType'],result['userCarNumber'])
-
-        return parkplace
-
+        if result != None:
+            parkplace = ParkPlace(result['lockStatus'],result['parkPlaceType'],result['useCarNumber'])
+            parkplace.parkPlaceID =result['parkPlaceID']
+            return parkplace
+        else:
+            return -1
     def updatecarnumber(self,parkplace):
         """更新车位中的车辆，车辆进入时写入车牌号
         车辆离开时将车牌号切换为null
@@ -25,8 +27,7 @@ class ParkPlaceImpl(ParkPlaceDao):
         :return:返回受影响行数
         """
 
-        sql = ('update  parkplace  set userCarNumber = {0} where parkPlaceID = '
-               '{1}'.format(parkplace.userCarNumber,parkplace.parkPlaceID))
+        sql = ('update  parkplace  set useCarNumber = %s where parkPlaceID = %s' %(parkplace.useCarNumber,parkplace.parkPlaceID))
         count = PyMySQLHelper().update(sql)
         return count
 
@@ -37,7 +38,7 @@ class ParkPlaceImpl(ParkPlaceDao):
         :return: 受影响记录条数
         """
         sql = ('update  parkplace  set parkPlaceType = 1 where parkPlaceID =(%s) '
-               +str(parkplaceid))
+               %(parkplaceid))
         count = PyMySQLHelper().update(sql)
         return count
 
@@ -46,7 +47,7 @@ class ParkPlaceImpl(ParkPlaceDao):
         :param parkplaceid: 车位id
         :return: 受影响记录条数
         """
-        sql = 'update  parkplace  set parkPlaceType = 0 where parkPlaceID =(%s) ' + str(parkplaceid)
+        sql = 'update  parkplace  set parkPlaceType = 0 where parkPlaceID =(%s) '%(parkplaceid)
         count = PyMySQLHelper().update(sql)
         return count
 
@@ -57,8 +58,8 @@ class ParkPlaceImpl(ParkPlaceDao):
         :return: 返回插入条数
         """
         sql = 'insert into  parkplace  (lockStatus,parkPlaceType)VALUES (%s,%s)'
-        params = (parkplace.parklockID,parkplace.parkPlaceType)
-        count = PyMySQLHelper().update(sql,params)
+        params = (parkplace.lockStatus,parkplace.parkPlaceType)
+        count = PyMySQLHelper().updateByParam(sql,params)
         return count
 
     def deleteparkplace(selfself, parkplaceid):
@@ -67,7 +68,7 @@ class ParkPlaceImpl(ParkPlaceDao):
         :param parkplaceid:车位号
         :return:
         """
-        sql = 'delete from  parkplace  WHERE parkPlaceID='+str(parkplaceid)
+        sql = 'delete from  parkplace  WHERE parkPlaceID=%s'%(parkplaceid)
 
         count = PyMySQLHelper().update(sql)
         return count
@@ -77,9 +78,9 @@ class ParkPlaceImpl(ParkPlaceDao):
         :param parkplace:车位
         :return:
         """
-        sql = 'update  parkplace set (lockStatus,parkPlaceType,userCarNumber)VALUES (%s,%s,%s)'
-        params = (parkplace.lockStatus,parkplace.parkPlaceType,parkplace.userCarNumber)
-        count = PyMySQLHelper().update(sql,params)
+        sql = 'update  parkplace set lockStatus = %s,parkPlaceType = %s,useCarNumber =%s  Where parkPlaceID =%s'
+        params = (parkplace.lockStatus,parkplace.parkPlaceType,parkplace.useCarNumber,parkplace.parkPlaceID)
+        count = PyMySQLHelper().updateByParam(sql,params)
         return count
 
     def listall(self):
@@ -90,8 +91,8 @@ class ParkPlaceImpl(ParkPlaceDao):
         result = PyMySQLHelper().selectalldictcursor(sql)
         list = []
         for rs in result:
-            parkplace = ParkPlace(rs['parklockID'],rs['lockStatus'],rs['parkPlaceType'],
-                                  rs['userCarNumber'])
+            parkplace = ParkPlace(rs['lockStatus'],rs['parkPlaceType'],rs['useCarNumber'])
+            parkplace.parkPlaceID = rs['parkPlaceID']
             list.append(parkplace)
 
         return list
@@ -101,8 +102,7 @@ class ParkPlaceImpl(ParkPlaceDao):
         :param parkPlaceType: 车位类型，0：内部车位,1：临时车车位
         :return:数量
         """
-        sql = ('SELECT COUNT(parkPlaceType) FROM parkplace WHERE parkPlaceType = '
-               '{0}'.format(parkPlaceType))
+        sql = ('SELECT COUNT(parkPlaceType) FROM parkplace WHERE parkPlaceType = %s'%(parkPlaceType))
         rs = PyMySQLHelper().selectOnedictcursor(sql)
         count = rs['COUNT(parkPlaceType)']
         return count
@@ -113,7 +113,7 @@ class ParkPlaceImpl(ParkPlaceDao):
         :return: 数量
         """
         sql = ('SELECT COUNT(parkPlaceType) FROM parkplace WHERE'
-               ' parkPlaceType = {0} and useCarNumber is  NULL').format(parkPlaceType)
+               ' parkPlaceType = %s and useCarNumber is  NULL') %(parkPlaceType)
         rs = PyMySQLHelper().selectOnedictcursor(sql)
         count = rs['COUNT(parkPlaceType)']
         return  count
@@ -125,7 +125,7 @@ class ParkPlaceImpl(ParkPlaceDao):
         :return: 数量
         """
         sql = ('SELECT COUNT(parkPlaceType) FROM parkplace WHERE'
-               ' parkPlaceType = {0} and useCarNumber is NOT NULL').format(parkPlaceType)
+               ' parkPlaceType = %s and useCarNumber is NOT NULL')%(parkPlaceType)
         rs = PyMySQLHelper().selectOnedictcursor(sql)
         count = rs['COUNT(parkPlaceType)']
         return count
@@ -136,7 +136,7 @@ class ParkPlaceImpl(ParkPlaceDao):
         :param parkplace: 车位锁状态 0：关闭 1：打开
         :return:
         """
-        sql =( 'update parkplace set lockStatus = {0} '
-               'WHERE  parkPlaceID = {1}'.format(lockstatus,parkPlaceID))
+        sql =( 'update parkplace set lockStatus = %s '
+               'WHERE  parkPlaceID = %s'%(lockstatus,parkPlaceID))
         count = PyMySQLHelper().update(sql)
         return count
