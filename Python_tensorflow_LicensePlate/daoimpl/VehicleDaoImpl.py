@@ -49,9 +49,9 @@ class VehilceDaoImpl(VehicleDao):
         list = []
         for rs in result:
             SID = rs['SID']
-            PlateID=['PlateID']
-            owner=['owner']
-            vehicle_identity=['vehicle_identity']
+            PlateID=rs['PlateID']
+            owner=rs['owner']
+            vehicle_identity=rs['vehicle_identity']
             vehicle = Vehicle(SID,PlateID, owner, vehicle_identity)
             list.append(vehicle)
         return list
@@ -64,9 +64,9 @@ class VehilceDaoImpl(VehicleDao):
         list = []
         for rs in result:
             SID = rs['SID']
-            PlateID = ['PlateID']
-            owner = ['owner']
-            vehicle_identity = ['vehicle_identity']
+            PlateID = rs['PlateID']
+            owner = rs['owner']
+            vehicle_identity =rs['vehicle_identity']
             vehicle = Vehicle(SID,PlateID, owner, vehicle_identity)
             list.append(vehicle)
         return list
@@ -81,9 +81,9 @@ class VehilceDaoImpl(VehicleDao):
         list = []
         for rs in result:
             SID = rs['SID']
-            PlateID=['PlateID']
-            owner=['owner']
-            vehicle_identity=['vehicle_identity']
+            PlateID=rs['PlateID']
+            owner=rs['owner']
+            vehicle_identity=rs['vehicle_identity']
             vehicle = Vehicle(SID,PlateID,owner,vehicle_identity)
             list.append(vehicle)
         return list
