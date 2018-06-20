@@ -31,7 +31,12 @@ class VehicleDao(object):
     def showallVehicle(self):
         pass
 
-    #删除车辆信息
+    #根据员工号删除车辆信息
     @abstractmethod
-    def deleteVehicle(self,SID):
+    def deleteVehicleBySID(self,SID):
+        pass
+
+    #根据车牌号删除车辆信息
+    @abstractmethod
+    def deleteVehicleByPlateID(self,PlateID):
         pass
