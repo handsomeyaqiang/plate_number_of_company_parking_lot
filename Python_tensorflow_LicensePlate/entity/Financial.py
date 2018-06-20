@@ -1,8 +1,9 @@
-class Financial():
+class Financial(object):
     '财务报表类'
-    def __init__(self, Fid,ParkPlaceID, chargetime, money):
+    def __init__(self,ParkPlaceID, chargetime, money):
         self.ParkPlaceID = ParkPlaceID
         self.chargetime = chargetime
         self.money = money
         self.Fid = None
+
 
