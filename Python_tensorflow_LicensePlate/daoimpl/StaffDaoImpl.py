@@ -17,24 +17,24 @@ class staffDaoImpl(staffDao):
 
     #修改员工信息实现
     def updateStaff(self,Staff):
-        py = Pymysql.PyMySQLHelper
-        sql = 'update staff set (VehicleQuantity,name,phoneNumber,' \
-              'gender,department) VALUES ({0},{1},{2},{3},{4})' \
-              ' WHERE SID = {5}'.format(Staff.vehicleQuantity,Staff.name,Staff.phoneNumber,Staff.phoneNumber,Staff.gender,Staff.department)
-        count = py.update(sql)
+        py = Pymysql.PyMySQLHelper()
+        sql = 'update staff set VehicleQuantity=%s,name=%s,phoneNumber=%s,gender=%s,department=%s WHERE SID =%s'
+        params=(Staff.vehicleQuantity,Staff.name,Staff.phoneNumber,Staff.gender,Staff.department,Staff.SID)
+        count = py.updateByParam(sql, params)
         return count
 
     #删除员工信息实现
     def deleteStaff(self, SID):
-        py = Pymysql.PyMySQLHelper
-        sql = 'delete from staff WHERE SID = {0}'.format(SID)
-        count = py.update(sql)
+        py = Pymysql.PyMySQLHelper()
+        sql = 'delete from staff WHERE SID =%s'
+        params = (SID)
+        count = py.updateByParam(sql, params)
         return count
 
     #根据工号查找员工信息实现
     def findStaffBySid(self, SID):
-        py = Pymysql.PyMySQLHelper
-        sql = 'select * from staff where SID = {0}'.format(SID)
+        py = Pymysql.PyMySQLHelper()
+        sql = "select * from staff where SID ='%s'"%(SID)
         result = py.selectalldictcursor(sql)
         list = []
         for rs in result:
@@ -44,13 +44,13 @@ class staffDaoImpl(staffDao):
             phoneNumber=rs['phoneNumber']
             gender=rs['gender']
             department=rs['department']
-            staff = Staff(SID, VehicleQuantity,name,phoneNumber,gender,department)
+            staff = Staff(name, SID, VehicleQuantity, phoneNumber, department, gender)
             list.append(staff)
         return list
 
     #根据员工姓名查找员工信息实现
     def findStaffByName(self, name):
-        py = Pymysql.PyMySQLHelper
+        py = Pymysql.PyMySQLHelper()
         sql = "select * from staff where name = '%s'"%(name)
         result = py.selectalldictcursor(sql)
         list = []
@@ -61,7 +61,7 @@ class staffDaoImpl(staffDao):
             phoneNumber=rs['phoneNumber']
             gender=rs['gender']
             department=rs['department']
-            staff = Staff(SID, VehicleQuantity,name,phoneNumber,gender,department)
+            staff = Staff(name, SID, VehicleQuantity, phoneNumber, department, gender)
             list.append(staff)
         return list
 
