@@ -7,11 +7,12 @@ class staffDaoImpl(staffDao):
         self.staffDaoImpl = ''
 
     #添加员工信息实现
-    def addStaff(self,Staff):
-        py =Pymysql.PyMySQLHelper
-        sql = 'insert into staff(SId,vehicleQuantity,name,phoneNumber,gender,department) VALUES ({0},{1},{2},{3},{4},{5})'.format(
-            Staff.SID, Staff.vehicleQuantity, Staff.name, Staff.phoneNumber, Staff.gender, Staff._department)
-        count = py.update(sql)
+    def addStaff(self,staff):
+        py =Pymysql.PyMySQLHelper()
+        sql = 'insert into staff(SID,vehicleQuantity,name,phoneNumber,gender,department) ' \
+              'VALUES (%s,%s,%s,%s,%s,%s)'
+        params = (staff.SID, staff.vehicleQuantity, staff.name, staff.phoneNumber, staff.gender, staff.department)
+        count = py.updateByParam(sql, params)
         return count
 
     #修改员工信息实现
@@ -66,18 +67,18 @@ class staffDaoImpl(staffDao):
 
     #显示所有员工信息实现
     def showallStaff(self):
-        py = Pymysql.PyMySQLHelper
+        py = Pymysql.PyMySQLHelper()
         sql = 'select * from staff'
         result = py.selectalldictcursor(sql)
         list = []
         for rs in result:
             SID = rs['SID']
-            VehicleQuantity=rs['VehicleQuantity']
+            VehicleQuantity=rs['vehicleQuantity']
             name=rs['name']
             phoneNumber=rs['phoneNumber']
             gender=rs['gender']
             department=rs['department']
-            staff = Staff(SID, VehicleQuantity,name,phoneNumber,gender,department)
+            staff = Staff(name,SID, VehicleQuantity,phoneNumber,department,gender)
             list.append(staff)
         return list
 

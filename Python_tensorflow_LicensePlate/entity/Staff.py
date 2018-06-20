@@ -7,38 +7,41 @@ class Staff:
         self.phoneNumber= phoneNumber
         self.gender=gender
 
+    # def __init__(self):
+    #     print("hello")
+
     def setName(self,  name):
-        self._name = name
+        self.name = name
 
     def getName(self):
-        return self._name
+        return self.name
 
     def setGender(self,gender):
-        self._gender = gender
+        self.gender = gender
 
     def getGender(self):
-        return self._gender
+        return self.gender
 
     def setDepartment(self,department):
-        self._department = department
+        self.department = department
 
     def getDepartment(self):
-        return self._department
+        return self.department
 
     def setSID(self,staffnum):
-        self._SID = staffnum
+        self.SID = staffnum
 
     def getSID(self):
-        return self._SID
+        return self.SID
 
     def setVehicleQuantity(self,vehicleQuantity):
-        self._vehicleQuantity = vehicleQuantity
+        self.vehicleQuantity = vehicleQuantity
 
     def getVehicleQuantity(self):
-        return self._vehicleQuantity
+        return self.vehicleQuantity
 
     def setPhoneNumber(self,phoneNumber):
-        self._phoneNumber = phoneNumber
+        self.phoneNumber = phoneNumber
 
     def getPhoneNumber(self):
-        return self._phoneNumber
+        return self.phoneNumber

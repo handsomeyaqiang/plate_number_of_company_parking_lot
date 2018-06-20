@@ -4,6 +4,8 @@ from staffUpdate import *
 # from updatePage import *    直接调用ui转化来的文件闪退，还是需第三方py文件调用
 from TableAndButton import *
 from PyQt5.QtWidgets import *
+from Python_tensorflow_LicensePlate.entity.Staff import Staff
+from Python_tensorflow_LicensePlate.controller.StaffController import StaffController
 
 # 导入文件的顺序不同会导致文件类识别异常，原因未知
 from PyQt5 import QtWidgets, QtCore, QtGui
@@ -173,7 +175,7 @@ class tableB(QtWidgets.QMainWindow):
     def DB_update(self, id):
         # 引入更新界面
         self.ui = Update_Ui()
-        self.ui.clear(id)
+        self.ui.update(id)
         self.ui.show()
 
 
@@ -221,40 +223,30 @@ class tableB(QtWidgets.QMainWindow):
 
 
     def DB_query(self):
-        # 获得查询的类型
-        category = self.ui.comboBox.currentText()
-        sql = "select Sid, vehicleQuantity, name, phone, gender,  department  from staff"
-        try:
-            conn = pymysql.connect(host='127.0.0.1',
-                                   port=3306, user='root', password='271996', db='db_car', charset='utf8')
-            cursor = conn.cursor()
-            cursor.execute(sql)
-            rows = cursor.fetchall()
-            row = cursor.rowcount       # 取得记录个数，获得表格的行数
-            col = len(rows[0])          # 取得得每个记录的字段数，获得表格的列数
-            cursor.close()
-            conn.close()
-
+        sc = StaffController()
+        result = sc.showStaff()
+        if result.status == 200:
+            row = len(result.data)
+            col = ["SID","vehicleQuantity","name","phoneNumber","gender","department"]
             self.ui.tableWidget.setRowCount(row)  # 控件的名字保持一致，切莫想当然
-            self.ui.tableWidget.setColumnCount(col+1)  # 加1，开辟一列放操作按钮
+            self.ui.tableWidget.setColumnCount(len(col)+1)  # 加1，开辟一列放操作按钮
             self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
             self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers)   # 将单元格设为不可更改类型
 
             for i in range(row):
-                for j in range(col):
-                    temp_data = rows[i][j]  # 临时记录，不能直接插入表格
+                for j in range(len(col)):
+                    staff = result.data[i]
+                    temp_data = staff.__getattribute__(col[j]) # 临时记录，不能直接插入表格
                     data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
                     self.ui.tableWidget.setItem(i, j, data)
                     # 数据库因为从0开始计数，所以列数减一
-                    if j == col-1:
+                    if j == len(col)-1:
                         # print(rows[i][0])
                         # 传入id rows[i][0]
-                        self.ui.tableWidget.setCellWidget(i, j+1, self.buttonForRow(str(rows[i][0])))
-
-
+                        staff = result.data[i]
+                        self.ui.tableWidget.setCellWidget(i, j+1, self.buttonForRow(str(staff.__getattribute__(col[0]))))
             self.ui.statusbar.showMessage("<font color='#ff0000'>查询成功</font>")
-        except Exception:
-
+        else:
             self.ui.statusbar.showMessage("<font color='#ff0000'>查询异常</font>", 2000) # 单引号包围font 井号会报错
 
 
