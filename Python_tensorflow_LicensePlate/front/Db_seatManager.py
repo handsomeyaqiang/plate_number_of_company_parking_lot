@@ -1,11 +1,14 @@
 from seatManage import *
+from Db_SeatUpdate import *
+from Python_tensorflow_LicensePlate.front.Db_SeatUpdate import *
 import sys
 import pymysql
 from PyQt5.QtWidgets import *
-from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QWidget
 from PyQt5 .QtGui import *
-from PyQt5.QtCore import *
+
+
 class SeatManage(QWidget):
     def __init__(self):
         super(SeatManage, self).__init__()
@@ -36,7 +39,7 @@ class SeatManage(QWidget):
         self.ui.pushButton_5.clicked.connect(self.clearInput)  # 清空车位设置的输入
         self.ui.pushButton_8.clicked.connect(self.operateSeat2) # 车位操作的控制逻辑函数
 
-
+    # 删除修改的按钮函数
     def buttonForRow(self, id):
         widget = QWidget()
         # 修改
@@ -65,7 +68,9 @@ class SeatManage(QWidget):
         hLayout.setContentsMargins(5, 2, 5, 2)
         widget.setLayout(hLayout)
         return widget
-    # 车位锁的打开关闭按钮
+
+
+    # 车位锁的打开关闭按钮函数
     def buttonForRow1(self, id):
         widget = QWidget()
         # 修改
@@ -146,8 +151,11 @@ class SeatManage(QWidget):
                 OK = QMessageBox.information(self, ("提示"), ("删除成功"))
             except Exception:
                 self.ui.statusbar.showMessage("删除异常", 2000)
-
-
+    # 修改 车位设置的信息
+    def DB_update(self, id):
+        self.ui = Update_seat()
+        self.ui.ShowUpdate(id)
+        self.ui.show()
     # 车位初始详情
     def seatDetailed(self):
         self.ui.tableWidget_2.show()
@@ -363,7 +371,7 @@ class SeatManage(QWidget):
         self.ui.tableWidget_2.hide()
         self.ui.tableWidget_3.hide()
 
-    # 操作车位设置的逻辑
+    # 操作车位设置的逻辑，车位总数，临时车位数目，员工车位数目
     def seatSet1(self):
         # 获得界面输入
         seatNum = self.ui.lineEdit.text()
