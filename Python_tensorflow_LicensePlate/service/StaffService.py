@@ -15,18 +15,21 @@ class StaffService(object):
 
     #删除员工信息
     def deleteStaff(self,SID):
-        count=staffDaoImpl().deleteStaff(SID)
-        if count==0:
-            return False
-        return True
+        result = ParkResult()
+        try:
+            staffDaoImpl().deleteStaff(SID)
+            return result.ok()
+        except:
+            return result.error("删除员工失败！")
 
     #修改员工信息
     def updateStaff(self,Staff):
-        count=staffDaoImpl().updateStaff(Staff)
-        if count==0:
-            return False
-        else:
-            return True
+        result = ParkResult()
+        try:
+            staffDaoImpl().updateStaff(Staff)
+            return result.ok()
+        except:
+            return result.error("修改员工失败！")
 
     #员工信息展示
     def showStaff(self):
@@ -41,20 +44,26 @@ class StaffService(object):
 
     #按照工号查询员工信息
     def findStaffById(self,SID):
-        list = staffDaoImpl.findStaffByName(SID)
-        if len(list) == 0:
-            return False
-        else:
-            return list
+        result = ParkResult()
+        try:
+            s = staffDaoImpl()
+            list = s.findStaffBySid(SID)
+            return result.ok(list)
+        except Exception as e:
+            print(e)
+            return result.error("查询员工信息失败！")
 
 
     # 按照员工姓名查找员工信息
     def findStaffByName(self,name):
-        list=staffDaoImpl.findStaffByName(name)
-        if len(list)==0:
-            return False
-        else:
-            return list
+        result = ParkResult()
+        try:
+            s = staffDaoImpl()
+            list = s.findStaffByName(name)
+            return result.ok(list)
+        except Exception as e:
+            print(e)
+            return result.error("查询员工信息失败！")
 
 
 
