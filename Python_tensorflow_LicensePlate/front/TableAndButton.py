@@ -121,6 +121,7 @@ class Ui_MainWindow(object):
         self.comboBox.addItem("")
         self.comboBox.addItem("")
         self.comboBox.addItem("")
+
         self.horizontalLayout_2.addWidget(self.comboBox)
         self.pushButton_2 = QtWidgets.QPushButton(self.horizontalLayoutWidget_2)
         self.pushButton_2.setObjectName("pushButton_2")
