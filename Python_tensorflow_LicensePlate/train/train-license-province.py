@@ -17,7 +17,10 @@ HEIGHT = 40
 NUM_CLASSES = 6
 iterations = 300
 
-SAVER_DIR = "train-saver/province/"
+SAVER_DIR = "../resources/model/province/"
+TRAIN_DIR = "../resources/train-images/training-set/"
+VALIDATION_DIR = "../resources/train-images/validation-set/"
+PREDICT_DIR = "../resource/images/splitplateimages/"
 
 PROVINCES = ("京", "闽", "粤", "苏", "沪", "浙")
 nProvinceIndex = 0
@@ -47,7 +50,7 @@ def train():
     # 第一次遍历图片目录是为了获取图片总数
     input_count = 0
     for i in range(0, NUM_CLASSES):
-        dir = './train_images/training-set/chinese-characters/%s/' % i  # 这里可以改成你自己的图片目录，i为分类标签
+        dir = TRAIN_DIR + "%s/" % i  # 这里可以改成你自己的图片目录，i为分类标签
         for rt, dirs, files in os.walk(dir):
             for filename in files:
                 input_count += 1
@@ -59,7 +62,7 @@ def train():
     # 第二次遍历图片目录是为了生成图片数据和标签
     index = 0
     for i in range(0, NUM_CLASSES):
-        dir = './train_images/training-set/chinese-characters/%s/' % i  # 这里可以改成你自己的图片目录，i为分类标签
+        dir = TRAIN_DIR + "%s/" % i  # 这里可以改成你自己的图片目录，i为分类标签
         for rt, dirs, files in os.walk(dir):
             for filename in files:
                 filename = dir + filename
@@ -80,7 +83,7 @@ def train():
     # 第一次遍历图片目录是为了获取验证图片总数
     val_count = 0
     for i in range(0, NUM_CLASSES):
-        dir = './train_images/validation-set/chinese-characters/%s/' % i  # 这里可以改成你自己的图片目录，i为分类标签
+        dir = VALIDATION_DIR + "%s/" % i  # 这里可以改成你自己的图片目录，i为分类标签
         for rt, dirs, files in os.walk(dir):
             for filename in files:
                 val_count += 1
@@ -92,7 +95,7 @@ def train():
     # 第二次遍历图片目录是为了生成验证图片数据和标签
     index = 0
     for i in range(0, NUM_CLASSES):
-        dir = './train_images/validation-set/chinese-characters/%s/' % i  # 这里可以改成你自己的图片目录，i为分类标签
+        dir = VALIDATION_DIR + "%s/" % i  # 这里可以改成你自己的图片目录，i为分类标签
         for rt, dirs, files in os.walk(dir):
             for filename in files:
                 filename = dir + filename
@@ -238,7 +241,7 @@ def predict():
         conv = tf.nn.softmax(tf.matmul(h_fc1_drop, W_fc2) + b_fc2)
 
         for n in range(1, 2):
-            path = "../chepai/%s.jpg" % (n)
+            path = PREDICT_DIR + "%s.jpg" % n
             img = Image.open(path)
             width = img.size[0]
             height = img.size[1]

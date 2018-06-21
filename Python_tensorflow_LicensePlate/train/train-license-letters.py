@@ -17,7 +17,10 @@ HEIGHT = 40
 NUM_CLASSES = 26
 iterations = 500
 
-SAVER_DIR = "train-saver/letters/"
+SAVER_DIR = "../resources/model/letter/"
+TRAIN_DIR = "../resources/train-images/training-set/"
+VALIDATION_DIR = "../resources/train-images/validation-set/"
+PREDICT_DIR = "../resource/images/splitplateimages/"
 
 LETTERS_DIGITS = (
 "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
@@ -49,7 +52,7 @@ def train():
     # 第一次遍历图片目录是为了获取图片总数
     input_count = 0
     for i in range(0 + 10, NUM_CLASSES + 10):
-        dir = './train_images/training-set/letters/%s/' % i  # 这里可以改成你自己的图片目录，i为分类标签
+        dir = TRAIN_DIR + "%s/" % i  # 这里可以改成你自己的图片目录，i为分类标签
         for rt, dirs, files in os.walk(dir):
             for filename in files:
                 input_count += 1
@@ -61,7 +64,7 @@ def train():
     # 第二次遍历图片目录是为了生成图片数据和标签
     index = 0
     for i in range(0 + 10, NUM_CLASSES + 10):
-        dir = './train_images/training-set/letters/%s/' % i  # 这里可以改成你自己的图片目录，i为分类标签
+        dir = TRAIN_DIR + "%s/" % i  # 这里可以改成你自己的图片目录，i为分类标签
         for rt, dirs, files in os.walk(dir):
             for filename in files:
                 filename = dir + filename
@@ -82,7 +85,7 @@ def train():
                 # 第一次遍历图片目录是为了获取图片总数
     val_count = 0
     for i in range(0 + 10, NUM_CLASSES + 10):
-        dir = './train_images/validation-set/%s/' % i  # 这里可以改成你自己的图片目录，i为分类标签
+        dir = VALIDATION_DIR + "%s/" % i  # 这里可以改成你自己的图片目录，i为分类标签
         for rt, dirs, files in os.walk(dir):
             for filename in files:
                 val_count += 1
@@ -94,7 +97,7 @@ def train():
     # 第二次遍历图片目录是为了生成图片数据和标签
     index = 0
     for i in range(0 + 10, NUM_CLASSES + 10):
-        dir = './train_images/validation-set/%s/' % i  # 这里可以改成你自己的图片目录，i为分类标签
+        dir = VALIDATION_DIR + "%s/" % i  # 这里可以改成你自己的图片目录，i为分类标签
         for rt, dirs, files in os.walk(dir):
             for filename in files:
                 filename = dir + filename
@@ -239,7 +242,7 @@ def predict():
         conv = tf.nn.softmax(tf.matmul(h_fc1_drop, W_fc2) + b_fc2)
 
         for n in range(2, 3):
-            path = "./chepai/%s.bmp" % (n)
+            path = PREDICT_DIR + "%s.jpg" % n
             img = Image.open(path)
             width = img.size[0]
             height = img.size[1]
