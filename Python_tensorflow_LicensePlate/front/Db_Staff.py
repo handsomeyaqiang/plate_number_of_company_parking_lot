@@ -1,7 +1,7 @@
 import sys
 import pymysql
 from staffUpdate import *
-# from updatePage import *    直接调用ui转化来的文件闪退，还是需第三方py文件调用
+#from updatePage import *    #直接调用ui转化来的文件闪退，还是需第三方py文件调用
 from TableAndButton import *
 from PyQt5.QtWidgets import *
 from Python_tensorflow_LicensePlate.entity.Staff import Staff
@@ -49,6 +49,8 @@ class tableB(QtWidgets.QMainWindow):
         self.ui.pushButton_2.clicked.connect(self.QueryBySid)
         self.ui.exit_pushButton.clicked.connect(self.close)  # 直接调用closeEvent函数报错，用自带的close方法间接调用
         self.ui.pushButton_3.clicked.connect(self.clearInput)
+
+
     def buttonForRow(self, id):
         widget = QWidget()
         # 修改
@@ -253,45 +255,17 @@ class tableB(QtWidgets.QMainWindow):
 
     # 删除  先根据id删除数据，然后查找所有刷新展示页面
     def DB_delete(self, id):
-        sql = "delete  from staff where Sid = '" + id + "'"
-        print(sql)
-        if id != '':
-            try:
-                conn = pymysql.connect(host='127.0.0.1',
-                                       port=3306, user='root', password='271996', db='db_car', charset='utf8')
-                cursor = conn.cursor()
-                cursor.execute(sql)
-                conn.commit()
-                sql_all ="select Sid, vehicleQuantity, name, phone, gender,  department  from staff"
-                cursor.execute(sql_all)
-                rows = cursor.fetchall()
-                row = cursor.rowcount  # 取得记录个数，获得表格的行数
-                col = len(rows[0])  # 取得得每个记录的字段数，获得表格的列数
-                cursor.close()
-                conn.close()
+        sc = StaffController()
+        result = sc.delStaff(id)
+        if result.status == 200:
+            #self.ui.tableWidget()
+            #self.ui.QApplication.processEvents()
+            #填入表格刷新函数：
 
-                self.ui.tableWidget.setRowCount(row)  # 控件的名字保持一致，切莫想当然
-                self.ui.tableWidget.setColumnCount(col + 1)  # 加1，开辟一列放操作按钮
-                self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
-                self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
+            OK = QMessageBox.information(self, ("提示："), ("""删除成功！"""))
+        elif result.status == 400:
+            OK = QMessageBox.information(self, ("提示："), ("""删除失败！"""))  # 单引号包围font 井号会报错
 
-                for i in range(row):
-                    for j in range(col):
-                        temp_data = rows[i][j]  # 临时记录，不能直接插入表格
-                        data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
-                        self.ui.tableWidget.setItem(i, j, data)
-                        # 数据库因为从0开始计数，所以列数减一
-                        if j == col - 1:
-                            # print(rows[i][0])
-                            # 传入id rows[i][0]
-                            self.ui.tableWidget.setCellWidget(i, j + 1, self.buttonForRow(str(rows[i][0])))
-
-                cursor.close()
-                conn.close()
-                OK = QMessageBox.information(self, ("提示"), ("删除成功"))
-            except Exception:
-
-                self.ui.statusbar.showMessage("删除异常", 2000)
 
 
     def DB_query(self):
