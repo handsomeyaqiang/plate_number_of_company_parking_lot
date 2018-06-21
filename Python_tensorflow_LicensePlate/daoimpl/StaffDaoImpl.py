@@ -39,7 +39,7 @@ class staffDaoImpl(staffDao):
         list = []
         for rs in result:
             SID = rs['SID']
-            VehicleQuantity=rs['VehicleQuantity']
+            VehicleQuantity=rs['vehicleQuantity']
             name=rs['name']
             phoneNumber=rs['phoneNumber']
             gender=rs['gender']
@@ -56,11 +56,31 @@ class staffDaoImpl(staffDao):
         list = []
         for rs in result:
             SID = rs['SID']
-            VehicleQuantity=rs['VehicleQuantity']
+            VehicleQuantity=rs['vehicleQuantity']
             name=rs['name']
             phoneNumber=rs['phoneNumber']
             gender=rs['gender']
             department=rs['department']
+            staff = Staff(name, SID, VehicleQuantity, phoneNumber, department, gender)
+            list.append(staff)
+        return list
+
+
+
+        # 根据部门查找员工信息实现
+
+    def findStaffByDepartment(self,depart):
+        py = Pymysql.PyMySQLHelper()
+        sql = "select * from staff where department = '%s'" % (depart)
+        result = py.selectalldictcursor(sql)
+        list = []
+        for rs in result:
+            SID = rs['SID']
+            VehicleQuantity = rs['vehicleQuantity']
+            name = rs['name']
+            phoneNumber = rs['phoneNumber']
+            gender = rs['gender']
+            department = rs['department']
             staff = Staff(name, SID, VehicleQuantity, phoneNumber, department, gender)
             list.append(staff)
         return list

@@ -4,25 +4,13 @@ from Python_tensorflow_LicensePlate.entity.Staff import Staff
 class StaffController:
 
     def insertStaff(self, StaffNum, carNum, name, phone, gender, department):
-        staff = Staff()
-        staff.setDepartment(department)
-        staff.setGender(gender)
-        staff.setName(name)
-        staff.setPhoneNumber(phone)
-        staff.setSID(StaffNum)
-        staff.setVehicleQuantity(carNum)
+        staff = Staff(name,StaffNum,carNum,phone,department,gender)
         s = StaffService()
         result = s.addStaff(staff)
         return result
 
     def updStaff(self, StaffNum, carNum, name, phone, gender, department):
-        staff = Staff()
-        staff.setDepartment(department)
-        staff.setGender(gender)
-        staff.setName(name)
-        staff.setPhoneNumber(phone)
-        staff.setSID(StaffNum)
-        staff.setVehicleQuantity(carNum)
+        staff = Staff(name, StaffNum, carNum, phone, department, gender)
         s = StaffService()
         result = s.updateStaff(staff)
         return result
@@ -42,6 +30,10 @@ class StaffController:
     def findStaffByname(self,sname):
         s = StaffService()
         return s.findStaffByName(sname)
+
+    def findStaffBydepart(self,depart):
+        s = StaffService()
+        return s.findStaffByDepart(depart)
 
 
 

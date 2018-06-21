@@ -26,6 +26,11 @@ class staffDao(object):
     def findStaffByName(self,name):
         pass
 
+    #根据员工部门查找员工
+    @abstractmethod
+    def findStaffByDepartment(self,depart):
+        pass
+
     #显示所有员工
     @abstractmethod
     def showallStaff(self):
