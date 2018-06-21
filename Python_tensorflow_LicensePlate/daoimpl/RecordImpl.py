@@ -18,75 +18,89 @@ class RecordImpl(RecordDao):
 
     # 根据车辆记录的id删除记录
     def deleteRecordByRid(self, rid):
-        sql = "delete from record where rid = {0}".format(rid)
-        Pymysql.PyMySQLHelper.update(sql)
+        py = Pymysql.PyMySQLHelper()
+        sql = 'delete from record WHERE rid =%s'
+        params = (rid)
+        count = py.updateByParam(sql, params)
+        return count
 
     # 根据车辆记录的车牌号删除记录
     def deleteRecordByPlateNumber(self, platenumber):
-        sql = "delete from record where platenumber = {0}".format(platenumber)
-        Pymysql.PyMySQLHelper.update(sql)
+        py = Pymysql.PyMySQLHelper()
+        sql = 'delete from record WHERE platenumber =%s'
+        params = (platenumber)
+        count = py.updateByParam(sql, params)
+        return count
 
     #根据车牌号查找车辆记录
     def findRecordByPlateID(self, platenumber):
-        py = Pymysql.PyMySQLHelper
-        sql = 'select * from record where PNumber = {0}'.format(platenumber)
+        py = Pymysql.PyMySQLHelper()
+        sql = "select * from record where platenumber = '%s'"%(platenumber)
         result = py.selectalldictcursor(sql)
         list = []
         for rs in result:
-            PNumber = rs['PNumber']
+            rid=rs['rid']
+            PNumber = rs['platenumber']
             intime = rs['intime']
             outtime = rs['outtime']
             vehicletype = rs['vehicletype']
             feestatus = rs['feestatus']
-            record = Record(PNumber, intime, outtime, vehicletype, feestatus)
+            record = Record(rid,PNumber, intime, outtime, vehicletype, feestatus)
             list.append(record)
         return list
 
+
     # 根据车辆离开时间按年查找车辆记录
     def findRecordByYear(self, year):
-        py = Pymysql.PyMySQLHelper
-        sql = 'select * from record where year(outtime) = {0}'.format(year)
-        result = py.selectalldictcursor(sql)
+        py = Pymysql.PyMySQLHelper()
+        sql = "select * from record WHERE DATE_FORMAT(outtime,'%%Y') = %s"
+        params = (year)
+        result=py.selectAllByParam(sql,params)
         list = []
         for rs in result:
-            PNumber = rs['PNumber']
+            rid=rs['rid']
+            PNumber = rs['platenumber']
             intime = rs['intime']
             outtime = rs['outtime']
             vehicletype = rs['vehicletype']
             feestatus = rs['feestatus']
-            record = Record(PNumber, intime, outtime, vehicletype, feestatus)
+            record = Record(rid,PNumber, intime, outtime, vehicletype, feestatus)
             list.append(record)
         return list
 
     # 根据车辆离开时间按月查找车辆记录
     def findRecordByMonth(self, month):
-        py = Pymysql.PyMySQLHelper
-        sql = 'select * from record where month(outtime) = {0}'.format(month)
-        result = py.selectalldictcursor(sql)
+        py = Pymysql.PyMySQLHelper()
+        sql = "select * from record WHERE DATE_FORMAT(outtime,'%%Y-%%m') = %s"
+        params = (month)
+        result = py.selectAllByParam(sql, params)
         list = []
         for rs in result:
-            PNumber = rs['PNumber']
+            rid = rs['rid']
+            PNumber = rs['platenumber']
             intime = rs['intime']
             outtime = rs['outtime']
             vehicletype = rs['vehicletype']
             feestatus = rs['feestatus']
-            record = Record(PNumber, intime, outtime, vehicletype, feestatus)
+            record = Record(rid, PNumber, intime, outtime, vehicletype, feestatus)
             list.append(record)
         return list
 
     # 根据车辆离开时间按日查找车辆记录
     def findRecordByDay(self, day):
-        py = Pymysql.PyMySQLHelper
-        sql = 'select * from record where day(outtime) = {0}'.format(day)
-        result = py.selectalldictcursor(sql)
+        py = Pymysql.PyMySQLHelper()
+        sql = "select * from record WHERE DATE_FORMAT(outtime,'%%Y-%%m-%%d') = %s"
+        params = (day)
+        result = py.selectAllByParam(sql, params)
         list = []
         for rs in result:
-            PNumber = rs['PNumber']
+            rid = rs['rid']
+            PNumber = rs['platenumber']
             intime = rs['intime']
             outtime = rs['outtime']
             vehicletype = rs['vehicletype']
             feestatus = rs['feestatus']
-            record = Record(PNumber, intime, outtime, vehicletype, feestatus)
+            record = Record(rid, PNumber, intime, outtime, vehicletype, feestatus)
             list.append(record)
         return list
 
