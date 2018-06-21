@@ -158,7 +158,7 @@ class ParkPlaceService(object):
             print(e)
             return result.error("打开车位锁失败！")
 
-    def updateparkplacetype(self, parkplace):
+    def updateparkplace(self, parkplace):
         """更新车位"""
         result = ParkResult.ParkResult()
         try:
