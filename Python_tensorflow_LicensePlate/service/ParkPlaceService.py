@@ -49,7 +49,7 @@ class ParkPlaceService(object):
             print(e)
             return result.error("增加内部车位失败！")
 
-    def deleteparkplacenyid(self, parkplaceid):
+    def deleteparkplacebyid(self, parkplaceid):
         """删除车位，传入参数为车位号"""
         result = ParkResult.ParkResult()
         try:
