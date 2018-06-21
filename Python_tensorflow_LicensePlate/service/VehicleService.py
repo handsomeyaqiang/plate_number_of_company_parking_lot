@@ -43,7 +43,7 @@ class VehicleService(object):
 
 
     # 按照车牌号查找车辆信息
-    def findStaffByName(self,pid):
+    def findVehicleByPlateNum(self,pid):
         list=VehilceDaoImpl().findVehicleByPlateID(pid)
         if len(list)==0:
             return False
