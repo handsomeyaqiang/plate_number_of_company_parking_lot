@@ -2,6 +2,10 @@ import sys
 import cv2
 import numpy as np
 
+DIR_RECEIVED_IMAGES = "../../resources/images/receivedplateimages"
+DIR_MIDEL_IMAGES = "../../resources/images/midledimages"
+DIR_SPLIT_IMAGES = "../../resources/images/splitplateimages"
+
 # 车牌预处理
 def preprocess(gray):
     # 高斯平滑
@@ -103,17 +107,18 @@ def detect(img):
     img_org2 = img.copy()
     img_plate = img_org2[y1:y2, x1:x2]
     cv2.imshow('number plate', img_plate)
-    cv2.imwrite('number_plate.jpg', img_plate)
+    cv2.imwrite(DIR_MIDEL_IMAGES+'/number_plate.jpg', img_plate)
 
     cv2.namedWindow('img', cv2.WINDOW_NORMAL)
     cv2.imshow('img', img)
 
     # 带轮廓的图片
-    cv2.imwrite('contours.png', img)
+    cv2.imwrite(DIR_MIDEL_IMAGES+'/contours.png', img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
 if __name__ == '__main__':
-    imagePath = '1.jpg'
+    imagePath = DIR_RECEIVED_IMAGES + "/plate.jpg"
     img = cv2.imread(imagePath)
+    print(img)
     detect(img)
