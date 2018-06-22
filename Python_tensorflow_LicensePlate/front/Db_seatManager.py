@@ -8,10 +8,12 @@ import pymysql
 from PyQt5.QtWidgets import *
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QWidget
-from PyQt5 .QtGui import *
+from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from Python_tensorflow_LicensePlate.controller.ParkPlaceController import ParkPlaceController
 from Python_tensorflow_LicensePlate.controller.ChargeController import ChargeController
+
+
 class SeatManage(QWidget):
     def __init__(self):
         super(SeatManage, self).__init__()
@@ -39,29 +41,31 @@ class SeatManage(QWidget):
                                       "QLabel{color:rgb(300,300,300,120);font-size:12px;font-weight:bold;font-family:宋体;}"
                                       )
         self.ui.pushButton_5.setStyleSheet('text-align: center;'
-                                         'width:40;'
-                                         'height:20;'
-                                         'background:lightgreen;')
+                                           'width:40;'
+                                           'height:20;'
+                                           'background:lightgreen;')
         self.ui.pushButton_6.setStyleSheet('text-align: center;'
                                            'width:40;'
                                            'height:20;'
                                            'background:lightgreen;')
 
         # 槽函数
-        self.ui.pushButton.clicked.connect(self.seatSet)   # 显示车位设置窗口
+        self.ui.pushButton.clicked.connect(self.seatSet)  # 显示车位设置窗口
         self.ui.pushButton_2.clicked.connect(self.lockState)  # 显示车位锁状态窗口
-        self.ui.pushButton_3.clicked.connect(self.operateSeat) # 操作车位锁的窗口
-        self.ui.pushButton_4.clicked.connect(self.seatDetailed) # 查看车位详情的窗口
-        self.ui.pushButton_6.clicked.connect(self.seatSet1)   # 设置车位，内外车位数目，总数目
+        self.ui.pushButton_3.clicked.connect(self.operateSeat)  # 操作车位锁的窗口
+        self.ui.pushButton_4.clicked.connect(self.seatDetailed)  # 查看车位详情的窗口
+        self.ui.pushButton_6.clicked.connect(self.seatSet1)  # 设置车位，内外车位数目，总数目
         self.ui.pushButton_5.clicked.connect(self.clearInput)  # 清空车位设置的输入
-        self.ui.pushButton_8.clicked.connect(self.operateSeat2) # 车位操作的控制逻辑函数
-        self.ui.pushButton_7.clicked.connect(self.addSeat)# 添加车位
+        self.ui.pushButton_8.clicked.connect(self.operateSeat2)  # 车位操作的控制逻辑函数
+        self.ui.pushButton_7.clicked.connect(self.addSeat)  # 添加车位
         self.ui.pushButton_9.clicked.connect(self.dayTimeFee)
         self.ui.pushButton_10.clicked.connect(self.nightFee)
+
     # 添加车位
     def addSeat(self):
         self.ui1 = AddSeat()
         self.ui1.show()
+
     # 查询晚上停车费用
     def nightFee(self):
         self.ui.tableWidget_2.hide()
@@ -140,6 +144,7 @@ class SeatManage(QWidget):
         # cursor.close()
 
         # 修改晚上停车费用专用按钮
+
     def buttonForRow3(self, id):
         widget = QWidget()
         # 修改
@@ -151,11 +156,13 @@ class SeatManage(QWidget):
                                                         font : 13px  ''')
 
         updateBtn.clicked.connect(lambda: self.nightFee(id))
+
     # 显示修改晚上停车费用窗口
     def dayFee(self, id):
         self.ui4 = nightfee()
         self.ui4.showUpdate(id)
         self.ui4.show()
+
     # 修改白天停车费用专用
     def buttonForRow2(self, id):
         widget = QWidget()
@@ -174,6 +181,7 @@ class SeatManage(QWidget):
         self.ui3 = dayfee()
         self.ui3.showUpdate(id)
         self.ui3.show()
+
     # 删除修改的按钮函数
     def buttonForRow(self, id):
         widget = QWidget()
@@ -203,7 +211,6 @@ class SeatManage(QWidget):
         hLayout.setContentsMargins(5, 2, 5, 2)
         widget.setLayout(hLayout)
         return widget
-
 
     # 车位锁的打开关闭按钮函数
     def buttonForRow1(self, id):
@@ -254,11 +261,9 @@ class SeatManage(QWidget):
                 cursor = conn.cursor()
                 cursor.execute(sql)
                 conn.commit()
-                sql_all ="select Sid, vehicleQuantity, name, phone, gender,  department  from staff"
+                sql_all = "select Sid, vehicleQuantity, name, phone, gender,  department  from staff"
                 cursor.execute(sql_all)
                 rows = cursor.fetchall()
-
-
 
                 row = cursor.rowcount  # 通过查询的数据，取得记录条数，用来设置表格的行数
                 col = len(rows[0])  # 取得每条记录的长度，用来设置表格的列数
@@ -286,11 +291,13 @@ class SeatManage(QWidget):
                 OK = QMessageBox.information(self, ("提示"), ("删除成功"))
             except Exception:
                 self.ui.statusbar.showMessage("删除异常", 2000)
+
     # 修改 车位设置的信息
     def DB_update(self, id):
         self.ui = Update_seat()
         self.ui.ShowUpdate(id)
         self.ui.show()
+
     # 车位初始详情
     def seatDetailed(self):
         self.ui.tableWidget_2.show()
@@ -332,7 +339,6 @@ class SeatManage(QWidget):
         self.ui.tableWidget_3.hide()
         self.ui.tableWidget_5.hide()
         self.ui.tableWidget.hide()
-
 
     # 车位操作的控制逻辑
     def operateSeat2(self):
@@ -378,10 +384,6 @@ class SeatManage(QWidget):
 
                 self.ui.statusbar.showMessage("查询异常", 2000)
 
-
-
-
-
     # 车位锁状态  查询所有，获得车位的id后进行打开关闭操作，点击打开时，先调用是否确认打开的提示
     # 然后根据id 查询到该车位的 车位状态，根据id 修改，在查询所有，放在table上
     def lockState(self):
@@ -391,30 +393,15 @@ class SeatManage(QWidget):
         self.ui.groupBox_2.hide()
         self.ui.tableWidget_5.hide()
         self.ui.tableWidget.hide()
-
-        # 操作数据库
-        # conn = pymysql.connect(host='127.0.0.1',
-        #                        port=3306, user='root', password='271996', db='db_car', charset='utf8')
-        # cursor = conn.cursor()
-        # sql_all = "select Sid, vehicleQuantity, name, phone, gender,  department  from staff"
-        # cursor.execute(sql_all)
-        # rows = cursor.fetchall()
-        #
-        # row = cursor.rowcount  # 通过查询的数据，取得记录条数，用来设置表格的行数
-        # col = len(rows[0])  # 取得每条记录的长度，用来设置表格的列数
-        # cursor.close()
-        # conn.close()
         pcontrol = ParkPlaceController()
-        print(111)
         result = pcontrol.showparkplaceinformation()
-        print(222)
-        if result.status ==200:
+        if result.status == 200:
             print(result.status)
             parkplacelist = result.data
-            row =len(parkplacelist)
-            col=['parkPlaceID','lockStatus','useCarNumber','parkPlaceType']
+            row = len(parkplacelist)
+            col = ['parkPlaceID', 'lockStatus', 'useCarNumber', 'parkPlaceType']
             self.ui.tableWidget_3.setRowCount(row)  # 控件的名字保持一致，切莫想当然
-            self.ui.tableWidget_3.setColumnCount(len(col)+1)  # 加1，开辟一列放操作按钮
+            self.ui.tableWidget_3.setColumnCount(len(col) + 1)  # 加1，开辟一列放操作按钮
             self.ui.tableWidget_3.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
             self.ui.tableWidget_3.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
             # 将查询到的数据显示在表格中
@@ -424,14 +411,11 @@ class SeatManage(QWidget):
                     temp_data = parkplace.__getattribute__(col[j])  # 临时记录，不能直接插入表格
                     data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
                     self.ui.tableWidget_3.setItem(i, j, data)
-                    if j == len(col)-1:
+                    if j == len(col) - 1:
                         # print(rows[i][0])
                         # 传入id rows[i][0]
-                        self.ui.tableWidget.setCellWidget(i, j + 1,
-                                                          self.buttonForRow(str(parkplace.__getattribute__(col[0]))))
-           # self.ui.statusbar.showMessage("<font color='#ff0000'>查询成功</font>")
-        # else:
-        #     self.ui.statusbar.showMessage("<font color='#ff0000'>查询异常</font>", 2000)  # 单引号包围font 井号会报错
+                        self.ui.tableWidget_3.setCellWidget(i, j + 1,
+                                                            self.buttonForRow1(str(parkplace.__getattribute__(col[0]))))
 
     # 打开车位锁的提示
     def openTip(self, id):
@@ -441,39 +425,37 @@ class SeatManage(QWidget):
                                      QMessageBox.No, QMessageBox.No)
         if reply == QMessageBox.Yes:
             self.lock_open(id)
+
     # 打开车位锁的逻辑数据库操作 根据id 将车位的状态设为打开 然后在查询数据库展示
     def lock_open(self, id):
 
         if id != '':
-            # 操作数据库
-            # conn = pymysql.connect(host='127.0.0.1',
-            #                        port=3306, user='root', password='271996', db='db_car', charset='utf8')
-            # cursor = conn.cursor()
-            # sql_all = "select Sid, vehicleQuantity, name, phone, gender,  department  from staff"
-            # cursor.execute(sql_all)
-            # rows = cursor.fetchall()
-            #
-            # row = cursor.rowcount  # 通过查询的数据，取得记录条数，用来设置表格的行数
-            # col = len(rows[0])  # 取得每条记录的长度，用来设置表格的列数
-            # cursor.close()
-            # conn.close()
-
-            self.ui.tableWidget_3.setRowCount(row)  # 控件的名字保持一致，切莫想当然
-            self.ui.tableWidget_3.setColumnCount(col)  # 加1，开辟一列放操作按钮
-            self.ui.tableWidget_3.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
-            self.ui.tableWidget_3.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
-            # 将查询到的数据显示在表格中
+            pcontrol = ParkPlaceController()
+            pcontrol.unlock(id)
+            result = pcontrol.showparkplaceinformation()
+            if result.status == 200:
+                print(result.status)
+                parkplacelist = result.data
+                row = len(parkplacelist)
+                col = ['parkPlaceID', 'lockStatus', 'useCarNumber', 'parkPlaceType']
+                self.ui.tableWidget_3.setRowCount(row)  # 控件的名字保持一致，切莫想当然
+                self.ui.tableWidget_3.setColumnCount(len(col)+1)  # 加1，开辟一列放操作按钮
+                self.ui.tableWidget_3.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
+                self.ui.tableWidget_3.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
+                # 将查询到的数据显示在表格中
             for i in range(row):
-                for j in range(col):
-                    temp_data = rows[i][j]  # 临时记录，不能直接插入表格
+                for j in range(len(col)):
+                    parkplace = parkplacelist[i]
+                    temp_data = parkplace.__getattribute__(col[j])  # 临时记录，不能直接插入表格
                     data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
                     self.ui.tableWidget_3.setItem(i, j, data)
-                    if j == col - 1:
+                    if j == len(col) - 1:
                         # print(rows[i][0])
                         # 传入id rows[i][0]
-                        self.ui.tableWidget_3.setCellWidget(i, j + 1, self.buttonForRow(str(rows[i][0])))
-        # 然后根据id查询数据库 ，看该车位的状态是否打开 如果打开了 添加弹窗
-        #OK = QMessageBox.information(self, ("提示"), ("打开成功！"))
+                        self.ui.tableWidget_3.setCellWidget(i, j + 1,
+                                                            self.buttonForRow1(str(parkplace.__getattribute__(col[0]))))
+            # 然后根据id查询数据库 ，看该车位的状态是否打开 如果打开了 添加弹窗
+            # OK = QMessageBox.information(self, ("提示"), ("打开成功！"))
 
     # 车位关闭的提示
     def closeTip(self, id):
@@ -488,33 +470,30 @@ class SeatManage(QWidget):
     def lock_close(self, id):
 
         if id != '':
-            # 操作数据库
-            conn = pymysql.connect(host='127.0.0.1',
-                                   port=3306, user='root', password='271996', db='db_car', charset='utf8')
-            cursor = conn.cursor()
-            sql_all = "select Sid, vehicleQuantity, name, phone, gender,  department  from staff"
-            cursor.execute(sql_all)
-            rows = cursor.fetchall()
-
-            row = cursor.rowcount  # 通过查询的数据，取得记录条数，用来设置表格的行数
-            col = len(rows[0])  # 取得每条记录的长度，用来设置表格的列数
-            cursor.close()
-            conn.close()
-            # 下面的不能更改
-            self.ui.tableWidget_3.setRowCount(row)  # 控件的名字保持一致，切莫想当然
-            self.ui.tableWidget_3.setColumnCount(col)  # 加1，开辟一列放操作按钮
-            self.ui.tableWidget_3.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
-            self.ui.tableWidget_3.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
-            # 将查询到的数据显示在表格中
+            pcontrol = ParkPlaceController()
+            pcontrol.lock(id)
+            result = pcontrol.showparkplaceinformation()
+            if result.status == 200:
+                print(result.status)
+                parkplacelist = result.data
+                row = len(parkplacelist)
+                col = ['parkPlaceID', 'lockStatus', 'useCarNumber', 'parkPlaceType']
+                self.ui.tableWidget_3.setRowCount(row)  # 控件的名字保持一致，切莫想当然
+                self.ui.tableWidget_3.setColumnCount(len(col) + 1)  # 加1，开辟一列放操作按钮
+                self.ui.tableWidget_3.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
+                self.ui.tableWidget_3.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
+                # 将查询到的数据显示在表格中
             for i in range(row):
-                for j in range(col):
-                    temp_data = rows[i][j]  # 临时记录，不能直接插入表格
+                for j in range(len(col)):
+                    parkplace = parkplacelist[i]
+                    temp_data = parkplace.__getattribute__(col[j])  # 临时记录，不能直接插入表格
                     data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
                     self.ui.tableWidget_3.setItem(i, j, data)
-                    if j == col - 1:
+                    if j == len(col) - 1:
                         # print(rows[i][0])
                         # 传入id rows[i][0]
-                        self.ui.tableWidget_3.setCellWidget(i, j + 1, self.buttonForRow(str(rows[i][0])))
+                        self.ui.tableWidget_3.setCellWidget(i, j + 1,
+                                                            self.buttonForRow1(str(parkplace.__getattribute__(col[0]))))
         # 然后根据id查询数据库 ，看该车位的状态是否关闭 如果关闭了 添加弹窗
         # OK = QMessageBox.information(self, ("提示"), ("关闭成功！"))
 
@@ -533,16 +512,14 @@ class SeatManage(QWidget):
         inNum = self.ui.lineEdit_2.text()
         outNum = self.ui.lineEdit_3.text()
 
-
         # 操作数据库时，把下面的注释清除
-
 
         if inNum != '' and outNum != '':
             inNum = eval(inNum)
-            outNum =eval(outNum)
+            outNum = eval(outNum)
             control = ParkPlaceController()
             # 操作数据库，设置内外车位的数
-            control.initparklot(inNum,outNum)
+            control.initparklot(inNum, outNum)
         else:
 
             if inNum == '':
@@ -553,6 +530,8 @@ class SeatManage(QWidget):
     def clearInput(self):
         self.ui.lineEdit_2.clear()
         self.ui.lineEdit_3.clear()
+
+
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     my = SeatManage()
