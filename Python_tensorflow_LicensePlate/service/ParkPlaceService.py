@@ -1,7 +1,7 @@
 from Python_tensorflow_LicensePlate.daoimpl.ParkPlaceImpl import ParkPlaceImpl
 from Python_tensorflow_LicensePlate.entity.ParkPlace import ParkPlace
 from Python_tensorflow_LicensePlate.utils import ParkResult
-
+import random
 
 class ParkPlaceService(object):
     """车位业务层"""
@@ -168,7 +168,7 @@ class ParkPlaceService(object):
             print(e)
             return result.error("更新车位信息失败！")
     def adddulparkplace(self,type,number):
-        result = ParkResult()
+        result = ParkResult.ParkResult()
         try:
             place = ParkPlace(0, type, None)
             for i in range(number):
@@ -180,7 +180,7 @@ class ParkPlaceService(object):
 
     def findbyid(self,parkplaceid):
         """按照车位号返回车位信息"""
-        result = ParkResult()
+        result = ParkResult.ParkResult()
         try:
             parkplace = ParkPlaceImpl().findbyid(parkplaceid)
             return result.ok(parkplace)
@@ -190,7 +190,7 @@ class ParkPlaceService(object):
 
     def findbytype(self,type):
         """按照车位类型返回车位信息"""
-        result = ParkResult()
+        result = ParkResult.ParkResult()
         try:
             list = ParkPlaceImpl().findbytype(type)
             return result.ok(list)
@@ -198,3 +198,24 @@ class ParkPlaceService(object):
             print(e)
             return result.error("查找失败！")
 
+    def allocateparkplace(self,carnumber,type):
+        """
+        随机分配车位函数 更改车位状态 返回车位号
+        :param carnumber:车牌号
+        :param type: 车辆类型 0 内部 1 临时车
+        :return: 返回车位号
+        """
+        result = ParkResult.ParkResult()
+        pimpl = ParkPlaceImpl()
+        parkplacelist = pimpl.findemptybytype(type)
+        if len(parkplacelist)!=0:
+            parkplace = random.choice(parkplacelist)
+            parkplace.useCarNumber = carnumber
+            parkplace.lockStatus = 1
+            pimpl.updateparkplace(parkplace)
+            return  result.ok(parkplace.parkPlaceID)
+        else:
+            return result.error("分配失败！")
+
+if __name__ == '__main__':
+    ParkPlaceService().allocateparkplace('豫A5678',1)
