@@ -1,14 +1,15 @@
 from seatManage import *
 from Db_SeatUpdate import *
-from Python_tensorflow_LicensePlate.front.Db_SeatUpdate import *
+from Db_addSeat import *
+from Db_dayFee import *
+from Db_nightFee import *
 import sys
 import pymysql
 from PyQt5.QtWidgets import *
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QWidget
 from PyQt5 .QtGui import *
-
-
+from PyQt5.QtCore import *
 class SeatManage(QWidget):
     def __init__(self):
         super(SeatManage, self).__init__()
@@ -21,14 +22,28 @@ class SeatManage(QWidget):
         self.ui.tableWidget_3.hide()
         self.ui.groupBox_2.hide()
         self.ui.groupBox_3.hide()
+        self.ui.tableWidget_5.hide()
+        self.ui.tableWidget.hide()
 
         # 设置lineEdit的删除
-        self.ui.lineEdit.setClearButtonEnabled(True)
+
         self.ui.lineEdit_3.setClearButtonEnabled(True)
         self.ui.lineEdit_2.setClearButtonEnabled(True)
         pixmap = QPixmap("seat.jpg")  # 按指定路径找到图片，注意路径必须用双引号包围，不能用单引号
         self.ui.label.setPixmap(pixmap)  # 在label上显示图片
         self.ui.label.setScaledContents(True)  # 让图片自适应label大小
+
+        self.ui.label_2.setStyleSheet("QLabel{background:white;}"
+                                      "QLabel{color:rgb(300,300,300,120);font-size:12px;font-weight:bold;font-family:宋体;}"
+                                      )
+        self.ui.pushButton_5.setStyleSheet('text-align: center;'
+                                         'width:40;'
+                                         'height:20;'
+                                         'background:lightgreen;')
+        self.ui.pushButton_6.setStyleSheet('text-align: center;'
+                                           'width:40;'
+                                           'height:20;'
+                                           'background:lightgreen;')
 
         # 槽函数
         self.ui.pushButton.clicked.connect(self.seatSet)   # 显示车位设置窗口
@@ -38,7 +53,125 @@ class SeatManage(QWidget):
         self.ui.pushButton_6.clicked.connect(self.seatSet1)   # 设置车位，内外车位数目，总数目
         self.ui.pushButton_5.clicked.connect(self.clearInput)  # 清空车位设置的输入
         self.ui.pushButton_8.clicked.connect(self.operateSeat2) # 车位操作的控制逻辑函数
+        self.ui.pushButton_7.clicked.connect(self.addSeat)# 添加车位
+        self.ui.pushButton_9.clicked.connect(self.dayTimeFee)
+        self.ui.pushButton_10.clicked.connect(self.nightFee)
+    # 添加车位
+    def addSeat(self):
+        self.ui1 = AddSeat()
+        self.ui1.show()
+    # 查询晚上停车费用
+    def nightFee(self):
+        self.ui.tableWidget_2.hide()
+        self.ui.groupBox_2.hide()
+        self.ui.groupBox_3.hide()
+        self.ui.tableWidget_3.hide()
+        self.ui.tableWidget_5.show()
+        self.ui.tableWidget.hide()
+        # 操作数据库 可复用之前的  self.buttonForRow3
 
+        # conn = pymysql.connect(host='127.0.0.1',
+        #                        port=3306, user='root', password='271996', db='db_car', charset='utf8')
+        # cursor = conn.cursor()
+        # cursor.execute(sql)
+        # conn.commit()
+        # sql_all = "select Sid, vehicleQuantity, name, phone, gender,  department  from staff"
+        # cursor.execute(sql_all)
+        # rows = cursor.fetchall()
+        #
+        # row = cursor.rowcount  # 通过查询的数据，取得记录条数，用来设置表格的行数
+        # col = len(rows[0])  # 取得每条记录的长度，用来设置表格的列数
+        # cursor.close()
+        # conn.close()
+        #
+        # self.ui.tableWidget_4.setRowCount(row)  # 控件的名字保持一致，切莫想当然
+        # self.ui.tableWidget_4.setColumnCount(col + 1)  # 加1，开辟一列放操作按钮
+        # self.ui.tableWidget_4.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
+        # self.ui.tableWidget_4.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
+        #
+        # for i in range(row):
+        #     for j in range(col):
+        #         temp_data = rows[i][j]  # 临时记录，不能直接插入表格
+        #         data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
+        #         self.ui.tableWidget_4.setItem(i, j, data)
+        #         if j == col - 1:
+        #             self.ui.tableWidget_4.setCellWidget(i, j + 1, self.buttonForRow3(str(rows[i][0])))
+        #
+        # cursor.close()
+
+    # 查询白天停车费用专用按钮
+    def dayTimeFee(self):
+        self.ui.tableWidget_2.hide()
+        self.ui.groupBox_2.hide()
+        self.ui.groupBox_3.hide()
+        self.ui.tableWidget_3.hide()
+        self.ui.tableWidget_5.hide()
+        self.ui.tableWidget.show()
+        #
+        # conn = pymysql.connect(host='127.0.0.1',
+        #                        port=3306, user='root', password='271996', db='db_car', charset='utf8')
+        # cursor = conn.cursor()
+        # cursor.execute(sql)
+        # conn.commit()
+        # sql_all = "select Sid, vehicleQuantity, name, phone, gender,  department  from staff"
+        # cursor.execute(sql_all)
+        # rows = cursor.fetchall()
+        #
+        # row = cursor.rowcount  # 通过查询的数据，取得记录条数，用来设置表格的行数
+        # col = len(rows[0])  # 取得每条记录的长度，用来设置表格的列数
+        # cursor.close()
+        # conn.close()
+        #
+        # self.ui.tableWidget_4.setRowCount(row)  # 控件的名字保持一致，切莫想当然
+        # self.ui.tableWidget_4.setColumnCount(col + 1)  # 加1，开辟一列放操作按钮
+        # self.ui.tableWidget_4.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
+        # self.ui.tableWidget_4.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
+        #
+        # for i in range(row):
+        #     for j in range(col):
+        #         temp_data = rows[i][j]  # 临时记录，不能直接插入表格
+        #         data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
+        #         self.ui.tableWidget_4.setItem(i, j, data)
+        #         if j == col - 1:
+        #             self.ui.tableWidget_4.setCellWidget(i, j + 1, self.buttonForRow2(str(rows[i][0])))
+        #
+        # cursor.close()
+
+        # 修改晚上停车费用专用按钮
+    def buttonForRow3(self, id):
+        widget = QWidget()
+        # 修改
+        updateBtn = QPushButton('修改')
+        updateBtn.setStyleSheet(''' text-align : center;
+                                                        background-color : DarkSeaGreen;
+                                                        height : 30px;
+                                                        border-style: outset;
+                                                        font : 13px  ''')
+
+        updateBtn.clicked.connect(lambda: self.nightFee(id))
+    # 显示修改晚上停车费用窗口
+    def dayFee(self, id):
+        self.ui4 = nightfee()
+        self.ui4.showUpdate(id)
+        self.ui4.show()
+    # 修改白天停车费用专用
+    def buttonForRow2(self, id):
+        widget = QWidget()
+        # 修改
+        updateBtn = QPushButton('修改')
+        updateBtn.setStyleSheet(''' text-align : center;
+                                                      background-color : DarkSeaGreen;
+                                                      height : 30px;
+                                                      border-style: outset;
+                                                      font : 13px  ''')
+
+        updateBtn.clicked.connect(lambda: self.dayFee(id))
+
+    # 显示修改晚上停车费用窗口
+    def dayFee(self, id):
+        self.ui3 = dayfee()
+        self.ui3.showUpdate(id)
+        self.ui3.show()
     # 删除修改的按钮函数
     def buttonForRow(self, id):
         widget = QWidget()
@@ -162,6 +295,8 @@ class SeatManage(QWidget):
         self.ui.groupBox_2.hide()
         self.ui.groupBox_3.hide()
         self.ui.tableWidget_3.hide()
+        self.ui.tableWidget_5.hide()
+        self.ui.tableWidget.hide()
         # 操作数据库 需要规范化
 
         conn = pymysql.connect(host='127.0.0.1',
@@ -193,6 +328,8 @@ class SeatManage(QWidget):
         self.ui.groupBox_3.hide()
         self.ui.tableWidget_2.hide()
         self.ui.tableWidget_3.hide()
+        self.ui.tableWidget_5.hide()
+        self.ui.tableWidget.hide()
 
 
     # 车位操作的控制逻辑
@@ -250,6 +387,8 @@ class SeatManage(QWidget):
         self.ui.tableWidget_2.hide()
         self.ui.groupBox_3.hide()
         self.ui.groupBox_2.hide()
+        self.ui.tableWidget_5.hide()
+        self.ui.tableWidget.hide()
 
         # 操作数据库
         conn = pymysql.connect(host='127.0.0.1',
@@ -370,6 +509,8 @@ class SeatManage(QWidget):
         self.ui.groupBox_2.hide()
         self.ui.tableWidget_2.hide()
         self.ui.tableWidget_3.hide()
+        self.ui.tableWidget_5.hide()
+        self.ui.tableWidget.hide()
 
     # 操作车位设置的逻辑，车位总数，临时车位数目，员工车位数目
     def seatSet1(self):
@@ -396,7 +537,6 @@ class SeatManage(QWidget):
         #         OK = QMessageBox.information(self, ("警告"), ("""请输入外部车数目！"""))
 
     def clearInput(self):
-        self.ui.lineEdit.clear()
         self.ui.lineEdit_2.clear()
         self.ui.lineEdit_3.clear()
 if __name__ == '__main__':
