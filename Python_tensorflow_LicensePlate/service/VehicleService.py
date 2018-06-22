@@ -1,54 +1,71 @@
 from Python_tensorflow_LicensePlate.daoimpl.VehicleDaoImpl import VehilceDaoImpl
-
+from Python_tensorflow_LicensePlate.utils.ParkResult import ParkResult
 class VehicleService(object):
     #车辆信息管理业务层
 
     #登记车辆信息
     def addVehicle(self,Vehicle):
-        count=VehilceDaoImpl().addVehicle(Vehicle)
-        if count==0:
-            return False
-        return True
+        result = ParkResult()
+        try:
+            VehilceDaoImpl().addVehicle(Vehicle)
+            return result.ok2()
+        except Exception as e:
+            print(e)
+            return result.error("添加车辆失败！")
 
     #删除车辆信息
     def deleteVehicle(self,SID):
-        count=VehilceDaoImpl.deleteVehicle(SID)
-        if count==0:
-            return False
-        return True
+        result = ParkResult()
+        try:
+            VehilceDaoImpl().deleteVehicleBySID(SID)
+            return result.ok2()
+        except Exception as e:
+            print(e)
+            return result.error("删除车辆失败！")
 
     #修改车辆信息
     def updateVehicle(self,Vehicle):
-        count=VehilceDaoImpl().updateVehicle(Vehicle)
-        if count==0:
-            return False
-        else:
-            return True
+        result = ParkResult()
+        try:
+            VehilceDaoImpl().updateVehicle(Vehicle)
+            return result.ok2()
+        except Exception as e:
+            print(e)
+            return result.error("修改车辆失败！")
 
     #车辆信息展示
     def showVehicle(self):
-        list = VehilceDaoImpl().showallVehicle()
-        if len(list) == 0:
-            return False
-        else:
-            return list
+        result = ParkResult()
+        try:
+            s = VehilceDaoImpl()
+            list = s.showallVehicle()
+            return result.ok(list)
+        except Exception as e:
+            print(e)
+            return result.error("显示员工信息失败！")
 
     #按照工号查询车辆信息
     def findVehicleById(self,SID):
-        list = VehilceDaoImpl().findVehicleBySID(SID)
-        if len(list) == 0:
-            return False
-        else:
-            return list
+        result = ParkResult()
+        try:
+            s = VehilceDaoImpl()
+            list = s.findVehicleBySID(SID)
+            return result.ok(list)
+        except Exception as e:
+            print(e)
+            return result.error("查询员工信息失败！")
 
 
     # 按照车牌号查找车辆信息
     def findVehicleByPlateNum(self,pid):
-        list=VehilceDaoImpl().findVehicleByPlateID(pid)
-        if len(list)==0:
-            return False
-        else:
-            return list
+        result = ParkResult()
+        try:
+            s = VehilceDaoImpl()
+            list = s.findVehicleByPlateID(pid)
+            return result.ok(list)
+        except Exception as e:
+            print(e)
+            return result.error("查询员工信息失败！")
 
 
 
