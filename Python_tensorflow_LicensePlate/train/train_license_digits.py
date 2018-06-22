@@ -26,7 +26,6 @@ LETTERS_DIGITS = (
 "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z")
 
 
-time_begin = time.time()
 
 # 定义输入节点，对应于图片像素值矩阵集合和图片标签(即所代表的数字)
 x = tf.placeholder(tf.float32, shape=[None, SIZE])
@@ -48,6 +47,7 @@ def full_connect(inputs, W, b):
 
 
 def train():
+    time_begin = time.time()
     # 第一次遍历图片目录是为了获取图片总数
     input_count = 0
     for i in range(0, NUM_CLASSES):
@@ -281,6 +281,7 @@ def predict():
             max3 * 100))
 
         print("车牌编号是: 【%s】" % license_num)
+        return license_num
 
 if __name__ == '__main__':
-    predict()
+    train()
