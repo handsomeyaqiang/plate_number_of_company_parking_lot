@@ -15,6 +15,7 @@ class carManage(QtWidgets.QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.setWindowTitle("车辆信息管理")
+        self.flag = 0
 
         palette = QPalette()
         icon = QPixmap('car.jpg').scaled(800, 600)
@@ -36,6 +37,7 @@ class carManage(QtWidgets.QMainWindow):
         # 槽函数
         self.ui.clear_pushButton.clicked.connect(self.Clear)
         self.ui.add_pushButton.clicked.connect(self.DB_Add)
+        self.ui.query_pushButton.clicked.connect(self.QueryBySid)
         self.ui.pushButton.clicked.connect(self.DB_queryAll)
         self.ui.exit_pushButton.clicked.connect(self.close)
     # 退出
@@ -98,48 +100,15 @@ class carManage(QtWidgets.QMainWindow):
 
     # 删除车辆信息  先根据id删除数据，然后查找所有刷新展示页面
     def DB_delete(self, id):
-        sql = "delete  from staff where Sid = '" + id + "'"
-        print(sql)
-        if id != '':
-            try:
-                conn = pymysql.connect(host='127.0.0.1',
-                                       port=3306, user='root', password='271996', db='db_car', charset='utf8')
-                cursor = conn.cursor()
-                cursor.execute(sql)
-                conn.commit()
-                sql_all ="select Sid, vehicleQuantity, name, phone, gender,  department  from staff"
-                cursor.execute(sql_all)
-                rows = cursor.fetchall()
+        sc = VehicleController()
+        result = sc.delVehicle(id)
+        if result.status == 200:
+            OK = QMessageBox.information(self, ("提示："), ("""删除成功！"""))
+            if self.flag==0:
+                self.DB_queryAll()
+            else :
+                self.QueryBySid()
 
-
-
-                row = cursor.rowcount  # 通过查询的数据，取得记录条数，用来设置表格的行数
-                col = len(rows[0])  # 取得每条记录的长度，用来设置表格的列数
-                cursor.close()
-                conn.close()
-
-                self.ui.tableWidget.setRowCount(row)  # 控件的名字保持一致，切莫想当然
-                self.ui.tableWidget.setColumnCount(col + 1)  # 加1，开辟一列放操作按钮
-                self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
-                self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
-
-                for i in range(row):
-                    for j in range(col):
-                        temp_data = rows[i][j]  # 临时记录，不能直接插入表格
-                        data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
-                        self.ui.tableWidget.setItem(i, j, data)
-                        # 数据库因为从0开始计数，所以列数减一
-                        if j == col - 1:
-                            # print(rows[i][0])
-                            # 传入id rows[i][0]
-                            self.ui.tableWidget.setCellWidget(i, j + 1, self.buttonForRow(str(rows[i][0])))
-
-                cursor.close()
-                conn.close()
-                OK = QMessageBox.information(self, ("提示"), ("删除成功"))
-            except Exception:
-
-                self.ui.statusbar.showMessage("删除异常", 2000)
 
 
     # 添加车辆信息
@@ -172,56 +141,68 @@ class carManage(QtWidgets.QMainWindow):
 
 
 
-        # 工号查询
+        # 查询
 
     def QueryBySid(self):
+
         # 获得输入  最好提供姓名和工号都可以查询，或者模糊查询
-        sid = self.ui.lineEdit_5.text()
-        category = self.ui.comboBox.currentText()  # 用户选择的条件，按工号等等
-        if sid == '':
-            OK = QMessageBox.information(self, ("警告"), ("""请输入查询内容!"""))
-        else:
+        text = self.ui.lineEdit_5.text()
+        print(text)
+        print(self.ui.comboBox.currentText())
 
-            print(sid)   # 测试是否捕获到用户输入
-            # 操作数据库
-            sql = "select Sid, vehicleQuantity, name, phone, gender,  department  from staff where Sid = '" + sid + "'"
-            print(sql)
-
-
-            try:
-                conn = pymysql.connect(host='127.0.0.1',
-                                       port=3306, user='root', password='271996', db='db_car', charset='utf8')
-                cursor = conn.cursor()
-                cursor.execute(sql)
-                rows = cursor.fetchall()
-
-
-                row = cursor.rowcount  # 通过查询的数据，取得记录条数，用来设置表格的行数
-                col = len(rows[0])  # 取得每条记录的长度，用来设置表格的列数
-
-                cursor.close()
-                conn.close()
-                # 控制表格属性
-                self.ui.tableWidget.setRowCount(row)
-                self.ui.tableWidget.setColumnCount(col + 1)  # 加1，开辟一列放操作按钮
+        # 按照工号查询
+        if self.ui.comboBox.currentText() == '按工号':
+            self.flag = 3
+            sc = VehicleController()
+            result = sc.findVehicleByid(text)
+            if result.status == 200:
+                row = len(result.data)
+                col = ["SID", "PlateID", "owner", "vehicle_identity"]
+                self.ui.tableWidget.setRowCount(row)  # 控件的名字保持一致，切莫想当然
+                self.ui.tableWidget.setColumnCount(len(col) + 1)  # 加1，开辟一列放操作按钮
                 self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
                 self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
                 for i in range(row):
-                    for j in range(col):
-                        temp_data = rows[i][j]  # 临时记录，不能直接插入表格
+                    for j in range(len(col)):
+                        staff = result.data[i]
+                        temp_data = staff.__getattribute__(col[j])  # 临时记录，不能直接插入表格
                         data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
                         self.ui.tableWidget.setItem(i, j, data)
                         # 数据库因为从0开始计数，所以列数减一
-                        if j == col - 1:
-                            print(rows[i][0])
-                            # 传入id rows[i][0]
-                            self.ui.tableWidget.setCellWidget(i, j + 1, self.buttonForRow(str(rows[i][0])))
+                        if j == len(col) - 1:
+                                    # print(rows[i][0])
+                                    # 传入id rows[i][0]
+                            staff = result.data[i]
+                            self.ui.tableWidget.setCellWidget(i, j + 1,self.buttonForRow(str(staff.__getattribute__(col[0]))))
+                self.ui.statusbar.showMessage("查询成功")
+            else:
+                self.ui.statusbar.showMessage("查询异常", 2000)  # 单引号包围font 井号会报错
 
-                self.ui.statusbar.showMessage("<font color='#ff0000'>查询成功</font>")
-            except Exception:
-
-                self.ui.statusbar.showMessage("<font color='#ff0000'>查询异常</font>", 2000)
-
+                # 按照车牌号查询
+        if self.ui.comboBox.currentText() == '按车牌号':
+            self.flag = 2
+            sc = VehicleController()
+            result = sc.findVehicleByplatenum(text)
+            if result.status == 200:
+                row = len(result.data)
+                col = ["SID", "PlateID", "owner", "vehicle_identity"]
+                self.ui.tableWidget.setRowCount(row)  # 控件的名字保持一致，切莫想当然
+                self.ui.tableWidget.setColumnCount(len(col) + 1)  # 加1，开辟一列放操作按钮
+                self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
+                self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
+                for i in range(row):
+                    for j in range(len(col)):
+                        staff = result.data[i]
+                        temp_data = staff.__getattribute__(col[j])  # 临时记录，不能直接插入表格
+                        data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
+                        self.ui.tableWidget.setItem(i, j, data)
+                                # 数据库因为从0开始计数，所以列数减一
+                        if j == len(col) - 1:
+                            staff = result.data[i]
+                            self.ui.tableWidget.setCellWidget(i, j + 1, self.buttonForRow(str(staff.__getattribute__(col[0]))))
+                self.ui.statusbar.showMessage("查询成功")
+            else:
+                self.ui.statusbar.showMessage("查询异常", 2000)  # 单引号包围font 井号会报错
 
 
     # 清空用户输入
@@ -232,14 +213,12 @@ class carManage(QtWidgets.QMainWindow):
         self.ui.driverNum_lineEdit.clear()
 
     def DB_queryAll(self):
-
         # 显示全部的车辆信息
-
         sc = VehicleController()
         result = sc.showVehicle()
         if result.status == 200:
             row = len(result.data)
-            col = ["SID", "platenumber", "owner", "Vehicle_identity"]
+            col = ["SID", "PlateID", "owner", "vehicle_identity"]
             self.ui.tableWidget.setRowCount(row)  # 控件的名字保持一致，切莫想当然
             self.ui.tableWidget.setColumnCount(len(col) + 1)  # 加1，开辟一列放操作按钮
             self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
@@ -257,9 +236,9 @@ class carManage(QtWidgets.QMainWindow):
                         # 传入id rows[i][0]
                         vehicle = result.data[i]
                         self.ui.tableWidget.setCellWidget(i, j + 1,self.buttonForRow(str(vehicle.__getattribute__(col[0]))))
-            self.ui.statusbar.showMessage("<font color='#ff0000'>查询成功</font>")
+            self.ui.statusbar.showMessage("查询成功")
         else:
-            self.ui.statusbar.showMessage("<font color='#ff0000'>查询异常</font>", 2000)  # 单引号包围font 井号会报错
+            self.ui.statusbar.showMessage("查询异常", 2000)  # 单引号包围font 井号会报错
 
 
 if __name__ == '__main__':
