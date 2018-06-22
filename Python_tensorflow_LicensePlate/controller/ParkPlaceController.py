@@ -100,3 +100,12 @@ class ParkPlaceController(object):
         """
         rs = ParkPlaceService().reclaimparkpalce(parkplaceid)
         return rs
+
+    def findbytype(self,type):
+        """
+        根据车位类型返回车位对象列表
+        :param type:0 内部车位 1 临时车位
+        :return:车位对象列表
+        """
+        rs = ParkPlaceService().findbytype()
+        return rs
