@@ -207,15 +207,38 @@ class ParkPlaceService(object):
         """
         result = ParkResult.ParkResult()
         pimpl = ParkPlaceImpl()
-        parkplacelist = pimpl.findemptybytype(type)
-        if len(parkplacelist)!=0:
-            parkplace = random.choice(parkplacelist)
-            parkplace.useCarNumber = carnumber
-            parkplace.lockStatus = 1
-            pimpl.updateparkplace(parkplace)
-            return  result.ok(parkplace.parkPlaceID)
-        else:
+        try:
+            parkplacelist = pimpl.findemptybytype(type)
+            if len(parkplacelist)!=0:
+                parkplace = random.choice(parkplacelist)
+                parkplace.useCarNumber = carnumber
+                parkplace.lockStatus = 1
+                pimpl.updateparkplace(parkplace)
+                return  result.ok(parkplace.parkPlaceID)
+            else:
+                return result.error("分配失败！")
+        except Exception as e:
+            print(e)
             return result.error("分配失败！")
 
-if __name__ == '__main__':
-    ParkPlaceService().allocateparkplace('豫A5678',1)
+    def reclaimparkpalce(self,parkplaceid):
+        """
+        车辆离开时调用，回收车位
+        :param parkplaceid: 车位号
+        :return:
+        """
+        result = ParkResult.ParkResult()
+        try:
+            pimpl = ParkPlaceImpl()
+            parkplace = pimpl.findbyid(parkplaceid)
+            parkplace.lockStatus = 0
+            parkplace.useCarNumber=None
+            pimpl.updateparkplace(parkplace)
+            return result.ok2()
+        except Exception as e:
+            return result.error("回收车位失败！")
+
+
+
+
+
