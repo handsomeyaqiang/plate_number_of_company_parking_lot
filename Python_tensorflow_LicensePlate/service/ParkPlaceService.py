@@ -167,3 +167,13 @@ class ParkPlaceService(object):
         except Exception as e:
             print(e)
             return result.error("更新车位信息失败！")
+    def adddulparkplace(self,type,number):
+        result = ParkResult()
+        try:
+            place = ParkPlace(0, type, None)
+            for i in range(number):
+                ParkPlaceImpl.insertparkplace(place)
+            return result.ok2()
+        except Exception as e:
+            print(e)
+            return result.error("添加车位失败！")
