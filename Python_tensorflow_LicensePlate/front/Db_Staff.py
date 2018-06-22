@@ -18,6 +18,7 @@ class tableB(QtWidgets.QMainWindow):
         super(tableB, self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        self.flag=0
 
 
         # 控制tableWidget item文字风格
@@ -124,6 +125,7 @@ class tableB(QtWidgets.QMainWindow):
 
     #按照工号查询
         if self.ui.comboBox.currentText() == '按工号':
+            self.flag=3
             sc = StaffController()
             result = sc.findStaffByid(text)
             if result.status == 200:
@@ -153,6 +155,7 @@ class tableB(QtWidgets.QMainWindow):
 
         # 按照姓名查询
         if self.ui.comboBox.currentText() == '按姓名':
+            self.flag=2
             sc = StaffController()
             result = sc.findStaffByname(text)
             if result.status == 200:
@@ -183,6 +186,7 @@ class tableB(QtWidgets.QMainWindow):
         if self.ui.comboBox.currentText() == '按部门':
             sc = StaffController()
             result = sc.findStaffBydepart(text)
+            self.flag=1
             if result.status == 200:
                 row = len(result.data)
                 col = ["SID", "vehicleQuantity", "name", "phoneNumber", "gender", "department"]
@@ -228,16 +232,21 @@ class tableB(QtWidgets.QMainWindow):
 
         if carNum == '':
             OK = QMessageBox.information(self, ("警告"), ("""请输入拥有的车辆数"""))
+            return
         if name == '':
             OK = QMessageBox.information(self, ("警告"), ("""姓名不能为空"""))
+            return
         if phone == '':
             OK = QMessageBox.information(self, ("警告"), ("""手机号不能为空"""))
+            return
         if department == '':
             OK = QMessageBox.information(self, ("警告"), ("""部门不能为空"""))
+            return
 
         #开始添加员工信息的数据库操作
         sc = StaffController()
         result = sc.insertStaff(StaffNum,carNum,name,phone,gender1,phone)
+        print(result.status)
         if result.status == 200:
             OK = QMessageBox.information(self,("提示："), ("""添加成功！"""))
         elif result.status == 400:
@@ -258,11 +267,14 @@ class tableB(QtWidgets.QMainWindow):
         sc = StaffController()
         result = sc.delStaff(id)
         if result.status == 200:
-            #self.ui.tableWidget()
-            #self.ui.QApplication.processEvents()
-            #填入表格刷新函数：
-
             OK = QMessageBox.information(self, ("提示："), ("""删除成功！"""))
+            if self.flag==0:
+                self.DB_query()
+            else :
+                self.QueryBySid()
+
+
+
         elif result.status == 400:
             OK = QMessageBox.information(self, ("提示："), ("""删除失败！"""))  # 单引号包围font 井号会报错
 
