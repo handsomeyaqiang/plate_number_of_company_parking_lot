@@ -6,6 +6,7 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QWidget
 from PyQt5 .QtGui import *
 from PyQt5.QtCore import *
+from Python_tensorflow_LicensePlate.controller.StaffController import StaffController
 class Update_Ui(QWidget):
 
     def __init__(self):
@@ -53,55 +54,61 @@ class Update_Ui(QWidget):
         self.ui.radioButton_2.setChecked(False)
         self.ui.radioButton.setFocusPolicy(Qt.NoFocus)
         self.ui.radioButton_2.setFocusPolicy(Qt.NoFocus)
-        # if self.ui.radioButton.isChecked():
-
-        # if self.ui.radioButton_2.isChecked():
-
-
-
-
 
     def DB_insert(self):
 
         # 获得界面输入
-        staffNum = self.ui.lineEdit.text()
-        CarNum = self.ui.car_lineEdit.text()
-        name = self.ui.name_lineEdit.text()
-        phone = self.ui.name_lineEdit.text()
-        depart = self.ui.depart_lineEdit.text()
-        if self.ui.radioButton.isChecked():
-            gender = '女'
-        else:
-            gender = '男'
+            StaffNum = self.ui.lineEdit.text()
+            carNum = self.ui.car_lineEdit.text()
+            name = self.ui.name_lineEdit.text()
+            phone = self.ui.phone_lineEdit.text()
 
-        # OK = QMessageBox.information(self, ("警告"), ("""更改成功""")) 更改成功加入提示框
+            if self.ui.radioButton.isChecked():
+                gender = '男'
+                gender1 = 1
+            else:
+                gender = '女'
+                gender1 = 0
+            department = self.ui.depart_lineEdit.text()
+
+            if carNum == '':
+                OK = QMessageBox.information(self, ("警告"), ("""请输入拥有的车辆数"""))
+                return
+            if name == '':
+                OK = QMessageBox.information(self, ("警告"), ("""姓名不能为空"""))
+                return
+            if phone == '':
+                OK = QMessageBox.information(self, ("警告"), ("""手机号不能为空"""))
+                return
+            if department == '':
+                OK = QMessageBox.information(self, ("警告"), ("""部门不能为空"""))
+                return
+            # 更新员工信息的数据库操作
+            sc = StaffController()
+            result=sc.updStaff(StaffNum, int(carNum), name, phone, gender1,department)
+            print(result.status)
+            if result.status == 200:
+                OK = QMessageBox.information(self, ("提示："), ("""修改成功！"""))
+            #！！！！！！！！！！！这里添加自己关闭窗口的操作！！！！！！！！！！
+
+
+            elif result.status == 400:
+                OK = QMessageBox.information(self, ("提示："), ("""修改失败！"""))  # 单引号包围font 井号会报错
 
     def update(self, id):
-
-
-        sql = "select Sid, vehicleQuantity, name, phone, gender,  department  from staff where Sid = '" + id + "'"
-        try:
-            conn = pymysql.connect(host='127.0.0.1',
-                                   port=3306, user='root', password='271996', db='db_car', charset='utf8')
-            cursor = conn.cursor()
-            cursor.execute(sql)
-            results = cursor.fetchall()
-            for row in results:
-                print(row[0])
-                self.ui.lineEdit.setText(row[0])
-                self.ui.car_lineEdit.setText(row[1])
-                self.ui.name_lineEdit.setText(row[2])
-                self.ui.phone_lineEdit.setText(row[3])
-              
-                # if results[4] == '女':
-                #     self.ui.radioButton.setChecked(True)
-                # else:
-                #     self.ui.radioButton_2.setChecked(True)
-                self.ui.depart_lineEdit.setText(row[5])
-                print(row[4])
-        except Exception:
-            self.ui.statusbar.showMessage("<font color='#ff0000'>查询异常</font>", 2000)
-
+          #获得当前要修改的员工信息，填入文本框中
+            sc = StaffController()
+            result = sc.findStaffByid(id)
+            staff=result.data[0]
+            self.ui.lineEdit.setText(staff.SID)
+            self.ui.car_lineEdit.setText(str(staff.vehicleQuantity))
+            self.ui.name_lineEdit.setText(staff.name)
+            self.ui.phone_lineEdit.setText(staff.phoneNumber)
+            if staff.gender==0:
+                self.ui.radioButton.setChecked(True)
+            else:
+                self.ui.radioButton_2.setChecked(True)
+            self.ui.depart_lineEdit.setText(staff.department)
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
