@@ -308,28 +308,19 @@ class SeatManage(QWidget):
         self.ui.tableWidget.hide()
         # 操作数据库 需要规范化
 
-        conn = pymysql.connect(host='127.0.0.1',
-                               port=3306, user='root', password='271996', db='db_car', charset='utf8')
-        cursor = conn.cursor()
-        sql_all = "select Sid, vehicleQuantity, name, phone, gender,  department  from staff"
-        cursor.execute(sql_all)
-        rows = cursor.fetchall()
-
-        row = cursor.rowcount  # 通过查询的数据，取得记录条数，用来设置表格的行数
-        col = len(rows[0])  # 取得每条记录的长度，用来设置表格的列数
-        cursor.close()
-        conn.close()
-
-        self.ui.tableWidget_2.setRowCount(row)  # 控件的名字保持一致，切莫想当然
-        self.ui.tableWidget_2.setColumnCount(col)  # 加1，开辟一列放操作按钮
+        pcontrol = ParkPlaceController()
+        innercount = pcontrol.getinuse_innerparlplacecount().data
+        tempcount = pcontrol.getinuse_tempparkplacecount().data
+        self.ui.tableWidget_2.setRowCount(2)  # 控件的名字保持一致，切莫想当然
+        self.ui.tableWidget_2.setColumnCount(2)  # 加1，开辟一列放操作按钮
         self.ui.tableWidget_2.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
         self.ui.tableWidget_2.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
         # 将查询到的数据显示在表格中
-        for i in range(row):
-            for j in range(col):
-                temp_data = rows[i][j]  # 临时记录，不能直接插入表格
-                data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
-                self.ui.tableWidget_2.setItem(i, j, data)
+        data = QTableWidgetItem(str(innercount))  # 转换后可插入表格
+        self.ui.tableWidget_2.setItem(0, 0, data)
+        data = QTableWidgetItem(str(tempcount))  # 转换后可插入表格
+        self.ui.tableWidget_2.setItem(0, 1, data)
+
 
     # 车位操作， 查看车位的状态信息
     def operateSeat(self):
