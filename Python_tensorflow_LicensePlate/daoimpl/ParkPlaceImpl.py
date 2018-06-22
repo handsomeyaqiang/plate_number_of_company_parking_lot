@@ -6,7 +6,7 @@ from Python_tensorflow_LicensePlate.entity.ParkPlace import ParkPlace
 class ParkPlaceImpl(ParkPlaceDao):
     """车位操作方法实现"""
 
-    def find(self,parkplaceid):
+    def findbyid(self,parkplaceid):
         """根据车位号查找车位信息
         :param parkplaceid: 车位id
         :return: ParkPlace对象
@@ -140,3 +140,20 @@ class ParkPlaceImpl(ParkPlaceDao):
                'WHERE  parkPlaceID = %s'%(lockstatus,parkPlaceID))
         count = PyMySQLHelper().update(sql)
         return count
+
+    def findbytype(self, type):
+        """根据车位类型查找车位信息
+               :param parkplaceid: 车位类型
+               :return: ParkPlace对象列表
+               """
+        sql = 'select * from parkplace where  parkPlaceType= %s' % (type)
+        result = PyMySQLHelper().selectalldictcursor(sql)
+        list = []
+        if result != None:
+            for rs in result:
+                parkplace = ParkPlace(rs['lockStatus'], rs['parkPlaceType'], rs['useCarNumber'])
+                parkplace.parkPlaceID = rs['parkPlaceID']
+                list.append(parkplace)
+            return list
+        else:
+            return -1
