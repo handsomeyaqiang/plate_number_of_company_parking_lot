@@ -19,7 +19,10 @@ class ParkPlaceController(object):
         """增加一个内部车位"""
         rs = ParkPlaceService().addsingelinnerparkplace()
         return rs
-
+    def adddulparkplace(self,type,number):
+        """增加多个车位"""
+        rs = ParkPlaceService().adddulparkplace(type,number)
+        return rs
     def deleteparkplacebyid(self,parkplaceid):
         """根据车位号删除车位"""
         rs = ParkPlaceService().deleteparkplacenyid(parkplaceid)
@@ -76,6 +79,5 @@ class ParkPlaceController(object):
         parkplace.parkPlaceID = parkPlaceID
         rs = ParkPlaceService().updateparkplace(parkplace)
         return rs
-
 
 
