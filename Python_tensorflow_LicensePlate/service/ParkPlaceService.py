@@ -177,3 +177,24 @@ class ParkPlaceService(object):
         except Exception as e:
             print(e)
             return result.error("添加车位失败！")
+
+    def findbyid(self,parkplaceid):
+        """按照车位号返回车位信息"""
+        result = ParkResult()
+        try:
+            parkplace = ParkPlaceImpl().findbyid(parkplaceid)
+            return result.ok(parkplace)
+        except Exception as e:
+            print(e)
+            return result.error("查找失败！")
+
+    def findbytype(self,type):
+        """按照车位类型返回车位信息"""
+        result = ParkResult()
+        try:
+            list = ParkPlaceImpl().findbytype(type)
+            return result.ok(list)
+        except Exception as e:
+            print(e)
+            return result.error("查找失败！")
+
