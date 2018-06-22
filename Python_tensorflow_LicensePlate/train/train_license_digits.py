@@ -1,6 +1,6 @@
 #!/usr/bin/python3.5
 # -*- coding: utf-8 -*-
-# 省份简称训练
+# 车牌编号训练（相当于训练24个字母+10个数字，我国交通法规规定车牌编号中不包含字母I和O
 import sys
 import os
 import time
@@ -14,15 +14,18 @@ from PIL import Image
 SIZE = 1280
 WIDTH = 32
 HEIGHT = 40
-NUM_CLASSES = 6
-iterations = 300
+NUM_CLASSES = 34
+iterations_num = 500
 
-SAVER_DIR = "train-saver/province/"
+SAVER_DIR = "../resources/model/digit/"
+TRAIN_DIR = "../resources/train-images/training-set/"
+VALIDATION_DIR = "../resources/train-images/validation-set/"
+PREDICT_DIR = "../resource/images/splitplateimages/"
+LETTERS_DIGITS = (
+"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "P",
+"Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z")
 
-PROVINCES = ("京", "闽", "粤", "苏", "沪", "浙")
-nProvinceIndex = 0
 
-time_begin = time.time()
 
 # 定义输入节点，对应于图片像素值矩阵集合和图片标签(即所代表的数字)
 x = tf.placeholder(tf.float32, shape=[None, SIZE])
@@ -44,22 +47,23 @@ def full_connect(inputs, W, b):
 
 
 def train():
+    time_begin = time.time()
     # 第一次遍历图片目录是为了获取图片总数
     input_count = 0
     for i in range(0, NUM_CLASSES):
-        dir = './train_images/training-set/chinese-characters/%s/' % i  # 这里可以改成你自己的图片目录，i为分类标签
+        dir = TRAIN_DIR + "%s/" % i  # 这里可以改成你自己的图片目录，i为分类标签
         for rt, dirs, files in os.walk(dir):
             for filename in files:
                 input_count += 1
 
-                # 定义对应维数和各维长度的数组
+    # 定义对应维数和各维长度的数组
     input_images = np.array([[0] * SIZE for i in range(input_count)])
     input_labels = np.array([[0] * NUM_CLASSES for i in range(input_count)])
 
     # 第二次遍历图片目录是为了生成图片数据和标签
     index = 0
     for i in range(0, NUM_CLASSES):
-        dir = './train_images/training-set/chinese-characters/%s/' % i  # 这里可以改成你自己的图片目录，i为分类标签
+        dir = TRAIN_DIR + "%s/" % i  # 这里可以改成你自己的图片目录，i为分类标签
         for rt, dirs, files in os.walk(dir):
             for filename in files:
                 filename = dir + filename
@@ -73,14 +77,13 @@ def train():
                             input_images[index][w + h * width] = 0
                         else:
                             input_images[index][w + h * width] = 1
-                # 是每张图片的标签对应的值为1其他的值为0 例如：[0,0,0,1,0]
                 input_labels[index][i] = 1
                 index += 1
 
-    # 第一次遍历图片目录是为了获取验证图片总数
+     # 第一次遍历图片目录是为了获取图片总数
     val_count = 0
     for i in range(0, NUM_CLASSES):
-        dir = './train_images/validation-set/chinese-characters/%s/' % i  # 这里可以改成你自己的图片目录，i为分类标签
+        dir = VALIDATION_DIR + "%s/" % i  # 这里可以改成你自己的图片目录，i为分类标签
         for rt, dirs, files in os.walk(dir):
             for filename in files:
                 val_count += 1
@@ -89,10 +92,10 @@ def train():
     val_images = np.array([[0] * SIZE for i in range(val_count)])
     val_labels = np.array([[0] * NUM_CLASSES for i in range(val_count)])
 
-    # 第二次遍历图片目录是为了生成验证图片数据和标签
+    # 第二次遍历图片目录是为了生成图片数据和标签
     index = 0
     for i in range(0, NUM_CLASSES):
-        dir = './train_images/validation-set/chinese-characters/%s/' % i  # 这里可以改成你自己的图片目录，i为分类标签
+        dir = VALIDATION_DIR + "%s/" % i  # 这里可以改成你自己的图片目录，i为分类标签
         for rt, dirs, files in os.walk(dir):
             for filename in files:
                 filename = dir + filename
@@ -149,9 +152,6 @@ def train():
         correct_prediction = tf.equal(tf.argmax(y_conv, 1), tf.argmax(y_, 1))
         accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
-        # 初始化saver
-        saver = tf.train.Saver()
-
         sess.run(tf.global_variables_initializer())
 
         time_elapsed = time.time() - time_begin
@@ -162,7 +162,7 @@ def train():
 
         # 设置每次训练op的输入个数和迭代次数，这里为了支持任意图片总数，定义了一个余数remainder，譬如，如果每次训练op的输入个数为60，图片总数为150张，则前面两次各输入60张，最后一次输入30张（余数30）
         batch_size = 60
-        iterations = iterations
+        iterations = iterations_num
         batches_count = int(input_count / batch_size)
         remainder = input_count % batch_size
         print("训练数据集分成 %s 批, 前面每批 %s 个数据，最后一批 %s 个数据" % (batches_count + 1, batch_size, remainder))
@@ -183,7 +183,7 @@ def train():
             if it % 5 == 0:
                 iterate_accuracy = accuracy.eval(feed_dict={x: val_images, y_: val_labels, keep_prob: 1.0})
                 print('第 %d 次训练迭代: 准确率 %0.5f%%' % (it, iterate_accuracy * 100))
-                if iterate_accuracy >= 0.9999 and it >= 150:
+                if iterate_accuracy >= 0.9999 and it >= 230:
                     break;
 
         print('完成训练!')
@@ -195,6 +195,8 @@ def train():
         if not os.path.exists(SAVER_DIR):
             print('不存在训练数据保存目录，现在创建保存目录')
             os.makedirs(SAVER_DIR)
+            # 初始化saver
+        saver = tf.train.Saver()
         saver_path = saver.save(sess, "%smodel.ckpt" % (SAVER_DIR))
 
 def predict():
@@ -236,9 +238,9 @@ def predict():
 
         # 定义优化器和训练op
         conv = tf.nn.softmax(tf.matmul(h_fc1_drop, W_fc2) + b_fc2)
-
-        for n in range(1, 2):
-            path = "../chepai/%s.jpg" % (n)
+        license_num = ""
+        for n in range(2, 8):
+            path = PREDICT_DIR + "%s.jpg" % n
             img = Image.open(path)
             width = img.size[0]
             height = img.size[1]
@@ -246,19 +248,19 @@ def predict():
             img_data = [[0] * SIZE for i in range(1)]
             for h in range(0, height):
                 for w in range(0, width):
-                    if img.getpixel((w, h)) < 190:
+                    if img.getpixel((w, h)) < 20:
                         img_data[0][w + h * width] = 1
                     else:
                         img_data[0][w + h * width] = 0
 
             result = sess.run(conv, feed_dict={x: np.array(img_data), keep_prob: 1.0})
+
             max1 = 0
             max2 = 0
             max3 = 0
             max1_index = 0
             max2_index = 0
             max3_index = 0
-            # 获取前三个概率最大的省份及其索引
             for j in range(NUM_CLASSES):
                 if result[0][j] > max1:
                     max1 = result[0][j]
@@ -273,11 +275,13 @@ def predict():
                     max3_index = j
                     continue
 
-            nProvinceIndex = max1_index
+            license_num = license_num + LETTERS_DIGITS[max1_index]
             print("概率：  [%s %0.2f%%]    [%s %0.2f%%]    [%s %0.2f%%]" % (
-            PROVINCES[max1_index], max1 * 100, PROVINCES[max2_index], max2 * 100, PROVINCES[max3_index], max3 * 100))
+            LETTERS_DIGITS[max1_index], max1 * 100, LETTERS_DIGITS[max2_index], max2 * 100, LETTERS_DIGITS[max3_index],
+            max3 * 100))
 
-        print("省份简称是: %s" % PROVINCES[nProvinceIndex])
+        print("车牌编号是: 【%s】" % license_num)
+        return license_num
 
 if __name__ == '__main__':
-    predict()
+    train()

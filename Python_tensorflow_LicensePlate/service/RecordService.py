@@ -22,3 +22,6 @@ class RecordService(object):
         list = RecordImpl().findRecordByPlateNumber(platenumber)
         return list
 
+    def saveRecord(self, record):
+        recordDao = RecordImpl()
+        recordDao.insertRecord(record)

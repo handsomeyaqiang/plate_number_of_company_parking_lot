@@ -8,7 +8,7 @@ class ParkPlaceDao(object):
 
     @abstractmethod
 
-    def find(self,parkplaceid):
+    def findbyid(self,parkplaceid):
         pass
     @abstractmethod
     def updatecarnumber(self, parkplace):
@@ -46,4 +46,9 @@ class ParkPlaceDao(object):
     @abstractmethod
     def updatelockstatus(self,lockstatus,parkPlaceID):
         pass
-
+    @abstractmethod
+    def findbytype(self,type):
+        pass
+    @abstractmethod
+    def findemptybytype(self,type):
+        pass

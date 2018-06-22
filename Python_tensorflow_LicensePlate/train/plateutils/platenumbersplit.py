@@ -1,7 +1,12 @@
 import cv2
 init_fazhi = 120
+
+DIR_RECEIVED_IMAGES = "../../resources/images/receivedplateimages"
+DIR_MIDEL_IMAGES = "../../resources/images/midledimages"
+DIR_SPLIT_IMAGES = "../../resources/images/splitplateimages"
+
 # 1、读取图像，并把图像转换为灰度图像并显示
-img = cv2.imread("number_plate.jpg")  # 读取图片
+img = cv2.imread(DIR_MIDEL_IMAGES+'/number_plate.jpg')  # 读取图片
 img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # 转换了灰度化
 cv2.imshow('gray', img_gray)  # 显示图片
 cv2.waitKey(0)
@@ -28,7 +33,7 @@ cv2.imshow('threshold', img_thre)
 cv2.waitKey(0)
 
 # 3、保存黑白图片
-cv2.imwrite('thre_res.png', img_thre)
+cv2.imwrite(DIR_MIDEL_IMAGES+'/thre_res.png', img_thre)
 print(img_thre)
 # 4、分割字符
 white = []  # 记录每一列的白色像素总和
@@ -107,7 +112,7 @@ while col_start < width - 6:
             cj = img_thre[20:76, col_start:col_end]
             cv2.imshow('caijian', cj)
             newImage = cv2.resize(cj,(32, 40),interpolation=cv2.INTER_CUBIC)
-            cv2.imwrite("../chepai/" + str(count) + ".jpg", newImage)
+            cv2.imwrite(DIR_SPLIT_IMAGES + "/" + str(count) + ".jpg", newImage)
             count += 1
             cv2.waitKey(0)
         col_start = col_end

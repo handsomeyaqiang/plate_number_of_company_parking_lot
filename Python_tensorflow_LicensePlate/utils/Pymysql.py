@@ -19,7 +19,8 @@ class PyMySQLHelper:
     # 定义一个连接mysql的函数
     def getConnection(self):
         try:
-            conn = pymysql.connect(host='localhost', port=3306, user='root', password='root', db='company_parking_system')
+            conn = pymysql.connect(host='localhost', port=3306, user='root', password='root', db='company_parking_system',use_unicode=True,
+                                   charset="utf8")
         except pymysql.Error as e:
             print("pymysql Connection Error:%s" % e)
         return conn

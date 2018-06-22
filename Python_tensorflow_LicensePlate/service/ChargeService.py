@@ -11,17 +11,15 @@ class ChargeService:
         :return: 返回应缴金额
         """
         result = ParkResult.ParkResult()
-        try:
-            # 将时间转换为时间戳
-            begintime = totime(begintime)
-            endtime = totime(endtime)
-            # 获取收费规则
-            rule = ChargeRulesDaoImpl().showRules()
-            money = ChargeRulesDaoImpl().chargemoney(rule,begintime,endtime)
-            return result.ok(money)
-        except Exception as e:
-            print(e)
-            return result.error("获取应缴金额失败！")
+
+        # 将时间转换为时间戳
+        begintime = totime(begintime)
+        endtime = totime(endtime)
+        # 获取收费规则
+        rule = ChargeRulesDaoImpl().showRules()
+        money = ChargeRulesDaoImpl().chargemoney(rule,begintime,endtime)
+        return money
+
 
     def updaterule(self,rule):
         """更新收费规则
