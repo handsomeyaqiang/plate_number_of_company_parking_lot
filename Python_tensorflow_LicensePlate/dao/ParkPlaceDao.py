@@ -49,5 +49,6 @@ class ParkPlaceDao(object):
     @abstractmethod
     def findbytype(self,type):
         pass
+    @abstractmethod
     def findemptybytype(self,type):
         pass

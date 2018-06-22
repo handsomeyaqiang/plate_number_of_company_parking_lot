@@ -157,3 +157,15 @@ class ParkPlaceImpl(ParkPlaceDao):
             return list
         else:
             return -1
+
+    def findemptybytype(self, type):
+        """根据传入车位类型返回空闲车位对象列表"""
+        sql = 'select * from parkplace where parkPlaceType = %s and useCarNumber is NULL '%(type)
+        result = PyMySQLHelper().selectalldictcursor(sql)
+        list = []
+        for rs in result:
+            parkplace = ParkPlace(rs['lockStatus'], rs['parkPlaceType'], rs['useCarNumber'])
+            parkplace.parkPlaceID = rs['parkPlaceID']
+            list.append(parkplace)
+        return list
+
