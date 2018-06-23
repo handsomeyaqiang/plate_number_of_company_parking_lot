@@ -29,7 +29,7 @@ class RecordService(object):
         result = ParkResult()
         try:
             s = RecordImpl()
-            list = s.findRecordByDay(day)
+            list = s.findRecordByYear(day)
             return result.ok(list)
         except Exception as e:
             print(e)
@@ -40,7 +40,7 @@ class RecordService(object):
         result = ParkResult()
         try:
             s = RecordImpl()
-            list = s
+            list = s.findRecordByPlateID(platenumber)
             return result.ok(list)
         except Exception as e:
             print(e)
