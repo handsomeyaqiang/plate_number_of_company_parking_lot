@@ -51,7 +51,7 @@ class VehilceDaoImpl(VehicleDao):
             SID = rs['SID']
             PlateID=rs['PlateID']
             owner=rs['owner']
-            vehicle_identity=rs['vehicle_identity']
+            vehicle_identity=rs['Vehicle_identity']
             vehicle = Vehicle(SID,PlateID, owner, vehicle_identity)
             list.append(vehicle)
         return list
@@ -60,13 +60,13 @@ class VehilceDaoImpl(VehicleDao):
     def findVehicleByPlateID(self, PlateID):
         py = Pymysql.PyMySQLHelper()
         sql = "select * from vehicle where PlateID = '%s'"%(PlateID)
-        result=py.selectOne(sql)
+        result=py.selectalldictcursor(sql)
         list = []
         for rs in result:
             SID = rs['SID']
             PlateID = rs['PlateID']
             owner = rs['owner']
-            vehicle_identity =rs['vehicle_identity']
+            vehicle_identity =rs['Vehicle_identity']
             vehicle = Vehicle(SID,PlateID, owner, vehicle_identity)
             list.append(vehicle)
         return list
@@ -83,7 +83,7 @@ class VehilceDaoImpl(VehicleDao):
             SID = rs['SID']
             PlateID=rs['PlateID']
             owner=rs['owner']
-            vehicle_identity=rs['vehicle_identity']
+            vehicle_identity=rs['Vehicle_identity']
             vehicle = Vehicle(SID,PlateID,owner,vehicle_identity)
             list.append(vehicle)
         return list
