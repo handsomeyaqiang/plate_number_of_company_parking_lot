@@ -40,8 +40,12 @@ class RecordService(object):
         result = ParkResult()
         try:
             s = RecordImpl()
-            list = s.findRecordByPlateID(platenumber)
+            list = s
             return result.ok(list)
         except Exception as e:
             print(e)
             return result.error("查询记录信息失败！")
+
+    def saveRecord(self, record):
+        recordDao = RecordImpl()
+        recordDao.insertRecord(record)
