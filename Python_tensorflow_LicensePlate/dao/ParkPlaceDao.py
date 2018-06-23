@@ -52,3 +52,6 @@ class ParkPlaceDao(object):
     @abstractmethod
     def findemptybytype(self,type):
         pass
+    @abstractmethod
+    def updatetypebyparkplaceid(self,parkplaceid,type):
+        pass
