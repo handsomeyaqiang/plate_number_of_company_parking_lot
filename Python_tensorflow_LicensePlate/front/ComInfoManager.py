@@ -23,7 +23,7 @@ class InfoManage(QWidget):
                        "QLabel{color:rgb(100,100,100,250);font-size:15px;font-weight:bold;font-family:Roman times;}")
 
         palette = QPalette()
-        icon = QPixmap('info.jpg').scaled(680, 480)
+        icon = QPixmap('info1.jpg').scaled(680, 480)
         palette.setBrush(self.backgroundRole(), QBrush(icon))
         self.setPalette(palette)
 
