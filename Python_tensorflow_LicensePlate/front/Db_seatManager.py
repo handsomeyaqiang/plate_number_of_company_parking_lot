@@ -1,8 +1,8 @@
-from seatManage import *
-from Db_SeatUpdate import *
-from Db_addSeat import *
-from Db_dayFee import *
-from Db_nightFee import *
+from Python_tensorflow_LicensePlate.front.seatManage import *
+from Python_tensorflow_LicensePlate.front.Db_SeatUpdate import *
+from Python_tensorflow_LicensePlate.front.Db_addSeat import *
+from Python_tensorflow_LicensePlate.front.Db_dayFee import *
+from Python_tensorflow_LicensePlate.front.Db_nightFee import *
 import sys
 import pymysql
 from PyQt5.QtWidgets import *
@@ -183,7 +183,7 @@ class SeatManage(QWidget):
         self.ui3.show()
 
     # 删除修改的按钮函数
-    def buttonForRow(self, id):
+    def buttonForRow(self, id,type):
         widget = QWidget()
         # 修改
         updateBtn = QPushButton('修改')
@@ -202,7 +202,7 @@ class SeatManage(QWidget):
                                              height : 30px;
                                              border-style: outset;
                                              font : 13px; ''')
-        deleteBtn.clicked.connect(lambda: self.DeleteTip(id))
+        deleteBtn.clicked.connect(lambda: self.DeleteTip(id,type))
 
         hLayout = QHBoxLayout()
         hLayout.addWidget(updateBtn)
@@ -243,54 +243,52 @@ class SeatManage(QWidget):
         return widget
 
     # 用来提示用户是否删除信息
-    def DeleteTip(self, id):
+    def DeleteTip(self, id,type):
         reply = QMessageBox.question(self, '提示',
                                      "确定删除吗？", QMessageBox.Yes |
                                      QMessageBox.No, QMessageBox.No)
         if reply == QMessageBox.Yes:
-            self.DB_delete(id)
+            self.DB_delete(id,type)
 
     # 删除车位信息  先根据id删除数据，然后查找所有刷新展示页面 里面的数据库需要规范化
-    def DB_delete(self, id):
-        sql = "delete  from staff where Sid = '" + id + "'"
-        print(sql)
+    def DB_delete(self, id,type):
+        pcontrol = ParkPlaceController()
+
         if id != '':
             try:
-                conn = pymysql.connect(host='127.0.0.1',
-                                       port=3306, user='root', password='271996', db='db_car', charset='utf8')
-                cursor = conn.cursor()
-                cursor.execute(sql)
-                conn.commit()
-                sql_all = "select Sid, vehicleQuantity, name, phone, gender,  department  from staff"
-                cursor.execute(sql_all)
-                rows = cursor.fetchall()
+                rs1 = pcontrol.deleteparkplacebyid(id)
+                if rs1.status == 200:
+                    # QMessageBox.information(self, ("提示"), ("删除成功"))
+                    #刷新页面
+                    if type == -1:
+                        rs =pcontrol.findbyid(eval(id))
+                        list = rs.data
+                    else:
+                        rs = pcontrol.findbytype(type)
+                        list = rs.data
 
-                row = cursor.rowcount  # 通过查询的数据，取得记录条数，用来设置表格的行数
-                col = len(rows[0])  # 取得每条记录的长度，用来设置表格的列数
-                cursor.close()
-                conn.close()
+                    row = len(list)
+                    col = ["parkPlaceID", "parkPlaceType"]
+                    self.ui.tableWidget_4.setRowCount(row)  # 控件的名字保持一致，切莫想当然
+                    self.ui.tableWidget_4.setColumnCount(len(col) + 1)  # 加1，开辟一列放操作按钮
+                    self.ui.tableWidget_4.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
+                    self.ui.tableWidget_4.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
 
-                self.ui.tableWidget_4.setRowCount(row)  # 控件的名字保持一致，切莫想当然
-                self.ui.tableWidget_4.setColumnCount(col + 1)  # 加1，开辟一列放操作按钮
-                self.ui.tableWidget_4.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
-                self.ui.tableWidget_4.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
+                    for i in range(row):
+                        for j in range(len(col)):
+                            parkplace = list[i]
+                            temp_data = parkplace.__getattribute__(col[j])  # 临时记录，不能直接插入表格
+                            data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
+                            self.ui.tableWidget_4.setItem(i, j, data)
+                            # 数据库因为从0开始计数，所以列数减一
+                            if j == len(col) - 1:
+                                # print(rows[i][0])
+                                # 传入id rows[i][0]
+                                self.ui.tableWidget_4.setCellWidget(i, j + 1, self.buttonForRow(str(parkplace.parkPlaceID),type))
 
-                for i in range(row):
-                    for j in range(col):
-                        temp_data = rows[i][j]  # 临时记录，不能直接插入表格
-                        data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
-                        self.ui.tableWidget_4.setItem(i, j, data)
-                        # 数据库因为从0开始计数，所以列数减一
-                        if j == col - 1:
-                            # print(rows[i][0])
-                            # 传入id rows[i][0]
-                            self.ui.tableWidget_4.setCellWidget(i, j + 1, self.buttonForRow(str(rows[i][0])))
-
-                cursor.close()
-                conn.close()
-                OK = QMessageBox.information(self, ("提示"), ("删除成功"))
+                    OK = QMessageBox.information(self, ("提示"), ("删除成功"))
             except Exception:
-                self.ui.statusbar.showMessage("删除异常", 2000)
+                QMessageBox.information(self, ("提示"), ("发生错误！"))
 
     # 修改 车位设置的信息
     def DB_update(self, id):
@@ -334,46 +332,58 @@ class SeatManage(QWidget):
     # 车位操作的控制逻辑
     def operateSeat2(self):
         # 获取界面输入
+        #如果输入框不为空则按车位号进行检索
         category = self.ui.comboBox.currentText()
         input = self.ui.lineEdit_4.text()
-        if category != '' and input != '':
-            # 开始操作数据库按输入的条件查询车位信息
 
-            sql = "select SID, PlateID, owner, Vehicle_identity  from vehicle"
-            try:
-                conn = pymysql.connect(host='127.0.0.1',
-                                       port=3306, user='root', password='271996', db='company_parking_system',
-                                       charset='utf8')
-                cursor = conn.cursor()
-                cursor.execute(sql)
+        list = []
+        pcontrol = ParkPlaceController()
+        tempinputdata=''
+        if input != '':
 
-                rows = cursor.fetchall()
-                row = cursor.rowcount  # 通过查询的数据，取得记录条数，用来设置表格的行数
-                col = len(rows[0])  # 取得每条记录的长度，用来设置表格的列数
+            result = pcontrol.findbyid(eval(input))
+            type = -1
+            tempinputdata =input
+            if result.status ==200:
+               list.append(result.data)
+            else:
+                # 需添加查找失败弹窗或标签
+                pass
+        elif category =="员工车位":
+            type = 0
+            result = pcontrol.findbytype(type)
+            if result.status ==200:
+                list = result.data
+            else:
+                #查找失败弹窗
+                pass
+        elif category =="临时车位":
+            type = 1
+            result = pcontrol.findbytype(type)
+            if result.status ==200:
+                list = result.data
+            else:
+                #查找失败弹窗
+                pass
+        #显示查找结果
+        row = len(list)
+        col = ["parkPlaceID","parkPlaceType"]
+        self.ui.tableWidget_4.setRowCount(row)  # 控件的名字保持一致，切莫想当然
+        self.ui.tableWidget_4.setColumnCount(len(col) + 1)  # 加1，开辟一列放操作按钮
+        self.ui.tableWidget_4.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
+        self.ui.tableWidget_4.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
 
-                cursor.close()
-                conn.close()
-
-                self.ui.tableWidget_4.setRowCount(row)  # 控件的名字保持一致，切莫想当然
-                self.ui.tableWidget_4.setColumnCount(col + 1)  # 加1，开辟一列放操作按钮
-                self.ui.tableWidget_4.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
-                self.ui.tableWidget_4.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
-
-                for i in range(row):
-                    for j in range(col):
-                        temp_data = rows[i][j]  # 临时记录，不能直接插入表格
-                        data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
-                        self.ui.tableWidget_4.setItem(i, j, data)
-                        # 数据库因为从0开始计数，所以列数减一
-                        if j == col - 1:
-                            # print(rows[i][0])
-                            # 传入id rows[i][0]
-                            self.ui.tableWidget_4.setCellWidget(i, j + 1, self.buttonForRow(str(rows[i][0])))
-
-                self.ui.statusbar.showMessage("查询成功")
-            except Exception:
-
-                self.ui.statusbar.showMessage("查询异常", 2000)
+        for i in range(row):
+            for j in range(len(col)):
+                parkplace = list[i]
+                temp_data = parkplace.__getattribute__(col[j])  # 临时记录，不能直接插入表格
+                data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
+                self.ui.tableWidget_4.setItem(i, j, data)
+                # 数据库因为从0开始计数，所以列数减一
+                if j == len(col) - 1:
+                    # print(rows[i][0])
+                    # 传入id rows[i][0]
+                    self.ui.tableWidget_4.setCellWidget(i, j + 1, self.buttonForRow(str(parkplace.parkPlaceID),type))
 
     # 车位锁状态  查询所有，获得车位的id后进行打开关闭操作，点击打开时，先调用是否确认打开的提示
     # 然后根据id 查询到该车位的 车位状态，根据id 修改，在查询所有，放在table上
