@@ -2,7 +2,7 @@ from Python_tensorflow_LicensePlate.dao import RecordDao
 from Python_tensorflow_LicensePlate.utils import Pymysql
 from Python_tensorflow_LicensePlate.entity.Record import Record
 
-class RecordImpl(RecordDao):
+class RecordImpl(RecordDao.RecordDao):
 
     # 车辆进入时的信息登记
     def insertRecord(self, record):
@@ -35,17 +35,15 @@ class RecordImpl(RecordDao):
     #根据车牌号查找车辆记录
     def findRecordByPlateID(self, platenumber):
         py = Pymysql.PyMySQLHelper()
-        sql = "select * from record where platenumber = '%s'"%(platenumber)
+        sql = "select platenumber,intime,outtime,vehicletype from record  where platenumber ='%s'"%(platenumber)
         result = py.selectalldictcursor(sql)
         list = []
         for rs in result:
-            rid=rs['rid']
             PNumber = rs['platenumber']
             intime = rs['intime']
             outtime = rs['outtime']
             vehicletype = rs['vehicletype']
-            feestatus = rs['feestatus']
-            record = Record(rid,PNumber, intime, outtime, vehicletype, feestatus)
+            record = Record(PNumber, intime, outtime, vehicletype)
             list.append(record)
         return list
 
@@ -58,13 +56,11 @@ class RecordImpl(RecordDao):
         result=py.selectAllByParam(sql,params)
         list = []
         for rs in result:
-            rid=rs['rid']
             PNumber = rs['platenumber']
             intime = rs['intime']
             outtime = rs['outtime']
             vehicletype = rs['vehicletype']
-            feestatus = rs['feestatus']
-            record = Record(rid,PNumber, intime, outtime, vehicletype, feestatus)
+            record = Record(PNumber, intime, outtime, vehicletype)
             list.append(record)
         return list
 
@@ -76,13 +72,11 @@ class RecordImpl(RecordDao):
         result = py.selectAllByParam(sql, params)
         list = []
         for rs in result:
-            rid = rs['rid']
             PNumber = rs['platenumber']
             intime = rs['intime']
             outtime = rs['outtime']
             vehicletype = rs['vehicletype']
-            feestatus = rs['feestatus']
-            record = Record(rid, PNumber, intime, outtime, vehicletype, feestatus)
+            record = Record(PNumber, intime, outtime, vehicletype)
             list.append(record)
         return list
 
@@ -94,13 +88,11 @@ class RecordImpl(RecordDao):
         result = py.selectAllByParam(sql, params)
         list = []
         for rs in result:
-            rid = rs['rid']
             PNumber = rs['platenumber']
             intime = rs['intime']
             outtime = rs['outtime']
             vehicletype = rs['vehicletype']
-            feestatus = rs['feestatus']
-            record = Record(rid, PNumber, intime, outtime, vehicletype, feestatus)
+            record = Record(PNumber, intime, outtime, vehicletype)
             list.append(record)
         return list
 
