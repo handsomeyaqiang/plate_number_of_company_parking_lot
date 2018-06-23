@@ -17,7 +17,7 @@ class ParkPlaceService(object):
         try:
             innerparkplace = ParkPlace(0, 0, None)
             for i in range(innernumber):
-                ParkPlaceImpl.insertparkplace(innerparkplace)
+                ParkPlaceImpl().insertparkplace(innerparkplace)
             tempparkplace = ParkPlace(0, 1, None)
             for i in range(tempnumber):
                 ParkPlaceImpl().insertparkplace(tempparkplace)
@@ -237,8 +237,19 @@ class ParkPlaceService(object):
             return result.ok2()
         except Exception as e:
             return result.error("回收车位失败！")
-
-
-
+    def updateparkplacetype(self,parkplaceid,type):
+        """
+        根据车位号更新车位类型
+        :param parkplaceid: 车位号
+        :param type: 更新后的车位类型 0 内部 1 外部
+        :return:
+        """
+        result = ParkResult()
+        try:
+            ParkPlaceImpl().updatetypebyparkplaceid(parkplaceid,type)
+            return result.ok2()
+        except Exception as e:
+            print(e)
+            return result.error("更新失败！")
 
 
