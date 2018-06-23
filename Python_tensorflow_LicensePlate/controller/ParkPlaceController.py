@@ -27,7 +27,7 @@ class ParkPlaceController(object):
 
     def deleteparkplacebyid(self, parkplaceid):
         """根据车位号删除车位"""
-        rs = ParkPlaceService().deleteparkplacenyid(parkplaceid)
+        rs = ParkPlaceService().deleteparkplacebyid(parkplaceid)
         return rs
 
     def getempty_innerparkplacecount(self):
@@ -101,11 +101,30 @@ class ParkPlaceController(object):
         rs = ParkPlaceService().reclaimparkpalce(parkplaceid)
         return rs
 
-    def findbytype(self,type):
+    def findbytype(self, type):
         """
         根据车位类型返回车位对象列表
         :param type:0 内部车位 1 临时车位
         :return:车位对象列表
         """
-        rs = ParkPlaceService().findbytype()
+        rs = ParkPlaceService().findbytype(type)
+        return rs
+
+    def findbyid(self, parkplaceid):
+        """
+        根据车位号返回车位对象
+        :param parkplaceid: 车位
+        :return: 车位对象
+        """
+        rs = ParkPlaceService().findbyid(parkplaceid)
+        return rs
+
+    def updatetypebyid(self, parkpalceid, type):
+        """
+        根据车位号更新车位类型
+        :param parkpalceid: 车位号
+        :param type: 车位类型
+        :return:
+        """
+        rs = ParkPlaceService().updateparkplacetype(parkpalceid, type)
         return rs
