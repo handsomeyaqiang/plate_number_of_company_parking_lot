@@ -169,3 +169,9 @@ class ParkPlaceImpl(ParkPlaceDao):
             list.append(parkplace)
         return list
 
+    def updatetypebyparkplaceid(self, parkplaceid, type):
+        """根据车位号更新车位类型"""
+
+        sql = 'update parkplace set parkPlaceType =%s WHERE  parkPlaceID =%s'%(type,parkplaceid)
+        result = PyMySQLHelper().update(sql)
+        return result
