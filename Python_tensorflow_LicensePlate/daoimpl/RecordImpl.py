@@ -48,12 +48,13 @@ class RecordImpl(RecordDao.RecordDao):
         return list
 
 
-    # 根据车辆离开时间按年查找车辆记录
-    def findRecordByYear(self, year):
+    # 根据车辆进入时间查找车辆记录
+    def findRecordByInTime(self, time):
         py = Pymysql.PyMySQLHelper()
-        sql = "select * from record WHERE DATE_FORMAT(outtime,'%%Y') = %s"
-        params = (year)
-        result=py.selectAllByParam(sql,params)
+        # args = ('%'+year+'%')
+        # sql = "select platenumber,intime,outtime,vehicletype from record where outtime like '%s'" % args
+        sql = "select platenumber,intime,outtime,vehicletype from record where intime like '%%%s%%'" % (time)
+        result = py.selectalldictcursor(sql)
         list = []
         for rs in result:
             PNumber = rs['platenumber']
@@ -64,12 +65,11 @@ class RecordImpl(RecordDao.RecordDao):
             list.append(record)
         return list
 
-    # 根据车辆离开时间按月查找车辆记录
-    def findRecordByMonth(self, month):
+    # 根据车辆离开时间查找车辆记录
+    def findRecordByOutTime(self, time):
         py = Pymysql.PyMySQLHelper()
-        sql = "select * from record WHERE DATE_FORMAT(outtime,'%%Y-%%m') = %s"
-        params = (month)
-        result = py.selectAllByParam(sql, params)
+        sql = "select platenumber,intime,outtime,vehicletype from record where outtime like '%%%s%%'" % (time)
+        result = py.selectalldictcursor(sql)
         list = []
         for rs in result:
             PNumber = rs['platenumber']
@@ -80,12 +80,11 @@ class RecordImpl(RecordDao.RecordDao):
             list.append(record)
         return list
 
-    # 根据车辆离开时间按日查找车辆记录
-    def findRecordByDay(self, day):
+    # 根据车辆类型查找车辆记录
+    def findRecordByVehicleType(self, type):
         py = Pymysql.PyMySQLHelper()
-        sql = "select * from record WHERE DATE_FORMAT(outtime,'%%Y-%%m-%%d') = %s"
-        params = (day)
-        result = py.selectAllByParam(sql, params)
+        sql = "select platenumber,intime,outtime,vehicletype from record  where vehicletype ='%s'" % (type)
+        result = py.selectalldictcursor(sql)
         list = []
         for rs in result:
             PNumber = rs['platenumber']
