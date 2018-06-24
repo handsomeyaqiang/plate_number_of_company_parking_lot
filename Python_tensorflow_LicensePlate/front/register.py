@@ -37,6 +37,12 @@ class reUi(QWidget):
         self.ui.phonelineEdit.setFixedSize(150, 24)
         self.ui.comboBox.setFixedSize(130, 24)
         self.ui.comboBox_2.setFixedSize(130, 24)
+
+        self.ui.namelineEdit.setClearButtonEnabled(True)
+        self.ui.phonelineEdit.setClearButtonEnabled(True)
+        self.ui.emalineEdit_3.setClearButtonEnabled(True)
+        self.ui.surePwdlineEdit.setClearButtonEnabled(True)
+        self.ui.pwdlineEdit.setClearButtonEnabled(True)
         # 槽函数
         self.ui.firmpushButton_2.clicked.connect(self.addAdmin)
         self.ui.concelpushButton.clicked.connect(self.clearInput)
@@ -61,9 +67,16 @@ class reUi(QWidget):
         MbAnswer = self.ui.emalineEdit_3.text()
 
         if self.ui.nv_radioButton.isChecked():
-            Gender = "女"
+            Gender = 0
         else:
-            Gender = "男"
+            Gender = 1
+        if identity == '财务管理员':
+            identity = 0
+        elif identity == '信息管理员':
+            identity = 1
+        else:
+            identity = 2
+        print(identity)
         print('对方水电费')
         # print('姓名：%s 密码：%s 确认密码：%s 手机号：%s  性别：%s 密保问题：%s 密保答案：%s' %
         #       (name, pwd, repwd, phone, Gender, MbQuestion, MbAnswer))
@@ -86,9 +99,11 @@ class reUi(QWidget):
             OK = QMessageBox.warning(self, ("警告"), ("密保答案不能为空！"))
 
         if name != "" and pwd != "" and repwd != "" and phone != "" and MbQuestion != "":
-            db = pymysql.connect(host="localhost", user="root", password="271996", db="db_car", charset="utf8")
-            cursor = db.cursor()
-            sql = "insert into admin(name, pwd, gender, phone, question, answer, identity) values " \
+            conn = pymysql.connect(host='127.0.0.1',
+                                   port=3306, user='root', password='271996', db='company_parking_system',
+                                   charset='utf8')
+            cursor = conn.cursor()
+            sql = "insert into administrater(username, password, gender, phone, question,answer, identity) values " \
                   "('" + name + "', " \
                                 "'" + pwd + "'," \
                                             " '" + Gender + "'," \
@@ -97,17 +112,14 @@ class reUi(QWidget):
                                                                                                "'" + MbAnswer + "', " \
                                                                                                                 "'" + identity + "')"
             print(sql)
-            cursor.execute(sql)
-            db.commit()
-            db.close()
-            try:
-                cursor.execute(sql)
-                db.commit()
-            except Exception as e:
-                db.rollback()
-            finally:
 
-                db.close()
+
+
+
+            cursor.execute(sql)
+            conn.commit()
+            conn.close()
+
             OK = QMessageBox.information(self, ("警告"), ("注册的用户信息不能为空！"))
         else:
             OK = QMessageBox.warning(self, ("警告"), ("注册的用户信息不能为空！"))

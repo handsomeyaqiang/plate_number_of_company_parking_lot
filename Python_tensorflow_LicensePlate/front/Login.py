@@ -1,11 +1,15 @@
 import sys
+import pymysql
 from PyQt5.QtWidgets import *
 from FPwd import *   # 导入文件的顺序不同会导致文件类识别异常，原因未知
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtCore import *
 from loginUI import *
 from register import *
-from Admin import *
+from Db_finance import *
+from ComInfoManager import *
+from Db_seatManager import *
+
 
 from PyQt5.QtWidgets import QWidget
 from PyQt5 .QtGui import *
@@ -14,7 +18,7 @@ from PyQt5.QtCore import *
 class Login(QWidget):
     def __init__(self):
         super(Login, self).__init__()
-        self.ui = Ui_Form()
+        self.ui = Ui_login_Ui()
         self.ui.setupUi(self)
 
         # self.setMinimumSize(QtCore.QSize(400, 200))  # 控制缩放范围
@@ -25,7 +29,7 @@ class Login(QWidget):
         # MainWindow.setFixedSize(MainWindow.width(), MainWindow.height());
         self.setWindowTitle("欢迎使用停车场管理系统")
         self.ui.labelTip.hide()
-
+        self.ui.labelTip.setText("密码或用户名不能为空!")
         # 设置label字体
         labelFont = QFont()
         labelFont.setPixelSize(15)
@@ -34,6 +38,9 @@ class Login(QWidget):
         self.ui.label_2.setMovie(self.gif)
         self.gif.start()
         # 这在label属性
+        self.ui.labelTip.setStyleSheet(
+            "QLabel{color:red;font-size:12px;font-weight:bold;font-family:Roman times;}"
+                                    )
         self.ui.userLabel.setStyleSheet("QLabel{background:white;}"
                    "QLabel{color:rgb(100,100,100,250);font-size:15px;font-weight:bold;font-family:Roman times;}"
                    "QLabel:hover{color:rgb(300,300,300,120);}")
@@ -63,7 +70,7 @@ class Login(QWidget):
         # 设置控件尺寸
         # self.ui.userlineEdit.setFrame(False)
         # self.ui.pwdlineEdit.setFrame(False)
-
+        self.ui.pwdlineEdit.setEchoMode(QLineEdit.Password)# 输入框设为密码模式
         self.ui.pwdlineEdit.setClearButtonEnabled(True)
         self.ui.userlineEdit.setClearButtonEnabled(True)
         self.ui.userlineEdit.setFixedWidth(190)
@@ -83,41 +90,90 @@ class Login(QWidget):
         self.ui.loginButton.clicked.connect(self.slotLogin)
         self.ui.registerButton.clicked.connect(self.slotRegister)
         self.ui.pushButton.clicked.connect(self.findPwd)
+
         text = self.ui.comboBox.currentText()
+        t = self.ui.comboBox.currentIndex()
+        print(t)
         print(text)
     def findPwd(self):
         self.ui = FPwd_ui()
         self.ui.show()
     def slotLogin(self):
-        if self.ui.userlineEdit.text() != "admin" or self.ui.pwdlineEdit.text() != "123":
-            self.ui.labelTip.show()
-        elif self.ui.userlineEdit.text() == " " or self.ui.pwdlineEdit.text() == " ":
-            self.ui.labelTip.setText("<font color=red>密码或用户名不能为空</font>")
+        # # 获得登录输入
+        name = self.ui.userlineEdit.text()
+        pwd = self.ui.pwdlineEdit.text()
+        print(name)
+        identity = self.ui.comboBox.currentIndex() # 获取下标
+        #  因为数据库登录人员的身份设计为整形，0表示财务管理，1表示信息管理，2表示停车场管理
+        if name != '' and pwd != '':
+            if identity == 0:
+                conn = pymysql.connect(host='127.0.0.1',
+                                       port=3306, user='root', password='271996', db='company_parking_system',
+                                       charset='utf8')
+                sql = "select * from administrater where username = '" + name + "' and password = '" + pwd + "' and identity= 0 "
+                print(sql)
+                cursor = conn.cursor()
+                cursor.execute(sql)
+
+                results = cursor.fetchall()
+
+                if results:
+                    self.ui1 = Finance()
+                    self.ui1.show()
+                    self.close()
+                else:
+                    OK = QMessageBox.warning(self, ("警告"), ("""账号或密码错误！"""))
+                cursor.close()
+                conn.close()
+            if identity == 1:
+                conn = pymysql.connect(host='127.0.0.1',
+                                       port=3306, user='root', password='271996', db='company_parking_system',
+                                       charset='utf8')
+                sql = "select * from administrater where username = '" + name + "' and password = '" + pwd + "' and identity= 1"
+                print(sql)
+                cursor = conn.cursor()
+                cursor.execute(sql)
+
+                results = cursor.fetchall()
+                print(identity)
+                if results:
+                    self.ui2 = InfoManage()
+                    self.ui2.show()
+                    self.close()
+                else:
+                    OK = QMessageBox.warning(self, ("警告"), ("""账号或密码错误！"""))
+                cursor.close()
+                conn.close()
+            if identity == 2:
+                conn = pymysql.connect(host='127.0.0.1',
+                                       port=3306, user='root', password='271996', db='company_parking_system',
+                                       charset='utf8')
+                sql = "select * from administrater where username = '" + name + "' and password = '" + pwd + "' and identity= 2 "
+                print(sql)
+                cursor = conn.cursor()
+                cursor.execute(sql)
+                results = cursor.fetchall()
+                print(identity)
+
+                if results:
+                    self.ui3 = SeatManage()
+                    self.ui3.show()
+                    self.close()
+                else:
+                    OK = QMessageBox.warning(self, ("警告"), ("""账号或密码错误！"""))
+                cursor.close()
+                conn.close()
         else:
-            self.ui = AdminUi()
-            self.ui.show()
-            print("登陆成功！")
+            if name == '':
+                OK = QMessageBox.warning(self, ("警告"), ("""请输入账号！"""))
+            if pwd == '':
+                OK = QMessageBox.warning(self, ("警告"), ("""请输入密码！"""))
+
     def slotRegister(self):
 
         # Dialog = QtWidgets.QWidget()   #定义前必须加self 不然跳转的页面闪一下就会消失
          self.ui = reUi()
          self.ui.show()
-        # ui.setupUi(Dialog)
-        # Dialog.show()
-    def closeEvent(self, QCloseEvent):
-        reply = QMessageBox.question(self, '提示',
-                                     "确定退出？", QMessageBox.Yes |
-                                     QMessageBox.No, QMessageBox.No)
-        if reply == QMessageBox.Yes:
-            QCloseEvent.accept()
-        else:
-            QCloseEvent.ignore()
-#
-# class reUi(QWidget):
-#     def __init__(self):
-#         super(reUi, self).__init__()
-#         self.ui = Ui_register()
-#         self.ui.setupUi(self)
 
 
 if __name__ == '__main__':
