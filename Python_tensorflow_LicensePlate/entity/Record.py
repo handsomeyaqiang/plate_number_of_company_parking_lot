@@ -8,10 +8,8 @@ class Record:
         feestatus 外部的车辆是否缴费
     '''
 
-    def __init__(self, rid, platenumber, intime, outtime, vehicletype, feestatus):
-        self.rid = rid
+    def __init__(self, platenumber, intime, outtime, vehicletype):
         self.platenumber = platenumber
         self.intime = intime
         self.outtime = outtime
         self.vehicletype = vehicletype
-        self.feestatus = feestatus

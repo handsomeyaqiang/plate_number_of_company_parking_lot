@@ -6,6 +6,7 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QWidget
 from PyQt5 .QtGui import *
 from PyQt5.QtCore import *
+from Python_tensorflow_LicensePlate.controller.RecordController import RecordController
 
 class CarRecord(QWidget):
     def __init__(self):
@@ -13,48 +14,86 @@ class CarRecord(QWidget):
         self.ui = Ui_carRecord()
         self.ui.setupUi(self)
         self.setWindowTitle("车辆历史记录查询")
+        self.flag=0
 
         # 槽函数
         self.ui.pushButton.clicked.connect(self.Query)
 
     def closeEvent(self, QCloseEvent):
-        reply = QMessageBox.question(self, '提示',
-                                     "确定退出？", QMessageBox.Yes |
-                                     QMessageBox.No, QMessageBox.No)
+        reply = QMessageBox.question(self, '提示',"确定退出？", QMessageBox.Yes |QMessageBox.No, QMessageBox.No)
         if reply == QMessageBox.Yes:
             QCloseEvent.accept()
         else:
             QCloseEvent.ignore()
 
     def Query(self):
-        category = self.ui.comboBox.currentText() # 查询的类别
-        input = self.ui.lineEdit.text()      # 输入的搜索条件
-        if category != '' and input != ' ':
+        #category = self.ui.comboBox.currentText() # 查询的类别
+        text = self.ui.lineEdit.text()      # 输入的搜索条件
 
-            # 执行数据库操作
-            conn = pymysql.connect(host='127.0.0.1',
-                                   port=3306, user='root', password='271996', db='company_parking_system',
-                                   charset='utf8')
-            cursor = conn.cursor()
-            cursor.execute(sql)
+        print(self.ui.lineEdit.text())
+        print(self.ui.comboBox.currentText())
 
-            rows = cursor.fetchall()
-            row = cursor.rowcount  # 通过查询的数据，取得记录条数，用来设置表格的行数
-            col = len(rows[0])  # 取得每条记录的长度，用来设置表格的列数
+        if self.ui.comboBox.currentText() == '车牌号':
+            self.flag = 3
+            sc = RecordController()
+            result = sc.findRecordByPid(text)
+            if result.status == 200:
+                row = len(result.data)
+                col = ["platenumber", "intime", "outtime", "vehicletype"]
+                self.ui.tableWidget.setRowCount(row)  # 控件的名字保持一致，切莫想当然
+                self.ui.tableWidget.setColumnCount(len(col))  # 加1，开辟一列放操作按钮
+                self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
+                self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
+                for i in range(row):
+                    for j in range(len(col)):
+                        record = result.data[i]
+                        temp_data = record.__getattribute__(col[j])  # 临时记录，不能直接插入表格
+                        if temp_data=='0':
+                            temp_data='内部车'
+                            data = QTableWidgetItem(str(temp_data))
+                            self.ui.tableWidget.setItem(i, j, data)
+                        elif temp_data=='':
+                            temp_data = '外部车'
+                            data = QTableWidgetItem(str(temp_data))
+                            self.ui.tableWidget.setItem(i, j, data)
+                        else:
+                            data = QTableWidgetItem(str(temp_data))
+                            self.ui.tableWidget.setItem(i, j, data)
+                OK = QMessageBox.information(self, ("提示："), ("""查询成功！"""))
+            else:
+                OK = QMessageBox.information(self, ("提示："), ("""查询失败！"""))
 
-            cursor.close()
-            conn.close()
+        if self.ui.comboBox.currentText() == '进入时间(按年)':
+            self.flag = 3
+            sc = RecordController()
+            result = sc.findRecordByYear(text)
+            if result.status == 200:
+                row = len(result.data)
+                col = ["platenumber", "intime", "outtime", "vehicletype"]
+                self.ui.tableWidget.setRowCount(row)  # 控件的名字保持一致，切莫想当然
+                self.ui.tableWidget.setColumnCount(len(col))  # 加1，开辟一列放操作按钮
+                self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
+                self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
+                for i in range(row):
+                    for j in range(len(col)):
+                        record = result.data[i]
+                        temp_data = record.__getattribute__(col[j])  # 临时记录，不能直接插入表格
+                        if temp_data == '0':
+                            temp_data = '内部车'
+                            data = QTableWidgetItem(str(temp_data))
+                            self.ui.tableWidget.setItem(i, j, data)
+                        elif temp_data == '':
+                            temp_data = '外部车'
+                            data = QTableWidgetItem(str(temp_data))
+                            self.ui.tableWidget.setItem(i, j, data)
+                        else:
+                            data = QTableWidgetItem(str(temp_data))
+                            self.ui.tableWidget.setItem(i, j, data)
+                OK = QMessageBox.information(self, ("提示："), ("""查询成功！"""))
+            else:
+                OK = QMessageBox.information(self, ("提示："), ("""查询失败！"""))
 
-            self.ui.tableWidget.setRowCount(row)  # 控件的名字保持一致，切莫想当然
-            self.ui.tableWidget.setColumnCount(col + 1)  # 加1，开辟一列放操作按钮
-            self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
-            self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
 
-            for i in range(row):
-                for j in range(col):
-                    temp_data = rows[i][j]  # 临时记录，不能直接插入表格
-                    data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
-                    self.ui.tableWidget.setItem(i, j, data)
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
