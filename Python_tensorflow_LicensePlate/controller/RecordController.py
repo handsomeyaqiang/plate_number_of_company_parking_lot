@@ -5,17 +5,17 @@ class RecordController:
         s = RecordService()
         return s.ListRecordByPlateID(pid)
 
-    def findRecordByYear(self,year):
+    def findRecordByIntime(self,time):
         s = RecordService()
-        return s.ListRecordByPlateID(year)
+        return s.ListRecordByIntime(time)
 
-    def findRecordByMonth(self,month):
+    def findRecordByOuttime(self,time):
         s = RecordService()
-        return s.ListRecordByMonth(month)
+        return s.ListRecordByOuttime(time)
 
-    def findRecordByDay(self,day):
+    def findRecordType(self,type):
         s = RecordService()
-        return s.ListRecordByDay(day)
+        return s.ListRecordByType(type)
 
 
 
