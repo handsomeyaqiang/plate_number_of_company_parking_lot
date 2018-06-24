@@ -10,17 +10,17 @@ class RecordDao(object):
         pass
 
 
-    def findRecordByYear(self, year):
+    def findRecordByInTime(self, time):
             pass
 
 
     @abstractmethod
-    def findRecordByMonth(self, month):
+    def findRecordByOutTime(self, time):
             pass
 
 
     @abstractmethod
-    def findRecordByDay(self, day):
+    def findRecordByVehicleType(self, type):
             pass
 
 
