@@ -40,19 +40,23 @@ class FPwd_ui(QWidget):
         self.ui.comboBox_2.setFixedSize(150, 23),
         self.ui.comboBox.setFixedSize(100, 23)
         self.ui.pushButton_2.setFixedSize(65, 24)
-        self.ui.pushButton.setFixedSize(65, 24)
+        self.ui.pushButton_4.setFixedSize(65, 24)
+        self.ui.pushButton_3.setFixedSize(65, 24)
         # self.ui.pushButton_2.setStyleSheet("background-color:lightbule")
 
-        self.ui.pushButton.setStyleSheet("QPushButton{color:blue}"
+        self.ui.pushButton_4.setStyleSheet("QPushButton{color:blue}"
                                          "QPushButton:hover{color:red}"
                                          )
 
         self.ui.pushButton_2.setStyleSheet("QPushButton{color:blue}"
                                          "QPushButton:hover{color:red}"
                                          )
+        self.ui.pushButton_3.setStyleSheet("QPushButton{color:blue}"
+                                           "QPushButton:hover{color:red}"
+                                           )
         # time.sleep(3)# 主程序3庙后显示输出
         # self.ui.textBrowser.clear()
-
+        self.ui.pushButton_3.hide()
         # 设置新密码的控件隐藏
         self.ui.lineEdit_2.hide()
         self.ui.lineEdit.hide()
@@ -60,7 +64,8 @@ class FPwd_ui(QWidget):
         self.ui.label_6.hide()
         # 槽函数
         self.ui.pushButton_2.clicked.connect(self.clearInput)
-        self.ui.pushButton.clicked.connect(self.getPwd)
+        self.ui.pushButton_4.clicked.connect(self.getPwd)
+        self.ui.pushButton_3.clicked.connect(self.newPwd)
         self.ui.comboBox_2.currentIndexChanged.connect(self.currentIndexChanged)# comboBox的槽函数事件
 
 
@@ -77,15 +82,58 @@ class FPwd_ui(QWidget):
             self.ui.lineEdit_2.show()
             self.ui.label_5.show()
             self.ui.label_6.show()
+            self.ui.pushButton_3.show()
+            self.ui.pushButton_4.hide()
 
         else:
             self.ui.lineEdit_2.hide()
             self.ui.lineEdit.hide()
             self.ui.label_5.hide()
             self.ui.label_6.hide()
+            self.ui.pushButton_4.show()
+            self.ui.pushButton_3.hide()
 
 
+    def newPwd(self):
+        name = self.ui.Name_lineEdit.text()
+        question = self.ui.comboBox.currentText()
+        answer = self.ui.MbAnswerlineEdit.text()
+        pwd = self.ui.lineEdit_2.text()
+        SurePwd = self.ui.lineEdit.text()
+        conn = pymysql.connect(host='127.0.0.1',
+                               port=3306, user='root', password='271996',
+                               db='company_parking_system', charset='utf8')
+        cursor = conn.cursor()
 
+        # 更新密码时，先判断根据账号，密保问题和密保答案能否查询成功，如果查询成功，将密码更新
+        if name != '' and answer != '' and pwd != '' and SurePwd != '':
+            if pwd == SurePwd:
+                sql = "select * from administrater where username = '" + name + "' and question = '" + question + "' and answer='" + answer + "'"
+                print(sql)
+                cursor.execute(sql)
+                results = cursor.fetchall()
+                if results:
+                    # 插入新密码
+                    sql_up = "update administrater set password = '" + pwd + "'where username = '" + name + "' " \
+                                                                                                            "and question = '" + question + "' and answer='" + answer + "'"
+                    cursor.execute(sql_up)
+                    conn.commit()
+                    self.ui.textBrowser.setText('密码更新成功！')
+                else:
+                    OK = QMessageBox.warning(self, ("警告"), ("""密保问题或密保答案错误！"""))
+                cursor.close()
+                conn.close()
+            else:
+                OK = QMessageBox.warning(self, ("警告"), ("""两次密码输入不一致！"""))
+        else:
+            if name == '':
+                OK = QMessageBox.warning(self, ("警告"), ("""账号不能为空！"""))
+            if answer == '':
+                OK = QMessageBox.warning(self, ("警告"), ("""密保答案不能为空！"""))
+            if pwd == '':
+                OK = QMessageBox.warning(self, ("警告"), ("""密码不能为空！"""))
+            if SurePwd == '':
+                OK = QMessageBox.warning(self, ("警告"), ("""确认密码不能为空！"""))
 
     def getPwd(self):
         # 获取界面输入
@@ -94,14 +142,15 @@ class FPwd_ui(QWidget):
         answer = self.ui.MbAnswerlineEdit.text()
         pwd = self.ui.lineEdit_2.text()
         SurePwd = self.ui.lineEdit.text()
-
-
+        conn = pymysql.connect(host='127.0.0.1',
+                               port=3306, user='root', password='271996',
+                               db='company_parking_system', charset='utf8')
+        cursor = conn.cursor()
         if name != ' ' and answer != '' and pwd == '' and SurePwd == '':
-            conn = pymysql.connect(host='127.0.0.1',
-                                   port=3306, user='root', password='271996', db='company_parking_system', charset='utf8')
-            sql = "select * from administrater where username = '"+ name +"' and question = '"+ question +"' and answer='"+ answer +"'"
+
+            sql = "select * from administrater where " \
+                  "username = '" + name +"' and question = '"+ question +"' and answer='"+ answer +"'"
             print(sql)
-            cursor = conn.cursor()
             cursor.execute(sql)
             results = cursor.fetchall()
             if results:
@@ -120,41 +169,6 @@ class FPwd_ui(QWidget):
 
             if answer == '':
                 OK = QMessageBox.warning(self, ("警告"), ("""密保答案不能为空！"""))
-
-
-
-       # 更新密码时，先判断根据账号，密保问题和密保答案能否查询成功，如果查询成功，将密码更新
-        if name != '' and answer != '' and pwd != '' and SurePwd != '':
-
-            if pwd == SurePwd:
-                conn = pymysql.connect(host='127.0.0.1',
-                                       port=3306, user='root', password='271996', db='company_parking_system',
-                                       charset='utf8')
-                sql = "select * from administrater where username = '" + name + "' and question = '" + question + "' and answer='" + answer + "'"
-                print(sql)
-                cursor = conn.cursor()
-                cursor.execute(sql)
-                results = cursor.fetchall()
-                if results:
-                    # 插入新密码
-                    sql_up = "update administrater set password = '" + pwd +"'where username = '" + name + "' " \
-                                                  "and question = '" + question + "' and answer='" + answer + "'"
-                    cursor.execute(sql_up)
-                    conn.commit()
-                    self.ui.textBrowser.setText('密码更新成功！')
-                cursor.close()
-                conn.close()
-            else:
-                OK = QMessageBox.warning(self, ("警告"), ("""两次密码输入不一致！"""))
-            if name == '':
-                OK = QMessageBox.warning(self, ("警告"), ("""账号不能为空！"""))
-
-            if answer == '':
-                OK = QMessageBox.warning(self, ("警告"), ("""密保答案不能为空！"""))
-
-
-
-
 
         # 如果账号密保问题和密保答案不等于空，密码和确认密码等于空，执行找回密码功能
         #如果账号密保问题密保答案密码和确认密码都不等于空，执行重新设置密码功能 用self.ui.textBrowser.append()显示密码

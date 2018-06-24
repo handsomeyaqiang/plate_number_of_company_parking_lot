@@ -102,19 +102,18 @@ class Login(QWidget):
         # # 获得登录输入
         name = self.ui.userlineEdit.text()
         pwd = self.ui.pwdlineEdit.text()
-        print(name)
+        conn = pymysql.connect(host='127.0.0.1',
+                               port=3306, user='root', password='271996', db='company_parking_system',
+                               charset='utf8')
+        cursor = conn.cursor()
         identity = self.ui.comboBox.currentIndex() # 获取下标
         #  因为数据库登录人员的身份设计为整形，0表示财务管理，1表示信息管理，2表示停车场管理
         if name != '' and pwd != '':
             if identity == 0:
-                conn = pymysql.connect(host='127.0.0.1',
-                                       port=3306, user='root', password='271996', db='company_parking_system',
-                                       charset='utf8')
+
                 sql = "select * from administrater where username = '" + name + "' and password = '" + pwd + "' and identity= 0 "
                 print(sql)
-                cursor = conn.cursor()
                 cursor.execute(sql)
-
                 results = cursor.fetchall()
 
                 if results:
@@ -123,17 +122,13 @@ class Login(QWidget):
                     self.close()
                 else:
                     OK = QMessageBox.warning(self, ("警告"), ("""账号或密码错误！"""))
-                cursor.close()
-                conn.close()
+                # cursor.close()
+                # conn.close()
             if identity == 1:
-                conn = pymysql.connect(host='127.0.0.1',
-                                       port=3306, user='root', password='271996', db='company_parking_system',
-                                       charset='utf8')
+
                 sql = "select * from administrater where username = '" + name + "' and password = '" + pwd + "' and identity= 1"
                 print(sql)
-                cursor = conn.cursor()
                 cursor.execute(sql)
-
                 results = cursor.fetchall()
                 print(identity)
                 if results:
@@ -142,15 +137,11 @@ class Login(QWidget):
                     self.close()
                 else:
                     OK = QMessageBox.warning(self, ("警告"), ("""账号或密码错误！"""))
-                cursor.close()
-                conn.close()
+                # cursor.close()
+                # conn.close()
             if identity == 2:
-                conn = pymysql.connect(host='127.0.0.1',
-                                       port=3306, user='root', password='271996', db='company_parking_system',
-                                       charset='utf8')
                 sql = "select * from administrater where username = '" + name + "' and password = '" + pwd + "' and identity= 2 "
                 print(sql)
-                cursor = conn.cursor()
                 cursor.execute(sql)
                 results = cursor.fetchall()
                 print(identity)
@@ -161,14 +152,15 @@ class Login(QWidget):
                     self.close()
                 else:
                     OK = QMessageBox.warning(self, ("警告"), ("""账号或密码错误！"""))
-                cursor.close()
-                conn.close()
+                # cursor.close()
+                # conn.close()
         else:
             if name == '':
                 OK = QMessageBox.warning(self, ("警告"), ("""请输入账号！"""))
             if pwd == '':
                 OK = QMessageBox.warning(self, ("警告"), ("""请输入密码！"""))
-
+        cursor.close()
+        conn.close()
     def slotRegister(self):
 
         # Dialog = QtWidgets.QWidget()   #定义前必须加self 不然跳转的页面闪一下就会消失

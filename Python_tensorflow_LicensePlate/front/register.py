@@ -26,7 +26,7 @@ class reUi(QWidget):
         self.ui.concelpushButton.setFixedSize(80, 28)
         # 设置背景
         palette = QPalette()
-        icon = QPixmap('re.jpg').scaled(800, 600)
+        icon = QPixmap('timg.jpg').scaled(800, 600)
         palette.setBrush(self.backgroundRole(), QBrush(icon))
         self.setPalette(palette)
 
@@ -48,6 +48,9 @@ class reUi(QWidget):
         self.ui.concelpushButton.clicked.connect(self.clearInput)
 
         # 用clear()方法出现未知错误
+
+
+
     def clearInput(self):
         self.ui.namelineEdit.setText("")
         self.ui.pwdlineEdit.setText("")
@@ -62,7 +65,6 @@ class reUi(QWidget):
         repwd = self.ui.surePwdlineEdit.text()
         phone = self.ui.phonelineEdit.text()
         identity = self.ui.comboBox_2.currentText()
-
         MbQuestion = self.ui.comboBox.currentText()
         MbAnswer = self.ui.emalineEdit_3.text()
 
@@ -76,53 +78,58 @@ class reUi(QWidget):
             identity = 1
         else:
             identity = 2
-        print(identity)
-        print('对方水电费')
+        Gender = str(Gender) #Expected type 'int', got 'str' instead的错误 把性别和identity转化成str 用str()
+        identity = str(identity)
+
+        conn = pymysql.connect(host='127.0.0.1',
+                               port=3306, user='root', password='271996', db='company_parking_system',
+                               charset='utf8')
+        cursor = conn.cursor()
+
         # print('姓名：%s 密码：%s 确认密码：%s 手机号：%s  性别：%s 密保问题：%s 密保答案：%s' %
         #       (name, pwd, repwd, phone, Gender, MbQuestion, MbAnswer))
 
-        if pwd != repwd:
-            OK = QMessageBox.warning(self, ("警告"), ("""两次密码输入不一致！"""))
-
-        if name == "":
-            OK = QMessageBox.warning(self, ("警告"), ("""用户名不能为空！"""))
-
-        if pwd == "":
-            OK = QMessageBox.warning(self, ("警告"), ("密码不能为空！"))
-        if repwd == "":
-            OK = QMessageBox.warning(self, ("警告"), ("请确认密码！"))
-        if phone == "":
-            OK = QMessageBox.warning(self, ("警告"), ("请输入手机号！"))
-        if MbQuestion == " ":
-            OK = QMessageBox.warning(self, ("警告"), ("请选择密保问题！"))
-        if MbAnswer == " ":
-            OK = QMessageBox.warning(self, ("警告"), ("密保答案不能为空！"))
-
-        if name != "" and pwd != "" and repwd != "" and phone != "" and MbQuestion != "":
-            conn = pymysql.connect(host='127.0.0.1',
-                                   port=3306, user='root', password='271996', db='company_parking_system',
-                                   charset='utf8')
-            cursor = conn.cursor()
-            sql = "insert into administrater(username, password, gender, phone, question,answer, identity) values " \
-                  "('" + name + "', " \
-                                "'" + pwd + "'," \
-                                            " '" + Gender + "'," \
-                                                            " '" + phone + "'," \
-                                                                           " '" + MbQuestion + "', " \
-                                                                                               "'" + MbAnswer + "', " \
-                                                                                                                "'" + identity + "')"
-            print(sql)
-
-
-
-
-            cursor.execute(sql)
-            conn.commit()
-            conn.close()
-
-            OK = QMessageBox.information(self, ("警告"), ("注册的用户信息不能为空！"))
+        if name != "" and pwd != "" and repwd != "" and phone != "" and MbQuestion != "" and Gender != '':
+            if pwd != repwd:
+                OK = QMessageBox.warning(self, ("警告"), ("""两次密码输入不一致！"""))
+            else:
+                sql_name = "select * from administrater WHERE  username = '" + name + "'"
+                cursor.execute(sql_name)
+                results = cursor.fetchall()
+                if results:
+                    OK = QMessageBox.warning(self, ("警告"), ("该用户名已注册！"))
+                else:
+                    sql = "insert into administrater(username, password, gender, phone, question,answer, identity) values " \
+                          "('" + name + "', " \
+                                        "'" + pwd + "'," \
+                                                    " '" + Gender + "'," \
+                                                                    " '" + phone + "'," \
+                                                                                   " '" + MbQuestion + "', " \
+                                                                                                       "'" + MbAnswer + "', " \
+                                                                                                                        "'" + identity + "')"
+                    print(sql)
+                    cursor.execute(sql)
+                    conn.commit()
+                    cursor.close()
+                    conn.close()
+                    OK = QMessageBox.information(self, ("提示"), ("注册成功！"))
         else:
-            OK = QMessageBox.warning(self, ("警告"), ("注册的用户信息不能为空！"))
+            if name == "" and pwd == "" and repwd == "" and phone == "" and MbAnswer == '':
+                OK = QMessageBox.warning(self, ("警告"), ("请输入用户信息！"))
+            else:  # Gender有默认值，待解觉
+                if name == "":
+                    OK = QMessageBox.warning(self, ("警告"), ("""用户名不能为空！"""))
+                if Gender == "":
+                    OK = QMessageBox.warning(self, ("警告"), ("""用户名不能为空！"""))
+                if pwd == "":
+                    OK = QMessageBox.warning(self, ("警告"), ("密码不能为空！"))
+                if repwd == "":
+                    OK = QMessageBox.warning(self, ("警告"), ("请确认密码！"))
+                if phone == "":
+                    OK = QMessageBox.warning(self, ("警告"), ("请输入手机号！"))
+                if MbAnswer == " ":
+                    OK = QMessageBox.warning(self, ("警告"), ("密保答案不能为空！"))
+
 
 
     def closeEvent(self, QCloseEvent):
