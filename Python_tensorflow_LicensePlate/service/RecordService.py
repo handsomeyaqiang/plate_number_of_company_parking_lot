@@ -2,34 +2,36 @@ from Python_tensorflow_LicensePlate.daoimpl.RecordImpl import RecordImpl
 from Python_tensorflow_LicensePlate.utils.ParkResult import ParkResult
 
 class RecordService(object):
-    def ListRecordByyear(self,year):
-        #根据时间年获得车辆记录
+    def ListRecordByIntime(self,time):
+        #根据进入时间获得车辆记录
         result = ParkResult()
         try:
             s = RecordImpl()
-            list = s.findRecordByYear(year)
+            print("调用impl")
+            list = s.findRecordByInTime(time)
+            print("获得记录返回")
             return result.ok(list)
         except Exception as e:
             print(e)
             return result.error("查询记录信息失败！")
 
-    def ListRecordByMonth(self,month):
-        #根据时间月查询车辆记录
+    def ListRecordByOuttime(self,time):
+        #根据车辆离开时间获得车辆记录
         result = ParkResult()
         try:
             s = RecordImpl()
-            list = s.findRecordByMonth(month)
+            list = s.findRecordByOutTime(time)
             return result.ok(list)
         except Exception as e:
             print(e)
             return result.error("查询记录信息失败！")
 
-    def ListRecordByDay(self,day):
-        #根据时间天获得车辆记录
+    def ListRecordByType(self,type):
+        #根据类型获得车辆记录
         result = ParkResult()
         try:
             s = RecordImpl()
-            list = s.findRecordByYear(day)
+            list = s.findRecordByVehicleType(type)
             return result.ok(list)
         except Exception as e:
             print(e)
