@@ -141,9 +141,9 @@ class tableB(QtWidgets.QMainWindow):
                             staff = result.data[i]
                             self.ui.tableWidget.setCellWidget(i, j + 1,
                                                           self.buttonForRow(str(staff.__getattribute__(col[0]))))
-                self.ui.statusbar.showMessage("<font color='#ff0000'>查询成功</font>")
+                self.ui.statusbar.showMessage("查询成功")
             else:
-                self.ui.statusbar.showMessage("<font color='#ff0000'>查询异常</font>", 2000)  # 单引号包围font 井号会报错
+                self.ui.statusbar.showMessage("查询异常", 2000)  # 单引号包围font 井号会报错
 
         # 按照姓名查询
         if self.ui.comboBox.currentText() == '按姓名':
@@ -170,9 +170,9 @@ class tableB(QtWidgets.QMainWindow):
                             # 传入id rows[i][0]
                             staff = result.data[i]
                             self.ui.tableWidget.setCellWidget(i, j + 1,self.buttonForRow(str(staff.__getattribute__(col[0]))))
-                self.ui.statusbar.showMessage("<font color='#ff0000'>查询成功</font>")
+                self.ui.statusbar.showMessage("查询成功")
             else:
-                self.ui.statusbar.showMessage("<font color='#ff0000'>查询异常</font>", 2000)  # 单引号包围font 井号会报错
+                self.ui.statusbar.showMessage("查询异常", 2000)  # 单引号包围font 井号会报错
 
             # 按照部门查询
         if self.ui.comboBox.currentText() == '按部门':
@@ -199,9 +199,9 @@ class tableB(QtWidgets.QMainWindow):
                             # 传入id rows[i][0]
                             staff = result.data[i]
                             self.ui.tableWidget.setCellWidget(i, j + 1, self.buttonForRow(str(staff.__getattribute__(col[0]))))
-                self.ui.statusbar.showMessage("<font color='#ff0000'>查询成功</font>")
+                self.ui.statusbar.showMessage("查询成功")
             else:
-                self.ui.statusbar.showMessage("<font color='#ff0000'>查询异常</font>", 2000)  # 单引号包围font 井号会报错
+                self.ui.statusbar.showMessage("查询异常", 2000)  # 单引号包围font 井号会报错
 
 
 
@@ -216,10 +216,10 @@ class tableB(QtWidgets.QMainWindow):
 
         if self.ui.nan_radioButton.isChecked():
             gender = '男'
-            gender1=1
+            gender1='男'
         else:
             gender = '女'
-            gender1=0
+            gender1='女'
         department = self.ui.depart_lineEdit.text()
 
         if carNum == '':
@@ -237,7 +237,7 @@ class tableB(QtWidgets.QMainWindow):
 
         #开始添加员工信息的数据库操作
         sc = StaffController()
-        result = sc.insertStaff(StaffNum,carNum,name,phone,gender1,phone)
+        result = sc.insertStaff(StaffNum,carNum,name,phone,gender1,department)
         print(result.status)
         if result.status == 200:
             OK = QMessageBox.information(self,("提示："), ("""添加成功！"""))
@@ -292,9 +292,9 @@ class tableB(QtWidgets.QMainWindow):
                         # 传入id rows[i][0]
                         staff = result.data[i]
                         self.ui.tableWidget.setCellWidget(i, j+1, self.buttonForRow(str(staff.__getattribute__(col[0]))))
-            self.ui.statusbar.showMessage("<font color='#ff0000'>查询成功</font>")
+            self.ui.statusbar.showMessage("查询成功")
         else:
-            self.ui.statusbar.showMessage("<font color='#ff0000'>查询异常</font>", 2000) # 单引号包围font 井号会报错
+            self.ui.statusbar.showMessage("查询异常", 2000) # 单引号包围font 井号会报错
 
 
 
