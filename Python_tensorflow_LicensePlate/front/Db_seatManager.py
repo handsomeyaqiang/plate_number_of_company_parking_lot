@@ -184,7 +184,7 @@ class SeatManage(QWidget):
         self.ui3.show()
 
     # 删除修改的按钮函数
-    def buttonForRow(self, id,type):
+    def buttonForRow(self, id,findtype):
         widget = QWidget()
         # 修改
         updateBtn = QPushButton('修改')
@@ -194,7 +194,7 @@ class SeatManage(QWidget):
                                                    border-style: outset;
                                                    font : 13px  ''')
 
-        updateBtn.clicked.connect(lambda: self.DB_update(id))
+        updateBtn.clicked.connect(lambda: self.DB_update(id,findtype))
 
         # 删除
         deleteBtn = QPushButton('删除')
@@ -203,7 +203,7 @@ class SeatManage(QWidget):
                                              height : 30px;
                                              border-style: outset;
                                              font : 13px; ''')
-        deleteBtn.clicked.connect(lambda: self.DeleteTip(id,type))
+        deleteBtn.clicked.connect(lambda: self.DeleteTip(id,findtype))
 
         hLayout = QHBoxLayout()
         hLayout.addWidget(updateBtn)
@@ -244,15 +244,15 @@ class SeatManage(QWidget):
         return widget
 
     # 用来提示用户是否删除信息
-    def DeleteTip(self, id,type):
+    def DeleteTip(self, id,findtype):
         reply = QMessageBox.question(self, '提示',
                                      "确定删除吗？", QMessageBox.Yes |
                                      QMessageBox.No, QMessageBox.No)
         if reply == QMessageBox.Yes:
-            self.DB_delete(id,type)
+            self.DB_delete(id,findtype)
 
     # 删除车位信息  先根据id删除数据，然后查找所有刷新展示页面 里面的数据库需要规范化
-    def DB_delete(self, id,type):
+    def DB_delete(self, id,findtype):
         pcontrol = ParkPlaceController()
 
         if id != '':
@@ -261,11 +261,11 @@ class SeatManage(QWidget):
                 if rs1.status == 200:
                     # QMessageBox.information(self, ("提示"), ("删除成功"))
                     #刷新页面
-                    if type == -1:
+                    if findtype == -1:
                         rs =pcontrol.findbyid(eval(id))
                         list = rs.data
                     else:
-                        rs = pcontrol.findbytype(type)
+                        rs = pcontrol.findbytype(findtype)
                         list = rs.data
 
                     row = len(list)
@@ -285,16 +285,19 @@ class SeatManage(QWidget):
                             if j == len(col) - 1:
                                 # print(rows[i][0])
                                 # 传入id rows[i][0]
-                                self.ui.tableWidget_4.setCellWidget(i, j + 1, self.buttonForRow(str(parkplace.parkPlaceID),type))
+                                self.ui.tableWidget_4.setCellWidget(i, j + 1, self.buttonForRow(str(parkplace.parkPlaceID),findtype))
 
                     OK = QMessageBox.information(self, ("提示"), ("删除成功"))
             except Exception:
                 QMessageBox.information(self, ("提示"), ("发生错误！"))
 
     # 修改 车位设置的信息
-    def DB_update(self, id):
+    def DB_update(self, id,findtype):
         self.ui = Update_seat()
         self.ui.ShowUpdate(id)
+
+
+
         self.ui.show()
 
     # 车位初始详情
@@ -339,28 +342,26 @@ class SeatManage(QWidget):
 
         list = []
         pcontrol = ParkPlaceController()
-        tempinputdata=''
         if input != '':
 
             result = pcontrol.findbyid(eval(input))
-            type = -1
-            tempinputdata =input
+            findtype = -1
             if result.status ==200:
                list.append(result.data)
             else:
                 # 需添加查找失败弹窗或标签
                 pass
         elif category =="员工车位":
-            type = 0
-            result = pcontrol.findbytype(type)
+            findtype = 0
+            result = pcontrol.findbytype(findtype)
             if result.status ==200:
                 list = result.data
             else:
                 #查找失败弹窗
                 pass
         elif category =="临时车位":
-            type = 1
-            result = pcontrol.findbytype(type)
+            findtype = 1
+            result = pcontrol.findbytype(findtype)
             if result.status ==200:
                 list = result.data
             else:
@@ -384,7 +385,7 @@ class SeatManage(QWidget):
                 if j == len(col) - 1:
                     # print(rows[i][0])
                     # 传入id rows[i][0]
-                    self.ui.tableWidget_4.setCellWidget(i, j + 1, self.buttonForRow(str(parkplace.parkPlaceID),type))
+                    self.ui.tableWidget_4.setCellWidget(i, j + 1, self.buttonForRow(str(parkplace.parkPlaceID),findtype))
 
     # 车位锁状态  查询所有，获得车位的id后进行打开关闭操作，点击打开时，先调用是否确认打开的提示
     # 然后根据id 查询到该车位的 车位状态，根据id 修改，在查询所有，放在table上
