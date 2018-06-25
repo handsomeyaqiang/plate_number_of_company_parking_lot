@@ -34,14 +34,6 @@ class Update_Ui(QWidget):
         self.ui.pushButton.clicked.connect(self.DB_insert)
         self.ui.clear_pushButton.clicked.connect(self.clearInput)
 
-    def closeEvent(self, QCloseEvent):
-        reply = QMessageBox.question(self, '提示',
-                                     "确定退出？", QMessageBox.Yes |
-                                     QMessageBox.No, QMessageBox.No)
-        if reply == QMessageBox.Yes:
-            QCloseEvent.accept()
-        else:
-            QCloseEvent.ignore()
 
     def clearInput(self):
 
@@ -74,7 +66,11 @@ class Update_Ui(QWidget):
         vc = VehicleController()
         result=vc.updVehicle(CarNum, name, chejia, staffNum)
         if result.status == 200:
-            OK = QMessageBox.information(self, ("提示："), ("""修改成功！"""))
+            reply = QMessageBox.question(self, '提示',
+                                         "修改成功", QMessageBox.Yes |
+                                         QMessageBox.No, QMessageBox.No)
+            if reply == QMessageBox.Yes:
+                self.close()
         elif result.status == 400:
             OK = QMessageBox.information(self, ("提示："), ("""修改失败！"""))
 

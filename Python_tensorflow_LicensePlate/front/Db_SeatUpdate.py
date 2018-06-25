@@ -71,10 +71,11 @@ class Update_seat(QWidget):
 
             rs = pcontrol.updatetypebyid(id,type)
             if rs.status ==200:
-                QMessageBox.information(self, ("提示"), ("修改成功！"))
-                #关闭窗口
-
-                #显示数据
+                reply = QMessageBox.question(self, '提示',
+                                             "修改成功", QMessageBox.Yes |
+                                             QMessageBox.No, QMessageBox.No)
+                if reply == QMessageBox.Yes:
+                    self.close()
 
 
             else:

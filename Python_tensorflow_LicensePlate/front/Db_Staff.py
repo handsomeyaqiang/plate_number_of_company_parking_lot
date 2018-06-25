@@ -35,8 +35,8 @@ class tableB(QtWidgets.QMainWindow):
         self.setStyleSheet("QLabel{background:;}"
                            "QLabel{color: LightCoral;font-size:12px;font-weight:lighter;font-family:Roman times;}"
                            "QLabel:hover{color:}")
-        self.ui.groupBox.setStyleSheet("QGroupBox{color:white;font-family:Roman times}")
-        self.ui.groupBox_2.setStyleSheet("QGroupBox{color:white;font-family:Roman times}")
+        self.ui.groupBox.setStyleSheet("QGroupBox{color:black;font-family:宋体}")
+        self.ui.groupBox_2.setStyleSheet("QGroupBox{color:black;font-family:宋体}")
         self.ui.nan_radioButton.setStyleSheet("QRadioButton{color:white;font-family:Roman times}")
         self.ui.nv_radioButton.setStyleSheet("QRadioButton{color:white;font-family:Roman times}")
         palette = QPalette()
@@ -274,8 +274,8 @@ class tableB(QtWidgets.QMainWindow):
         result = sc.showStaff()
         if result.status == 200:
             row = len(result.data)
-            col = ["SID","vehicleQuantity","name","phoneNumber","gender","department"]
-            self.ui.tableWidget.setRowCount(row)  # 控件的名字保持一致，切莫想当然
+            col = ["SID", "vehicleQuantity", "name", "phoneNumber", "gender", "department"]
+            self.ui.tableWidget.setRowCount(row)
             self.ui.tableWidget.setColumnCount(len(col)+1)  # 加1，开辟一列放操作按钮
             self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
             self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers)   # 将单元格设为不可更改类型
