@@ -37,6 +37,17 @@ class RecordService(object):
             print(e)
             return result.error("查询记录信息失败！")
 
+    # 根据车牌号查询当前进入的车辆记录
+    def getSingleRecordByPlateId(self, plate_num):
+        result = ParkResult()
+        try:
+            s = RecordImpl()
+            list = s.getSingleRecordByPlateId(plate_num)
+            return result.ok(list)
+        except Exception as e:
+            print(e)
+            return result.error("查询记录信息失败！")
+
     def ListRecordByPlateID(self,platenumber):
         #根据车牌号查询车辆记录
         result = ParkResult()
@@ -48,6 +59,10 @@ class RecordService(object):
             print(e)
             return result.error("查询记录信息失败！")
 
-    def saveRecord(self, record):
+    def insert_record(self, record):
         recordDao = RecordImpl()
         recordDao.insertRecord(record)
+
+    def update_record(self, record):
+        recordDao = RecordImpl()
+        recordDao.updateRecord(record)

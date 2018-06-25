@@ -232,10 +232,13 @@ class ParkPlaceService(object):
         try:
             pimpl = ParkPlaceImpl()
             parkplace = pimpl.findbyplateid(plate_num)
-            parkplace.lockStatus = 0
-            parkplace.useCarNumber=None
-            pimpl.updateparkplace(parkplace)
-            return result.ok(parkplace.parkPlaceID)
+            if parkplace != None:
+                parkplace.lockStatus = 0
+                parkplace.useCarNumber = None
+                pimpl.updateparkplace(parkplace)
+                return result.ok(parkplace.parkPlaceID)
+            else:
+                return result.error("次车牌号没有车位，回收失败")
         except Exception as e:
             print(e)
             return result.error("回收车位失败！")
