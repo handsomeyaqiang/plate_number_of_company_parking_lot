@@ -40,7 +40,7 @@ class tableB(QtWidgets.QMainWindow):
         self.ui.nan_radioButton.setStyleSheet("QRadioButton{color:white;font-family:Roman times}")
         self.ui.nv_radioButton.setStyleSheet("QRadioButton{color:white;font-family:Roman times}")
         palette = QPalette()
-        icon = QPixmap('bg2.jpg').scaled(800, 600)
+        icon = QPixmap('bg3.jpg').scaled(800, 600)
         palette.setBrush(self.backgroundRole(), QBrush(icon))
         self.setPalette(palette)
         # item = self.ui.horizontalHeaderItem(3)
