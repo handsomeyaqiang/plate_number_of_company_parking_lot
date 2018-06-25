@@ -20,9 +20,9 @@ class Update_seat(QWidget):
         icon = QPixmap('upSeat.jpg').scaled(400, 300)
         palette.setBrush(self.backgroundRole(), QBrush(icon))
         self.setPalette(palette)
-
-        self.ui.lineEdit.setClearButtonEnabled(True)
-        # self.ui.lineEdit.setFrame(False)
+        self.ui.lineEdit.setReadOnly(True)
+        # self.ui.lineEdit.setClearButtonEnabled(True)
+        self.ui.lineEdit.setFrame(False)
         self.ui.comboBox.setFixedSize(145, 24)
         self.ui.lineEdit.setFixedSize(145, 24)
         self.setWindowIcon(QIcon('2.png'))

@@ -33,6 +33,7 @@ class Update_Ui(QWidget):
         self.ui.phone_lineEdit.setClearButtonEnabled(True)
         self.ui.name_lineEdit.setClearButtonEnabled(True)
         self.ui.lineEdit.setClearButtonEnabled(True)
+        self.ui.depart_lineEdit.setClearButtonEnabled(True)
 
         # 槽函数
         self.ui.pushButton.clicked.connect(self.DB_insert)

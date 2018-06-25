@@ -76,7 +76,7 @@ class Update_Ui(QWidget):
         if result.status == 200:
             OK = QMessageBox.information(self, ("提示："), ("""修改成功！"""))
         elif result.status == 400:
-            OK = QMessageBox.information(self, ("提示："), ("""修改失败！"""))  # 单引号包围font 井号会报错
+            OK = QMessageBox.information(self, ("提示："), ("""修改失败！"""))
 
 
 
