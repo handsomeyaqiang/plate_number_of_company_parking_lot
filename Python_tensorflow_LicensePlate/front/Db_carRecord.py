@@ -14,7 +14,7 @@ class CarRecord(QWidget):
         self.ui = Ui_carRecord()
         self.ui.setupUi(self)
         self.setWindowTitle("车辆历史记录查询")
-
+        self.setFixedSize(self.width(), self.height())  # 实现禁止窗口最大化和禁止窗口拉伸
         # 槽函数
         self.ui.pushButton.clicked.connect(self.Query)
 

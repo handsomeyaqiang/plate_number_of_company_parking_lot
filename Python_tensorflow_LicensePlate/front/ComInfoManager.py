@@ -17,6 +17,7 @@ class InfoManage(QWidget):
 
         self.setWindowTitle(" ")
         self.setWindowIcon(QIcon('3.png'))
+        self.setFixedSize(self.width(), self.height())  # 实现禁止窗口最大化和禁止窗口拉伸
 
         self.ui.label.setFixedSize(650, 35)
         self.ui.label.setStyleSheet("QLabel{background:white;}"

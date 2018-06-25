@@ -17,9 +17,10 @@ class FPwd_ui(QWidget):
                                         "QLabel{color:rgb(100,100,100,250);font-size:15px;font-weight:bold;font-family:Roman times;}"
                                         "QLabel:hover{color:rgb(300,300,300,120);}")
         self.setWindowTitle('找回密码')
-
+        # self.setWindowFlags(Qt.WindowMinimizeButtonHint)
+        self.setFixedSize(self.width(), self.height()) # 实现禁止窗口最大化和禁止窗口拉伸
         palette = QPalette()
-        icon = QPixmap('fp1.jpg').scaled(700, 500)
+        icon = QPixmap('fp.jpg').scaled(700, 500)
         palette.setBrush(self.backgroundRole(), QBrush(icon))
         self.setPalette(palette)
         # 调整控件

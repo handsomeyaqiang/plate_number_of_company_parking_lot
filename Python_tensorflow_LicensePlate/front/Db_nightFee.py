@@ -12,6 +12,7 @@ class nightfee(QWidget):
         self.ui.setupUi(self)
 
         self.setWindowTitle("修改白天停车收费")
+        self.setFixedSize(self.width(), self.height())  # 实现禁止窗口最大化和禁止窗口拉伸
         self.ui.lineEdit.setClearButtonEnabled(True)
         self.ui.lineEdit_2.setClearButtonEnabled(True)
         self.ui.lineEdit_3.setClearButtonEnabled(True)

@@ -20,7 +20,8 @@ class tableB(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self.flag=0
 
-
+        self.setWindowTitle("员工信息管理")
+        self.setFixedSize(self.width(), self.height())  # 实现禁止窗口最大化和禁止窗口拉伸
         # 控制tableWidget item文字风格
         for index in range(self.ui.tableWidget.columnCount()):
             headItem = self.ui.tableWidget.horizontalHeaderItem(index)
@@ -39,7 +40,7 @@ class tableB(QtWidgets.QMainWindow):
         self.ui.nan_radioButton.setStyleSheet("QRadioButton{color:white;font-family:Roman times}")
         self.ui.nv_radioButton.setStyleSheet("QRadioButton{color:white;font-family:Roman times}")
         palette = QPalette()
-        icon = QPixmap('bg2.gif').scaled(800, 600)
+        icon = QPixmap('bg2.jpg').scaled(800, 600)
         palette.setBrush(self.backgroundRole(), QBrush(icon))
         self.setPalette(palette)
         # item = self.ui.horizontalHeaderItem(3)
@@ -64,15 +65,6 @@ class tableB(QtWidgets.QMainWindow):
 
         updateBtn.clicked.connect(lambda: self.DB_update(id))
 
-        # 查看
-        # viewBtn = QPushButton('查看')
-        # viewBtn.setStyleSheet(''' text-align : center;
-        #                                    background-color : NavajoWhite;
-        #                                    height : 30px;
-        #                                    border-style: outset;
-        #                                    font : 13px; ''')
-        #
-        # viewBtn.clicked.connect(lambda: self.viewTable(id))
 
         # 删除
         deleteBtn = QPushButton('删除')
@@ -272,11 +264,8 @@ class tableB(QtWidgets.QMainWindow):
                 self.DB_query()
             else :
                 self.QueryBySid()
-
-
-
         elif result.status == 400:
-            OK = QMessageBox.information(self, ("提示："), ("""删除失败！"""))  # 单引号包围font 井号会报错
+            OK = QMessageBox.information(self, ("提示："), ("""删除失败！"""))
 
 
 

@@ -1,4 +1,5 @@
 from finance_Ui import *
+from Login import *
 import sys
 from PyQt5.QtWidgets import *
 from PyQt5 import QtWidgets, QtCore, QtGui
@@ -62,8 +63,14 @@ class Finance(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
 
 
-
         self.setWindowTitle("财务管理")
+        self.setFixedSize(self.width(), self.height())  # 实现禁止窗口最大化和禁止窗口拉伸
+
+        palette = QPalette()
+        icon = QPixmap('cw.jpg').scaled(450, 350)
+        palette.setBrush(self.backgroundRole(), QBrush(icon))
+        self.setPalette(palette)
+
         # 动态显示时间在label上
         timer = QtCore.QTimer(self)
         timer.timeout.connect(self.showtime)

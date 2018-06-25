@@ -12,6 +12,7 @@ class AddSeat(QWidget):
         self.ui.setupUi(self)
 
         self.setWindowTitle("添加车位")
+        self.setFixedSize(self.width(), self.height())  # 实现禁止窗口最大化和禁止窗口拉伸
         self.ui.lineEdit.setClearButtonEnabled(True)
         # self.ui.lineEdit.setFrame(False)
         self.ui.comboBox.setFixedSize(135, 24)

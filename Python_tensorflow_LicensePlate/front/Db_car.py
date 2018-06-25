@@ -14,7 +14,9 @@ class carManage(QtWidgets.QMainWindow):
         super(carManage, self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+
         self.setWindowTitle("车辆信息管理")
+        self.setFixedSize(self.width(), self.height())  # 实现禁止窗口最大化和禁止窗口拉伸
         self.flag = 0
 
         palette = QPalette()

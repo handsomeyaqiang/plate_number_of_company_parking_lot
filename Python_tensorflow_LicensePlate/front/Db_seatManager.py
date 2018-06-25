@@ -21,6 +21,7 @@ class SeatManage(QWidget):
         self.ui.setupUi(self)
 
         self.setWindowTitle("车位管理")
+        self.setFixedSize(self.width(), self.height())  # 实现禁止窗口最大化和禁止窗口拉伸
 
         self.ui.tableWidget_2.hide()
         self.ui.tableWidget_3.hide()

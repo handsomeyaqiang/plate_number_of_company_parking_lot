@@ -12,6 +12,8 @@ class Update_seat(QWidget):
         self.ui = Ui_seatUp()
         self.ui.setupUi(self)
 
+        self.setWindowTitle("车位更新")
+        self.setFixedSize(self.width(), self.height())  # 实现禁止窗口最大化和禁止窗口拉伸
         palette = QPalette()
         icon = QPixmap('upSeat.jpg').scaled(400, 300)
         palette.setBrush(self.backgroundRole(), QBrush(icon))

@@ -16,6 +16,7 @@ class Update_Ui(QWidget):
         self.ui.setupUi(self)
 
         self.setWindowTitle("修改车辆信息页面")
+        self.setFixedSize(self.width(), self.height())  # 实现禁止窗口最大化和禁止窗口拉伸
         self.ui.name_lineEdit.setFrame(False)  # 无边框
         self.ui.Chejia_lineEdit.setFrame(False)
         self.ui.car_lineEdit.setFrame(False)
