@@ -1,5 +1,6 @@
 import sys
 import pymysql
+from Python_tensorflow_LicensePlate.utils.Pymysql import *
 from PyQt5.QtWidgets import *
 from FPwd import *   # 导入文件的顺序不同会导致文件类识别异常，原因未知
 from PyQt5 import QtWidgets, QtCore, QtGui
@@ -102,10 +103,13 @@ class Login(QWidget):
         # # 获得登录输入
         name = self.ui.userlineEdit.text()
         pwd = self.ui.pwdlineEdit.text()
-        conn = pymysql.connect(host='127.0.0.1',
-                               port=3306, user='root', password='271996', db='company_parking_system',
-                               charset='utf8')
-        cursor = conn.cursor()
+        # conn = pymysql.connect(host='127.0.0.1',
+        #                        port=3306, user='root', password='271996', db='company_parking_system',
+        #                        charset='utf8')
+
+        db = PyMySQLHelper()  # 不能直接用conn = PyMySQLHelper.getConnection
+        # conn = db.getConnection()
+        # cursor = conn.cursor()
         identity = self.ui.comboBox.currentIndex() # 获取下标
         #  因为数据库登录人员的身份设计为整形，0表示财务管理，1表示信息管理，2表示停车场管理
         if name != '' and pwd != '':
@@ -113,8 +117,9 @@ class Login(QWidget):
 
                 sql = "select * from administrater where username = '" + name + "' and password = '" + pwd + "' and identity= 0 "
                 print(sql)
-                cursor.execute(sql)
-                results = cursor.fetchall()
+                # cursor.execute(sql)
+                # results = cursor.fetchall()
+                results = db.selectALL(sql)
 
                 if results:
                     self.ui1 = Finance()
@@ -128,23 +133,22 @@ class Login(QWidget):
 
                 sql = "select * from administrater where username = '" + name + "' and password = '" + pwd + "' and identity= 1"
                 print(sql)
-                cursor.execute(sql)
-                results = cursor.fetchall()
-                print(identity)
+                # cursor.execute(sql)
+                # results = cursor.fetchall()
+                results = db.selectALL(sql)
                 if results:
                     self.ui2 = InfoManage()
                     self.ui2.show()
                     self.close()
                 else:
                     OK = QMessageBox.warning(self, ("警告"), ("""账号或密码错误！"""))
-                # cursor.close()
-                # conn.close()
+
             if identity == 2:
                 sql = "select * from administrater where username = '" + name + "' and password = '" + pwd + "' and identity= 2 "
                 print(sql)
-                cursor.execute(sql)
-                results = cursor.fetchall()
-                print(identity)
+
+                results = db.selectALL(sql)
+                # print(identity)
 
                 if results:
                     self.ui3 = SeatManage()
@@ -152,17 +156,15 @@ class Login(QWidget):
                     self.close()
                 else:
                     OK = QMessageBox.warning(self, ("警告"), ("""账号或密码错误！"""))
-                # cursor.close()
-                # conn.close()
+
         else:
             if name == '':
                 OK = QMessageBox.warning(self, ("警告"), ("""请输入账号！"""))
             if pwd == '':
                 OK = QMessageBox.warning(self, ("警告"), ("""请输入密码！"""))
-        cursor.close()
-        conn.close()
+        # cursor.close()
+        # conn.close()
     def slotRegister(self):
-
         # Dialog = QtWidgets.QWidget()   #定义前必须加self 不然跳转的页面闪一下就会消失
          self.ui = reUi()
          self.ui.show()

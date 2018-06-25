@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
+from Python_tensorflow_LicensePlate.utils.Pymysql import *
 from PyQt5.QtCore import *
 from register_Ui import *
 import sys
@@ -80,22 +81,23 @@ class reUi(QWidget):
             identity = 2
         Gender = str(Gender) #Expected type 'int', got 'str' instead的错误 把性别和identity转化成str 用str()
         identity = str(identity)
-
-        conn = pymysql.connect(host='127.0.0.1',
-                               port=3306, user='root', password='271996', db='company_parking_system',
-                               charset='utf8')
-        cursor = conn.cursor()
+        #
+        # conn = pymysql.connect(host='127.0.0.1',
+        #                        port=3306, user='root', password='271996', db='company_parking_system',
+        #                        charset='utf8')
+        # cursor = conn.cursor()
 
         # print('姓名：%s 密码：%s 确认密码：%s 手机号：%s  性别：%s 密保问题：%s 密保答案：%s' %
         #       (name, pwd, repwd, phone, Gender, MbQuestion, MbAnswer))
-
+        db = PyMySQLHelper()
         if name != "" and pwd != "" and repwd != "" and phone != "" and MbQuestion != "" and Gender != '':
             if pwd != repwd:
                 OK = QMessageBox.warning(self, ("警告"), ("""两次密码输入不一致！"""))
             else:
                 sql_name = "select * from administrater WHERE  username = '" + name + "'"
-                cursor.execute(sql_name)
-                results = cursor.fetchall()
+                # cursor.execute(sql_name)
+                # results = cursor.fetchall()
+                results = db.selectALL(sql_name)
                 if results:
                     OK = QMessageBox.warning(self, ("警告"), ("该用户名已注册！"))
                 else:
@@ -108,10 +110,11 @@ class reUi(QWidget):
                                                                                                        "'" + MbAnswer + "', " \
                                                                                                                         "'" + identity + "')"
                     print(sql)
-                    cursor.execute(sql)
-                    conn.commit()
-                    cursor.close()
-                    conn.close()
+                    db.update(sql)
+                    # cursor.execute(sql)
+                    # conn.commit()
+                    # cursor.close()
+                    # conn.close()
                     OK = QMessageBox.information(self, ("提示"), ("注册成功！"))
         else:
             if name == "" and pwd == "" and repwd == "" and phone == "" and MbAnswer == '':

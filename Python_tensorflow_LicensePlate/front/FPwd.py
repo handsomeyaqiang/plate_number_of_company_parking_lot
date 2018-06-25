@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+from Python_tensorflow_LicensePlate.utils.Pymysql import *
 from findPwd import *
 import sys
 import pymysql
@@ -101,29 +102,32 @@ class FPwd_ui(QWidget):
         answer = self.ui.MbAnswerlineEdit.text()
         pwd = self.ui.lineEdit_2.text()
         SurePwd = self.ui.lineEdit.text()
-        conn = pymysql.connect(host='127.0.0.1',
-                               port=3306, user='root', password='271996',
-                               db='company_parking_system', charset='utf8')
-        cursor = conn.cursor()
+        # conn = pymysql.connect(host='127.0.0.1',
+        #                        port=3306, user='root', password='271996',
+        #                        db='company_parking_system', charset='utf8')
+        # cursor = conn.cursor()
+        db = PyMySQLHelper()
 
         # 更新密码时，先判断根据账号，密保问题和密保答案能否查询成功，如果查询成功，将密码更新
         if name != '' and answer != '' and pwd != '' and SurePwd != '':
             if pwd == SurePwd:
                 sql = "select * from administrater where username = '" + name + "' and question = '" + question + "' and answer='" + answer + "'"
                 print(sql)
-                cursor.execute(sql)
-                results = cursor.fetchall()
+                # cursor.execute(sql)
+                # results = cursor.fetchall()
+                results = db.selectALL(sql)
                 if results:
                     # 插入新密码
                     sql_up = "update administrater set password = '" + pwd + "'where username = '" + name + "' " \
                                                                                                             "and question = '" + question + "' and answer='" + answer + "'"
-                    cursor.execute(sql_up)
-                    conn.commit()
+                    # cursor.execute(sql_up)
+                    # conn.commit()\
+                    db.update(sql)
                     self.ui.textBrowser.setText('密码更新成功！')
                 else:
                     OK = QMessageBox.warning(self, ("警告"), ("""密保问题或密保答案错误！"""))
-                cursor.close()
-                conn.close()
+                # cursor.close()
+                # conn.close()
             else:
                 OK = QMessageBox.warning(self, ("警告"), ("""两次密码输入不一致！"""))
         else:
@@ -143,25 +147,28 @@ class FPwd_ui(QWidget):
         answer = self.ui.MbAnswerlineEdit.text()
         pwd = self.ui.lineEdit_2.text()
         SurePwd = self.ui.lineEdit.text()
-        conn = pymysql.connect(host='127.0.0.1',
-                               port=3306, user='root', password='271996',
-                               db='company_parking_system', charset='utf8')
-        cursor = conn.cursor()
+        # 这种调用外部数据库链接的方式，没有直接在本函数内建立链接的操作响应迅速
+        # conn = pymysql.connect(host='127.0.0.1',
+        #                        port=3306, user='root', password='271996',
+        #                        db='company_parking_system', charset='utf8')
+        # cursor = conn.cursor()
+        db = PyMySQLHelper()
         if name != ' ' and answer != '' and pwd == '' and SurePwd == '':
 
             sql = "select * from administrater where " \
                   "username = '" + name +"' and question = '"+ question +"' and answer='"+ answer +"'"
             print(sql)
-            cursor.execute(sql)
-            results = cursor.fetchall()
+            # cursor.execute(sql)
+            # results = cursor.fetchall()
+            results = db.selectALL(sql)
             if results:
                 for row in results:
                     print(row[2])
                     self.ui.textBrowser.setText('你找回的密码是：' + row[2])# 点击按钮只显示一次文本
                     # self.ui.textBrowser.append('你找回的密码是：' + row[2])# append只要点击按钮会不断的输出
                 # self.ui.textBrowser.clear()
-                cursor.close()
-                conn.close()
+                # cursor.close()
+                # conn.close()
             else:
                 OK = QMessageBox.warning(self, ("警告"), ("""密保问题或密保答案错误！"""))
         else:
