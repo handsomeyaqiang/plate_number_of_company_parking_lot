@@ -8,8 +8,9 @@ class Record:
         feestatus 外部的车辆是否缴费
     '''
 
-    def __init__(self, platenumber, intime, outtime, vehicletype):
+    def __init__(self, platenumber, intime, outtime, vehicletype, leavestatus):
         self.platenumber = platenumber
         self.intime = intime
         self.outtime = outtime
         self.vehicletype = vehicletype
+        self.leavestatus = leavestatus
