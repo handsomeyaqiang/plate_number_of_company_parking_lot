@@ -9,7 +9,7 @@ from PyQt5 .QtGui import *
 from PyQt5.QtCore import *
 from Python_tensorflow_LicensePlate.controller.ParkPlaceController import ParkPlaceController
 class Update_seat(QWidget):
-    def __init__(self):
+    def __init__(self, id):
         super(Update_seat, self).__init__()
         self.ui = Ui_seatUp()
         self.ui.setupUi(self)
@@ -40,7 +40,7 @@ class Update_seat(QWidget):
         self.ui.pushButton_2.setIcon(QIcon("cancle.png"))
         self.setWindowTitle("车位信息修改")
         self.ui.comboBox.setCurrentText("外部车辆")
-
+        self.id = id
         # 槽函数
         self.ui.pushButton.clicked.connect(self.updateTip)
         self.ui.pushButton_2.clicked.connect(self.clear)
@@ -48,13 +48,13 @@ class Update_seat(QWidget):
         pass
         # self.ui.lineEdit.clear()
         # self.ui.comboBox.setFocus(False)
-    def updateTip(self, id):
+    def updateTip(self):
 
         reply = QMessageBox.question(self, '提示',
                                      "确定修改？", QMessageBox.Yes |
                                      QMessageBox.No, QMessageBox.No)
         if reply == QMessageBox.Yes:
-            self.Db_insert(id)
+            self.Db_insert(self.id)
 
     # 将更改的数据插入数据库
     def Db_insert(self,id):
@@ -73,6 +73,7 @@ class Update_seat(QWidget):
             if rs.status ==200:
                 QMessageBox.information(self, ("提示"), ("修改成功！"))
                 #关闭窗口
+
                 #显示数据
 
 

@@ -138,3 +138,16 @@ class PyMySQLHelper:
         finally:
             cur.close()
             conn.close()
+    def selectalldictcursorByparams(self,sql,params):
+        """返回多行记录，字典类型"""
+        try:
+            conn = self.getConnection()
+            cur = conn.cursor(cursor = pymysql.cursors.DictCursor)
+            count = cur.execute(sql,params)
+            result = cur.fetchall()
+            return result
+        except pymysql.Error as e:
+            print("pymysql Error:%s" % e)
+        finally:
+            cur.close()
+            conn.close()
