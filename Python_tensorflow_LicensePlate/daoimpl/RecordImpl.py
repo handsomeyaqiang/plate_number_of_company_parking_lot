@@ -7,8 +7,8 @@ class RecordImpl(RecordDao.RecordDao):
     # 车辆进入时的信息登记
     def insertRecord(self, record):
         py = Pymysql.PyMySQLHelper()
-        sql = 'insert into record(platenumber, intime, outtime vehicletype, feestatus) values(%s,%s,%s,%s,%s)'
-        params = (record.platenumber, record.intime, record.outtime, record.vehicletype, record.feestatus)
+        sql = 'insert into record(platenumber, intime, outtime, vehicletype, leavestatus) values(%s,%s,%s,%s,%s)'
+        params = (record.platenumber, record.intime, record.outtime, record.vehicletype, record.leavestatus)
         py.updateByParam(sql, params)
 
     # 车辆离开时的信息更新
@@ -58,7 +58,7 @@ class RecordImpl(RecordDao.RecordDao):
             record = Record(result['platenumber'], result['intime'], result['outtime'], result['vehicletype'], result['leavestatus'])
             return record
         else:
-            return -1
+            return None
 
     # 根据车辆进入时间查找车辆记录
     def findRecordByInTime(self, time):
