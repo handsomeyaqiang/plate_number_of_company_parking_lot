@@ -13,10 +13,10 @@ class ChargeRulesDaoImpl(ChargeRulesDao):
     def updateRules(self, chargerules):
         sql =( 'update  chargerules set dayprice = %s,nightprice = %s,' 
               'daybegintime = %s,dayendtime = %s,nightbegintime = %s,nightendtime = %s,' 
-              'dayfirsthourprice = %s')
+              'dayfirsthourprice = %s where rid = %s')
         params =(chargerules.dayprice, chargerules.nightprice, chargerules.daybegintime,
                 chargerules.dayendtime, chargerules.nightbegintime, chargerules.nightendtime,
-                chargerules.firsthourprice)
+                chargerules.firsthourprice,chargerules.rid)
         count = PyMySQLHelper().updateByParam(sql,params)
         return count
 
