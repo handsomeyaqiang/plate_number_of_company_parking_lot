@@ -45,6 +45,6 @@ class Ui_addSeat(object):
         self.label_6.setText(_translate("addSeat", " 车位类型："))
         self.label_2.setText(_translate("addSeat", "   车位数："))
         self.comboBox.setItemText(0, _translate("addSeat", "员工车位"))
-        self.comboBox.setItemText(1, _translate("addSeat", "外部车位"))
+        self.comboBox.setItemText(1, _translate("addSeat", "临时车位"))
         self.pushButton.setText(_translate("addSeat", "确定"))
 

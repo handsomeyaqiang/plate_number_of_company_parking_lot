@@ -191,7 +191,7 @@ class SeatManage(QWidget):
         updateBtn = QPushButton('修改')
         updateBtn.setStyleSheet(''' text-align : center;
                                                    background-color : DarkSeaGreen;
-                                                   height : 30px;
+                                                    height : 30px;
                                                    border-style: outset;
                                                    font : 13px  ''')
 

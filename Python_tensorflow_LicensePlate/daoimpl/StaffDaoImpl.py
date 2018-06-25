@@ -26,6 +26,9 @@ class staffDaoImpl(staffDao):
     #删除员工信息实现
     def deleteStaff(self, SID):
         py = Pymysql.PyMySQLHelper()
+        sql1 = 'delete from vehicle WHERE SID =%s'
+        params1 = (SID)
+        py.updateByParam(sql1, params1)
         sql = 'delete from staff WHERE SID =%s'
         params = (SID)
         count = py.updateByParam(sql, params)
