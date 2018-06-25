@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50534
 File Encoding         : 65001
 
-Date: 2018-06-12 14:18:23
+Date: 2018-06-25 18:40:34
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -67,7 +67,7 @@ CREATE TABLE `financial` (
   `chargetime` datetime DEFAULT NULL COMMENT '收费时间',
   `money` double DEFAULT NULL COMMENT '收费金额',
   PRIMARY KEY (`Fid`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of financial
@@ -87,23 +87,34 @@ CREATE TABLE `parkplace` (
   `parkPlaceType` int(11) DEFAULT NULL COMMENT '车位的类型：外部类型：1，内部类型：0',
   `useCarNumber` varchar(255) DEFAULT NULL COMMENT '车位分配的车id车牌号',
   PRIMARY KEY (`parkPlaceID`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='车位表';
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8 COMMENT='车位表';
 
 -- ----------------------------
 -- Records of parkplace
 -- ----------------------------
-INSERT INTO `parkplace` VALUES ('1', '0', '0', null);
+INSERT INTO `parkplace` VALUES ('1', '1', '0', '');
 INSERT INTO `parkplace` VALUES ('2', '0', '1', null);
 INSERT INTO `parkplace` VALUES ('3', '0', '1', null);
-INSERT INTO `parkplace` VALUES ('4', '0', '0', null);
+INSERT INTO `parkplace` VALUES ('4', '1', '0', '');
 INSERT INTO `parkplace` VALUES ('5', '0', '0', null);
 INSERT INTO `parkplace` VALUES ('6', '0', '1', null);
 INSERT INTO `parkplace` VALUES ('7', '0', '1', null);
 INSERT INTO `parkplace` VALUES ('8', '0', '0', null);
 INSERT INTO `parkplace` VALUES ('9', '0', '1', null);
-INSERT INTO `parkplace` VALUES ('10', '0', '0', null);
-INSERT INTO `parkplace` VALUES ('11', '0', '0', null);
+INSERT INTO `parkplace` VALUES ('10', '1', '0', '');
+INSERT INTO `parkplace` VALUES ('11', '1', '0', '');
 INSERT INTO `parkplace` VALUES ('12', '0', '1', null);
+INSERT INTO `parkplace` VALUES ('13', '1', '0', '');
+INSERT INTO `parkplace` VALUES ('14', '1', '0', '');
+INSERT INTO `parkplace` VALUES ('15', '0', '0', null);
+INSERT INTO `parkplace` VALUES ('16', '0', '0', null);
+INSERT INTO `parkplace` VALUES ('17', '1', '0', '');
+INSERT INTO `parkplace` VALUES ('18', '0', '1', null);
+INSERT INTO `parkplace` VALUES ('19', '0', '1', null);
+INSERT INTO `parkplace` VALUES ('20', '0', '1', null);
+INSERT INTO `parkplace` VALUES ('21', '0', '1', null);
+INSERT INTO `parkplace` VALUES ('22', '1', '1', null);
+INSERT INTO `parkplace` VALUES ('23', '0', '1', null);
 
 -- ----------------------------
 -- Table structure for record
@@ -115,19 +126,20 @@ CREATE TABLE `record` (
   `intime` datetime DEFAULT NULL COMMENT '车辆进入时间',
   `outtime` datetime DEFAULT NULL COMMENT '车辆离开时间',
   `vehicletype` int(11) DEFAULT NULL COMMENT '车辆类型 0：内部车   1:外部车',
-  `feestatus` int(11) DEFAULT '0' COMMENT '缴费状态默认是没有缴费  0：没交 1：交',
+  `leavestatus` int(11) DEFAULT '0' COMMENT '离开状态默认是没有离开  0：没离开 1：离开',
   PRIMARY KEY (`rid`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='车辆进出记录表，有关车辆缴费状态及缴费情况，通过此表可以获取财务记录情况';
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COMMENT='车辆进出记录表，有关车辆缴费状态及缴费情况，通过此表可以获取财务记录情况';
 
 -- ----------------------------
 -- Records of record
 -- ----------------------------
-INSERT INTO `record` VALUES ('1', '豫A55555', '2018-05-29 11:17:17', '2018-05-29 11:23:21', '0', '0');
+INSERT INTO `record` VALUES ('1', '豫A55555', '2018-05-29 11:17:17', '2018-05-29 11:23:26', '0', '1');
 INSERT INTO `record` VALUES ('2', '豫B55555', '2018-05-28 11:35:48', '2018-05-29 11:35:55', '1', '1');
 INSERT INTO `record` VALUES ('3', '京RD34F4', '2018-05-22 15:00:58', '2018-05-22 20:01:19', '1', '1');
-INSERT INTO `record` VALUES ('4', '豫B82343', '2018-05-23 15:01:46', '2018-05-24 15:01:50', '0', '0');
+INSERT INTO `record` VALUES ('4', '豫B82343', '2018-05-23 15:01:46', '2018-05-24 15:01:50', '0', '1');
 INSERT INTO `record` VALUES ('5', '豫S34234', '2018-05-08 15:04:45', '2018-05-09 15:04:48', '1', '1');
 INSERT INTO `record` VALUES ('6', '京G34553', '2018-05-24 15:05:58', '2018-05-24 18:06:01', '1', '1');
+INSERT INTO `record` VALUES ('7', '京B82343', '2018-06-25 11:21:12', '2018-06-25 18:30:44', '0', '1');
 
 -- ----------------------------
 -- Table structure for staff
@@ -151,6 +163,7 @@ INSERT INTO `staff` VALUES ('0002', '1', 'Jike', '1565626854', '1', '销售部')
 INSERT INTO `staff` VALUES ('0003', '0', 'rose', '1535456456', '1', '开发部');
 INSERT INTO `staff` VALUES ('0004', '2', 'wang', '1545454242', '0', '研发部');
 INSERT INTO `staff` VALUES ('0005', '1', 'mike', '1535445874', '0', '销售部');
+INSERT INTO `staff` VALUES ('0006', '1', 'vivo', '1536464515', '0', '卡发布');
 
 -- ----------------------------
 -- Table structure for vehicle
