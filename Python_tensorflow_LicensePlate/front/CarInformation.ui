@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>777</width>
     <height>600</height>
    </rect>
   </property>
@@ -17,10 +17,10 @@
    <widget class="QTableWidget" name="tableWidget">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>340</y>
-      <width>721</width>
-      <height>221</height>
+      <x>140</x>
+      <y>320</y>
+      <width>521</width>
+      <height>261</height>
      </rect>
     </property>
     <column>
@@ -30,7 +30,7 @@
     </column>
     <column>
      <property name="text">
-      <string>拥有车辆数</string>
+      <string>车牌号</string>
      </property>
     </column>
     <column>
@@ -40,17 +40,7 @@
     </column>
     <column>
      <property name="text">
-      <string>联系方式</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>性别</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>部门</string>
+      <string>车架号</string>
      </property>
     </column>
     <column>
@@ -94,7 +84,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>添加员工</string>
+      <string>确认添加</string>
      </property>
     </widget>
     <widget class="QPushButton" name="exit_pushButton">
@@ -121,7 +111,7 @@
      </rect>
     </property>
     <property name="title">
-     <string>添加员工信息</string>
+     <string>添加车辆信息</string>
     </property>
     <widget class="QWidget" name="gridLayoutWidget">
      <property name="geometry">
@@ -133,73 +123,32 @@
       </rect>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="5" column="1">
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QRadioButton" name="nan_radioButton">
-          <property name="text">
-           <string>男</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="nv_radioButton">
-          <property name="text">
-           <string>女</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="car_lineEdit"/>
-      </item>
-      <item row="5" column="0">
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>  性别：</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="1">
-       <widget class="QLineEdit" name="phone_lineEdit"/>
-      </item>
-      <item row="3" column="1">
-       <widget class="QLineEdit" name="name_lineEdit"/>
-      </item>
-      <item row="3" column="0">
+      <item row="2" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>  姓名：</string>
         </property>
        </widget>
       </item>
-      <item row="6" column="0">
+      <item row="4" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>  部门：</string>
+         <string>车架号：</string>
         </property>
        </widget>
       </item>
-      <item row="6" column="1">
-       <widget class="QLineEdit" name="depart_lineEdit"/>
+      <item row="4" column="2">
+       <widget class="QLineEdit" name="driverNum_lineEdit"/>
       </item>
-      <item row="4" column="0">
+      <item row="2" column="2">
+       <widget class="QLineEdit" name="name_lineEdit"/>
+      </item>
+      <item row="3" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>  电话：</string>
+         <string>车牌号：</string>
         </property>
        </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>车辆数：</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="num_lineEdit"/>
       </item>
       <item row="0" column="0">
        <widget class="QLabel" name="label_7">
@@ -208,14 +157,20 @@
         </property>
        </widget>
       </item>
+      <item row="3" column="2">
+       <widget class="QLineEdit" name="carNum_lineEdit"/>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLineEdit" name="num_lineEdit"/>
+      </item>
      </layout>
     </widget>
-    <widget class="QPushButton" name="pushButton_3">
+    <widget class="QPushButton" name="clear_pushButton">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>100</x>
        <y>180</y>
-       <width>191</width>
+       <width>111</width>
        <height>21</height>
       </rect>
      </property>
@@ -227,9 +182,9 @@
    <widget class="Line" name="line">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>30</y>
-      <width>741</width>
+      <x>0</x>
+      <y>40</y>
+      <width>801</width>
       <height>20</height>
      </rect>
     </property>
@@ -255,18 +210,17 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_5"/>
+      <widget class="QLineEdit" name="lineEdit_5">
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QComboBox" name="comboBox">
        <item>
         <property name="text">
-         <string>按姓名</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>按部门</string>
+         <string>按工号</string>
         </property>
        </item>
        <item>
@@ -277,9 +231,9 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton_2">
+      <widget class="QPushButton" name="query_pushButton">
        <property name="text">
-        <string>确定</string>
+        <string>检索</string>
        </property>
       </widget>
      </item>
@@ -298,13 +252,39 @@
      <enum>Qt::Vertical</enum>
     </property>
    </widget>
+   <widget class="Line" name="line_3">
+    <property name="geometry">
+     <rect>
+      <x>-460</x>
+      <y>80</y>
+      <width>3</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Vertical</enum>
+    </property>
+   </widget>
+   <widget class="Line" name="line_4">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>310</y>
+      <width>761</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>777</width>
      <height>23</height>
     </rect>
    </property>
