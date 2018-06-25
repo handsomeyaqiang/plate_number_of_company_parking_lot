@@ -29,10 +29,10 @@ class Update_Ui(QWidget):
         self.setFixedSize(self.width(), self.height())
         # 清除
         self.ui.car_lineEdit.setClearButtonEnabled(True)
-        self.ui.lineEdit.setClearButtonEnabled(True)
+        # self.ui.lineEdit.setClearButtonEnabled(True)
         self.ui.phone_lineEdit.setClearButtonEnabled(True)
         self.ui.name_lineEdit.setClearButtonEnabled(True)
-        self.ui.lineEdit.setClearButtonEnabled(True)
+
         self.ui.depart_lineEdit.setClearButtonEnabled(True)
 
         # 槽函数
