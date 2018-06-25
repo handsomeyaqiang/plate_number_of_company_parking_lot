@@ -167,6 +167,7 @@ class ParkPlaceService(object):
         except Exception as e:
             print(e)
             return result.error("更新车位信息失败！")
+
     def adddulparkplace(self,type,number):
         result = ParkResult.ParkResult()
         try:
@@ -221,7 +222,7 @@ class ParkPlaceService(object):
             print(e)
             return result.error("分配失败！")
 
-    def reclaimparkpalce(self,parkplaceid):
+    def reclaimparkpalce(self,plate_num):
         """
         车辆离开时调用，回收车位
         :param parkplaceid: 车位号
@@ -230,13 +231,15 @@ class ParkPlaceService(object):
         result = ParkResult.ParkResult()
         try:
             pimpl = ParkPlaceImpl()
-            parkplace = pimpl.findbyid(parkplaceid)
+            parkplace = pimpl.findbyplateid(plate_num)
             parkplace.lockStatus = 0
             parkplace.useCarNumber=None
             pimpl.updateparkplace(parkplace)
-            return result.ok2()
+            return result.ok(parkplace.parkPlaceID)
         except Exception as e:
+            print(e)
             return result.error("回收车位失败！")
+
     def updateparkplacetype(self,parkplaceid,type):
         """
         根据车位号更新车位类型
