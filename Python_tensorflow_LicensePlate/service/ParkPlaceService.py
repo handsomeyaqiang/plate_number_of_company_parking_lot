@@ -172,7 +172,7 @@ class ParkPlaceService(object):
         try:
             place = ParkPlace(0, type, None)
             for i in range(number):
-                ParkPlaceImpl.insertparkplace(place)
+                ParkPlaceImpl().insertparkplace(place)
             return result.ok2()
         except Exception as e:
             print(e)
@@ -214,9 +214,9 @@ class ParkPlaceService(object):
                 parkplace.useCarNumber = carnumber
                 parkplace.lockStatus = 1
                 pimpl.updateparkplace(parkplace)
-                return  result.ok(parkplace.parkPlaceID)
+                return result.ok(parkplace.parkPlaceID)
             else:
-                return result.error("分配失败！")
+                return result.error("车位已满！")
         except Exception as e:
             print(e)
             return result.error("分配失败！")
