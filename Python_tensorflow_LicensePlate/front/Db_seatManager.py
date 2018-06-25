@@ -4,7 +4,6 @@ from Python_tensorflow_LicensePlate.front.Db_addSeat import *
 from Python_tensorflow_LicensePlate.front.Db_dayFee import *
 from Python_tensorflow_LicensePlate.front.Db_nightFee import *
 import sys
-import pymysql
 from PyQt5.QtWidgets import *
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QWidget
@@ -29,7 +28,6 @@ class SeatManage(QWidget):
         self.ui.groupBox_3.hide()
         self.ui.tableWidget_5.hide()
         self.ui.tableWidget.hide()
-        self.ui.tableWidget_4.hide()
 
         # 设置lineEdit的删除
 
@@ -68,86 +66,67 @@ class SeatManage(QWidget):
         self.ui1 = AddSeat()
         self.ui1.show()
 
-    # 查询晚上停车费用
+
     def nightFee(self):
+        """夜间价格显示"""
         self.ui.tableWidget_2.hide()
         self.ui.groupBox_2.hide()
         self.ui.groupBox_3.hide()
         self.ui.tableWidget_3.hide()
         self.ui.tableWidget_5.show()
         self.ui.tableWidget.hide()
-        # 操作数据库 可复用之前的  self.buttonForRow3
+        rulecontrol = ChargeController()
+        result = rulecontrol.showrule()
+        if result.status ==200:
+            rule = result.data
+            row = 1
+            col = 3
+            self.ui.tableWidget_5.setRowCount(row)  # 控件的名字保持一致，切莫想当然
+            self.ui.tableWidget_5.setColumnCount(col + 1)  # 加1，开辟一列放操作按钮
+            self.ui.tableWidget_5.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
+            self.ui.tableWidget_5.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
 
-        # conn = pymysql.connect(host='127.0.0.1',
-        #                        port=3306, user='root', password='271996', db='db_car', charset='utf8')
-        # cursor = conn.cursor()
-        # cursor.execute(sql)
-        # conn.commit()
-        # sql_all = "select Sid, vehicleQuantity, name, phone, gender,  department  from staff"
-        # cursor.execute(sql_all)
-        # rows = cursor.fetchall()
-        #
-        # row = cursor.rowcount  # 通过查询的数据，取得记录条数，用来设置表格的行数
-        # col = len(rows[0])  # 取得每条记录的长度，用来设置表格的列数
-        # cursor.close()
-        # conn.close()
-        #
-        # self.ui.tableWidget_4.setRowCount(row)  # 控件的名字保持一致，切莫想当然
-        # self.ui.tableWidget_4.setColumnCount(col + 1)  # 加1，开辟一列放操作按钮
-        # self.ui.tableWidget_4.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
-        # self.ui.tableWidget_4.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
-        #
-        # for i in range(row):
-        #     for j in range(col):
-        #         temp_data = rows[i][j]  # 临时记录，不能直接插入表格
-        #         data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
-        #         self.ui.tableWidget_4.setItem(i, j, data)
-        #         if j == col - 1:
-        #             self.ui.tableWidget_4.setCellWidget(i, j + 1, self.buttonForRow3(str(rows[i][0])))
-        #
-        # cursor.close()
+            data = QTableWidgetItem(str(rule.nightbegintime))
+            # 转换后可插入表格
+            self.ui.tableWidget_5.setItem(0, 0, data)
+            data = QTableWidgetItem(str(rule.nightendtime))
+            self.ui.tableWidget_5.setItem(0, 1, data)
+            data = QTableWidgetItem(str(rule.nightprice))
+            self.ui.tableWidget_5.setItem(0, 2, data)
+            self.ui.tableWidget_5.setCellWidget(0, 3, self.buttonForRow3(rule))
 
-    # 查询白天停车费用专用按钮
     def dayTimeFee(self):
+        """白天价格显示"""
         self.ui.tableWidget_2.hide()
         self.ui.groupBox_2.hide()
         self.ui.groupBox_3.hide()
         self.ui.tableWidget_3.hide()
         self.ui.tableWidget_5.hide()
         self.ui.tableWidget.show()
-        #
-        # conn = pymysql.connect(host='127.0.0.1',
-        #                        port=3306, user='root', password='271996', db='db_car', charset='utf8')
-        # cursor = conn.cursor()
-        # cursor.execute(sql)
-        # conn.commit()
-        # sql_all = "select Sid, vehicleQuantity, name, phone, gender,  department  from staff"
-        # cursor.execute(sql_all)
-        # rows = cursor.fetchall()
-        #
-        # row = cursor.rowcount  # 通过查询的数据，取得记录条数，用来设置表格的行数
-        # col = len(rows[0])  # 取得每条记录的长度，用来设置表格的列数
-        # cursor.close()
-        # conn.close()
-        #
-        # self.ui.tableWidget_4.setRowCount(row)  # 控件的名字保持一致，切莫想当然
-        # self.ui.tableWidget_4.setColumnCount(col + 1)  # 加1，开辟一列放操作按钮
-        # self.ui.tableWidget_4.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
-        # self.ui.tableWidget_4.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
-        #
-        # for i in range(row):
-        #     for j in range(col):
-        #         temp_data = rows[i][j]  # 临时记录，不能直接插入表格
-        #         data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
-        #         self.ui.tableWidget_4.setItem(i, j, data)
-        #         if j == col - 1:
-        #             self.ui.tableWidget_4.setCellWidget(i, j + 1, self.buttonForRow2(str(rows[i][0])))
-        #
-        # cursor.close()
+        rulecontrol = ChargeController()
+        result = rulecontrol.showrule()
+        if result.status == 200:
+            rule = result.data
+            row = 1
+            col = 4
+            self.ui.tableWidget.setRowCount(row)
+            self.ui.tableWidget.setColumnCount(col + 1)  # 加1，开辟一列放操作按钮
+            self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
+            self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
 
-        # 修改晚上停车费用专用按钮
+            data = QTableWidgetItem(str(rule.daybegintime))
+            self.ui.tableWidget.setItem(0, 0, data)
+            data = QTableWidgetItem(str(rule.dayendtime))
+            self.ui.tableWidget.setItem(0, 1, data)
+            data = QTableWidgetItem(str(rule.dayprice))
+            self.ui.tableWidget.setItem(0, 2, data)
+            data = QTableWidgetItem(str(rule.firsthourprice))
+            self.ui.tableWidget.setItem(0, 3, data)
+            self.ui.tableWidget.setCellWidget(0, 4, self.button_updatedayrule(rule))
 
-    def buttonForRow3(self, id):
+
+    def buttonForRow3(self,rule):
+        """修改夜间规则信息的按钮函数"""
         widget = QWidget()
         # 修改
         updateBtn = QPushButton('修改')
@@ -157,16 +136,23 @@ class SeatManage(QWidget):
                                                         border-style: outset;
                                                         font : 13px  ''')
 
-        updateBtn.clicked.connect(lambda: self.nightFee(id))
+        updateBtn.clicked.connect(lambda: self.updatenighrulewindow(rule))
+        hLayout = QHBoxLayout()
+        hLayout.addWidget(updateBtn)
+        # hLayout.addWidget(viewBtn)
+        hLayout.setContentsMargins(5, 2, 5, 2)
+        widget.setLayout(hLayout)
+        return widget
 
-    # 显示修改晚上停车费用窗口
-    def dayFee(self, id):
-        self.ui4 = nightfee()
-        self.ui4.showUpdate(id)
+    def updatenighrulewindow(self,rule):
+        """显示更新夜晚规则的界面"""
+        self.ui4 = nightfee(rule)
+        self.ui4.ShowUpdate()
         self.ui4.show()
 
     # 修改白天停车费用专用
-    def buttonForRow2(self, id):
+    def button_updatedayrule(self,rule):
+        """修改白天规则按钮"""
         widget = QWidget()
         # 修改
         updateBtn = QPushButton('修改')
@@ -176,12 +162,19 @@ class SeatManage(QWidget):
                                                       border-style: outset;
                                                       font : 13px  ''')
 
-        updateBtn.clicked.connect(lambda: self.dayFee(id))
+        updateBtn.clicked.connect(lambda: self.updatedayrule(rule))
 
-    # 显示修改晚上停车费用窗口
-    def dayFee(self, id):
-        self.ui3 = dayfee()
-        self.ui3.showUpdate(id)
+        hLayout = QHBoxLayout()
+        hLayout.addWidget(updateBtn)
+        # hLayout.addWidget(viewBtn)
+        hLayout.setContentsMargins(5, 2, 5, 2)
+        widget.setLayout(hLayout)
+        return widget
+
+    def updatedayrule(self,rule):
+        """显示更新白天收费规则的窗口"""
+        self.ui3 = dayfee(rule)
+        self.ui3.ShowUpdate()
         self.ui3.show()
 
     # 删除修改的按钮函数
@@ -336,7 +329,6 @@ class SeatManage(QWidget):
 
     # 车位操作的控制逻辑
     def operateSeat2(self):
-        self.ui.tableWidget_4.show()
         # 获取界面输入
         #如果输入框不为空则按车位号进行检索
         category = self.ui.comboBox.currentText()
