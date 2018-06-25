@@ -15,6 +15,10 @@ class CarRecord(QWidget):
         self.ui.setupUi(self)
         self.setWindowTitle("车辆历史记录查询")
         self.setFixedSize(self.width(), self.height())  # 实现禁止窗口最大化和禁止窗口拉伸
+
+        # self.ui.tableWidget.horizontalHeader().setFixedWidth(45)
+        self.ui.tableWidget.setColumnWidth(2, 140) # 设置列的宽度
+        self.ui.tableWidget.setColumnWidth(1, 140)
         # 槽函数
         self.ui.pushButton.clicked.connect(self.Query)
 
@@ -55,7 +59,7 @@ class CarRecord(QWidget):
                         else:
                             data = QTableWidgetItem(str(temp_data))
                             self.ui.tableWidget.setItem(i, j, data)
-                OK = QMessageBox.information(self, ("提示："), ("""查询成功！"""))
+
             else:
                 OK = QMessageBox.information(self, ("提示："), ("""查询失败！"""))
 
@@ -85,7 +89,7 @@ class CarRecord(QWidget):
                         else:
                             data = QTableWidgetItem(str(temp_data))
                             self.ui.tableWidget.setItem(i, j, data)
-                OK = QMessageBox.information(self, ("提示："), ("""查询成功！"""))
+
             else:
                 OK = QMessageBox.information(self, ("提示："), ("""查询失败！"""))
 
@@ -116,7 +120,7 @@ class CarRecord(QWidget):
                         else:
                             data = QTableWidgetItem(str(temp_data))
                             self.ui.tableWidget.setItem(i, j, data)
-                OK = QMessageBox.information(self, ("提示："), ("""查询成功！"""))
+
             else:
                 OK = QMessageBox.information(self, ("提示："), ("""查询失败！"""))
 
@@ -144,7 +148,7 @@ class CarRecord(QWidget):
                         else:
                             data = QTableWidgetItem(str(temp_data))
                             self.ui.tableWidget.setItem(i, j, data)
-                OK = QMessageBox.information(self, ("提示："), ("""查询成功！"""))
+
             else:
                 OK = QMessageBox.information(self, ("提示："), ("""查询失败！"""))
 
@@ -170,7 +174,7 @@ class CarRecord(QWidget):
                         else:
                             data = QTableWidgetItem(str(temp_data))
                             self.ui.tableWidget.setItem(i, j, data)
-                OK = QMessageBox.information(self, ("提示："), ("""查询成功！"""))
+
             else:
                 OK = QMessageBox.information(self, ("提示："), ("""查询失败！"""))
 

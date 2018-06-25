@@ -20,10 +20,13 @@ class Update_Ui(QWidget):
         self.ui.depart_lineEdit.setFrame(False)
         self.ui.car_lineEdit.setFrame(False)
         self.ui.lineEdit.setFrame(False)
+        self.ui.lineEdit.setReadOnly(True)  # 工号设为只读
+
 
         self.ui.pushButton.setIcon(QIcon("sure.png"))
         self.ui.pushButton_2.setIcon(QIcon("cancle.png"))
 
+        self.setFixedSize(self.width(), self.height())
         # 清除
         self.ui.car_lineEdit.setClearButtonEnabled(True)
         self.ui.lineEdit.setClearButtonEnabled(True)
