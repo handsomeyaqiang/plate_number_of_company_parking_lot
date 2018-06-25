@@ -178,7 +178,7 @@ class SeatManage(QWidget):
         self.ui3.show()
 
     # 删除修改的按钮函数
-    def buttonForRow(self, id,findtype):
+    def buttonForRow(self, parkplace,findtype):
         widget = QWidget()
         # 修改
         updateBtn = QPushButton('修改')
@@ -188,7 +188,7 @@ class SeatManage(QWidget):
                                                    border-style: outset;
                                                    font : 13px  ''')
 
-        updateBtn.clicked.connect(lambda: self.DB_update(id,findtype))
+        updateBtn.clicked.connect(lambda: self.DB_update(parkplace,findtype))
 
         # 删除
         deleteBtn = QPushButton('删除')
@@ -197,7 +197,7 @@ class SeatManage(QWidget):
                                              height : 30px;
                                              border-style: outset;
                                              font : 13px; ''')
-        deleteBtn.clicked.connect(lambda: self.DeleteTip(id,findtype))
+        deleteBtn.clicked.connect(lambda: self.DeleteTip(parkplace.parkPlaceID,findtype))
 
         hLayout = QHBoxLayout()
         hLayout.addWidget(updateBtn)
@@ -272,23 +272,30 @@ class SeatManage(QWidget):
                     for i in range(row):
                         for j in range(len(col)):
                             parkplace = list[i]
-                            temp_data = parkplace.__getattribute__(col[j])  # 临时记录，不能直接插入表格
+                            if col[j] == "parkPlaceType":
+                                if parkplace.parkPlaceType == 0:
+                                    temp_data = "员工车位"
+                                elif parkplace.parkPlaceType == 1:
+                                    temp_data = "临时车位"
+                                else:
+                                    temp_data = "error"
+                            else:
+                                temp_data = parkplace.__getattribute__(col[j])  # 临时记录，不能直接插入表格
                             data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
                             self.ui.tableWidget_4.setItem(i, j, data)
                             # 数据库因为从0开始计数，所以列数减一
                             if j == len(col) - 1:
                                 # print(rows[i][0])
                                 # 传入id rows[i][0]
-                                self.ui.tableWidget_4.setCellWidget(i, j + 1, self.buttonForRow(str(parkplace.parkPlaceID),findtype))
-
+                                self.ui.tableWidget_4.setCellWidget(i, j + 1, self.buttonForRow(parkplace, findtype))
                     OK = QMessageBox.information(self, ("提示"), ("删除成功"))
             except Exception:
                 QMessageBox.information(self, ("提示"), ("发生错误！"))
 
     # 修改 车位设置的信息
-    def DB_update(self, id,findtype):
-        self.ui = Update_seat(id)
-        self.ui.ShowUpdate(id)
+    def DB_update(self, parkplace,findtype):
+        self.ui = Update_seat(parkplace)
+        self.ui.ShowUpdate()
 
 
 
@@ -372,14 +379,22 @@ class SeatManage(QWidget):
         for i in range(row):
             for j in range(len(col)):
                 parkplace = list[i]
-                temp_data = parkplace.__getattribute__(col[j])  # 临时记录，不能直接插入表格
+                if col[j] == "parkPlaceType":
+                    if parkplace.parkPlaceType == 0:
+                        temp_data = "员工车位"
+                    elif parkplace.parkPlaceType == 1:
+                        temp_data = "临时车位"
+                    else:
+                        temp_data = "error"
+                else:
+                    temp_data = parkplace.__getattribute__(col[j])  # 临时记录，不能直接插入表格
                 data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
                 self.ui.tableWidget_4.setItem(i, j, data)
                 # 数据库因为从0开始计数，所以列数减一
                 if j == len(col) - 1:
                     # print(rows[i][0])
                     # 传入id rows[i][0]
-                    self.ui.tableWidget_4.setCellWidget(i, j + 1, self.buttonForRow(str(parkplace.parkPlaceID),findtype))
+                    self.ui.tableWidget_4.setCellWidget(i, j + 1, self.buttonForRow(parkplace,findtype))
 
     # 车位锁状态  查询所有，获得车位的id后进行打开关闭操作，点击打开时，先调用是否确认打开的提示
     # 然后根据id 查询到该车位的 车位状态，根据id 修改，在查询所有，放在table上
@@ -405,7 +420,28 @@ class SeatManage(QWidget):
             for i in range(row):
                 for j in range(len(col)):
                     parkplace = parkplacelist[i]
-                    temp_data = parkplace.__getattribute__(col[j])  # 临时记录，不能直接插入表格
+                    if col[j] == 'lockStatus':
+                        if parkplace.lockStatus == 1:
+                            temp_data = "打开"
+                        elif parkplace.lockStatus == 0:
+                            temp_data = "关闭"
+                        else:
+                            temp_data = "error"
+
+                    elif col[j] == "parkPlaceType":
+                        if parkplace.parkPlaceType == 0:
+                            temp_data = "内部车位"
+                        elif parkplace.parkPlaceType == 1:
+                            temp_data = "临时车位"
+                        else:
+                            temp_data = "error"
+                    elif col[j] == "useCarNumber":
+                        if parkplace.useCarNumber is None:
+                            temp_data = "空闲"
+                        else:
+                            temp_data = parkplace.useCarNumber
+                    else:
+                        temp_data = parkplace.__getattribute__(col[j])  # 临时记录，不能直接插入表格
                     data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
                     self.ui.tableWidget_3.setItem(i, j, data)
                     if j == len(col) - 1:
@@ -443,7 +479,27 @@ class SeatManage(QWidget):
             for i in range(row):
                 for j in range(len(col)):
                     parkplace = parkplacelist[i]
-                    temp_data = parkplace.__getattribute__(col[j])  # 临时记录，不能直接插入表格
+                    if col[j]=='lockStatus':
+                        if parkplace.lockStatus == 1:
+                            temp_data ="打开"
+                        elif parkplace.lockStatus ==0:
+                            temp_data = "关闭"
+                        else:
+                            temp_data="error"
+
+                    elif col[j] =="parkPlaceType":
+                        if parkplace.parkPlaceType== 0:
+                            temp_data ="内部车位"
+                        elif parkplace.parkPlaceType==1:
+                            temp_data = "临时车位"
+                        else:
+                            temp_data="error"
+                    elif col[j]=="useCarNumber":
+                        if parkplace.useCarNumber is None:
+                            temp_data ="空闲"
+                        else: temp_data =parkplace.useCarNumber
+                    else:
+                        temp_data = parkplace.__getattribute__(col[j])  # 临时记录，不能直接插入表格
                     data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
                     self.ui.tableWidget_3.setItem(i, j, data)
                     if j == len(col) - 1:
@@ -483,7 +539,27 @@ class SeatManage(QWidget):
             for i in range(row):
                 for j in range(len(col)):
                     parkplace = parkplacelist[i]
-                    temp_data = parkplace.__getattribute__(col[j])  # 临时记录，不能直接插入表格
+                    if col[j]=='lockStatus':
+                        if parkplace.lockStatus == 1:
+                            temp_data ="打开"
+                        elif parkplace.lockStatus ==0:
+                            temp_data = "关闭"
+                        else:
+                            temp_data="error"
+
+                    elif col[j] =="parkPlaceType":
+                        if parkplace.parkPlaceType== 0:
+                            temp_data ="内部车位"
+                        elif parkplace.parkPlaceType==1:
+                            temp_data = "临时车位"
+                        else:
+                            temp_data="error"
+                    elif col[j]=="useCarNumber":
+                        if parkplace.useCarNumber is None:
+                            temp_data ="空闲"
+                        else: temp_data =parkplace.useCarNumber
+                    else:
+                        temp_data = parkplace.__getattribute__(col[j])  # 临时记录，不能直接插入表格
                     data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
                     self.ui.tableWidget_3.setItem(i, j, data)
                     if j == len(col) - 1:

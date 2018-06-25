@@ -247,7 +247,7 @@ class ParkPlaceService(object):
         :param type: 更新后的车位类型 0 内部 1 外部
         :return:
         """
-        result = ParkResult()
+        result = ParkResult.ParkResult()
         try:
             ParkPlaceImpl().updatetypebyparkplaceid(parkplaceid,type)
             return result.ok2()

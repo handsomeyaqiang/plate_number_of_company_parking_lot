@@ -9,7 +9,7 @@ from PyQt5 .QtGui import *
 from PyQt5.QtCore import *
 from Python_tensorflow_LicensePlate.controller.ParkPlaceController import ParkPlaceController
 class Update_seat(QWidget):
-    def __init__(self, id):
+    def __init__(self, parkplace):
         super(Update_seat, self).__init__()
         self.ui = Ui_seatUp()
         self.ui.setupUi(self)
@@ -40,7 +40,7 @@ class Update_seat(QWidget):
         self.ui.pushButton_2.setIcon(QIcon("cancle.png"))
         self.setWindowTitle("车位信息修改")
         self.ui.comboBox.setCurrentText("外部车辆")
-        self.id = id
+        self.parkplace = parkplace
         # 槽函数
         self.ui.pushButton.clicked.connect(self.updateTip)
         self.ui.pushButton_2.clicked.connect(self.clear)
@@ -61,15 +61,15 @@ class Update_seat(QWidget):
         # 获得界面输入 self.ui.currentIndex用来获得下拉框的下标
         seatCategory = self.ui.comboBox.currentText()
 
-        if id != '' and seatCategory != '':
+        if self.parkplace.parkPlaceID != '' and seatCategory != '':
             # 操作数据库
             pcontrol = ParkPlaceController()
             if seatCategory =="员工车位":
-                type = 0
+                self.parkplace.parkPlaceType =0
             elif seatCategory =="临时车位":
-                type = 1
+                self.parkplace.parkPlaceType =1
 
-            rs = pcontrol.updatetypebyid(id,type)
+            rs = pcontrol.updateparkplace(self.parkplace.parkPlaceID,self.parkplace.lockStatus,self.parkplace.parkPlaceType,self.parkplace.useCarNumber)
             if rs.status ==200:
                 reply = QMessageBox.question(self, '提示',
                                              "修改成功", QMessageBox.Yes |
@@ -82,12 +82,10 @@ class Update_seat(QWidget):
                 QMessageBox.information(self, ("提示"), ("error"))
 
     # 将修改的数据展示
-    def ShowUpdate(self, id):
-        pcontrol = ParkPlaceController()
-        parkplace =pcontrol.findbyid(id).data
-        self.ui.lineEdit.setText(id)
+    def ShowUpdate(self):
+        self.ui.lineEdit.setText(str(self.parkplace.parkPlaceID))
 
-        if parkplace.parkPlaceType ==0:
+        if self.parkplace.parkPlaceType ==0:
            self.ui.comboBox.setCurrentIndex(1)
         else:
            self.ui.comboBox.setCurrentIndex(0)
