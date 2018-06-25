@@ -109,3 +109,10 @@ class FinancialDaoImpl(FinancialDao):
             financial.Fid = Fid
             list.append(financial)
         return list
+
+    def listsumeachmonthbyyear(self,year):
+        """根据年份，返回该年
+        每一个月的收入总和
+        :param year:年 格式为： 2018
+        :return: 返回字典类型列表
+        """
