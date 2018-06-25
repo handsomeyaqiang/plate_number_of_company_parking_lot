@@ -54,10 +54,10 @@ class Update_seat(QWidget):
                                      "确定修改？", QMessageBox.Yes |
                                      QMessageBox.No, QMessageBox.No)
         if reply == QMessageBox.Yes:
-            self.Db_insert(self.id)
+            self.Db_insert()
 
     # 将更改的数据插入数据库
-    def Db_insert(self,id):
+    def Db_insert(self):
         # 获得界面输入 self.ui.currentIndex用来获得下拉框的下标
         seatCategory = self.ui.comboBox.currentText()
 
@@ -85,7 +85,7 @@ class Update_seat(QWidget):
         pcontrol = ParkPlaceController()
         parkplace =pcontrol.findbyid(id).data
         self.ui.lineEdit.setText(id)
-        self.ui.lineEdit.setReadOnly(True)
+
         if parkplace.parkPlaceType ==0:
            self.ui.comboBox.setCurrentIndex(1)
         else:

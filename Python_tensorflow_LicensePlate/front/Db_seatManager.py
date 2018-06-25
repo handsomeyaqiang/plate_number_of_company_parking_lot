@@ -29,6 +29,7 @@ class SeatManage(QWidget):
         self.ui.groupBox_3.hide()
         self.ui.tableWidget_5.hide()
         self.ui.tableWidget.hide()
+        self.ui.tableWidget_4.hide()
 
         # 设置lineEdit的删除
 
@@ -335,6 +336,7 @@ class SeatManage(QWidget):
 
     # 车位操作的控制逻辑
     def operateSeat2(self):
+        self.ui.tableWidget_4.show()
         # 获取界面输入
         #如果输入框不为空则按车位号进行检索
         category = self.ui.comboBox.currentText()

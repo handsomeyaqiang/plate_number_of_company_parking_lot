@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_seat(object):
     def setupUi(self, seat):
         seat.setObjectName("seat")
-        seat.resize(765, 521)
+        seat.resize(770, 521)
         self.line = QtWidgets.QFrame(seat)
         self.line.setGeometry(QtCore.QRect(30, 20, 721, 16))
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
@@ -81,11 +81,11 @@ class Ui_seat(object):
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget_2.setHorizontalHeaderItem(1, item)
         self.groupBox_2 = QtWidgets.QGroupBox(seat)
-        self.groupBox_2.setGeometry(QtCore.QRect(230, 170, 441, 211))
+        self.groupBox_2.setGeometry(QtCore.QRect(230, 160, 441, 251))
         self.groupBox_2.setTitle("")
         self.groupBox_2.setObjectName("groupBox_2")
         self.tableWidget_4 = QtWidgets.QTableWidget(self.groupBox_2)
-        self.tableWidget_4.setGeometry(QtCore.QRect(80, 80, 331, 111))
+        self.tableWidget_4.setGeometry(QtCore.QRect(70, 80, 341, 161))
         self.tableWidget_4.setObjectName("tableWidget_4")
         self.tableWidget_4.setColumnCount(3)
         self.tableWidget_4.setRowCount(0)
