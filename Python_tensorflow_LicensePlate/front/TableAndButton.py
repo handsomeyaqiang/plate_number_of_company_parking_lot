@@ -14,7 +14,7 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
-        self.tableWidget.setGeometry(QtCore.QRect(30, 340, 711, 221))
+        self.tableWidget.setGeometry(QtCore.QRect(30, 340, 721, 221))
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(7)
         self.tableWidget.setRowCount(0)
@@ -120,7 +120,6 @@ class Ui_MainWindow(object):
         self.comboBox.addItem("")
         self.comboBox.addItem("")
         self.comboBox.addItem("")
-
         self.horizontalLayout_2.addWidget(self.comboBox)
         self.pushButton_2 = QtWidgets.QPushButton(self.horizontalLayoutWidget_2)
         self.pushButton_2.setObjectName("pushButton_2")
@@ -174,9 +173,8 @@ class Ui_MainWindow(object):
         self.label_7.setText(_translate("MainWindow", " 工 号："))
         self.pushButton_3.setText(_translate("MainWindow", "清空输入"))
         self.label_6.setText(_translate("MainWindow", "请输入"))
-        self.comboBox.setItemText(0, _translate("MainWindow", "按工号"))
-        self.comboBox.setItemText(1, _translate("MainWindow", "按姓名"))
-        self.comboBox.setItemText(2, _translate("MainWindow", "按部门"))
-
+        self.comboBox.setItemText(0, _translate("MainWindow", "按姓名"))
+        self.comboBox.setItemText(1, _translate("MainWindow", "按部门"))
+        self.comboBox.setItemText(2, _translate("MainWindow", "按车牌号"))
         self.pushButton_2.setText(_translate("MainWindow", "确定"))
 

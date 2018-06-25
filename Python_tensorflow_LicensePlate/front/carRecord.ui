@@ -16,9 +16,9 @@
   <widget class="QTableWidget" name="tableWidget">
    <property name="geometry">
     <rect>
-     <x>50</x>
+     <x>40</x>
      <y>150</y>
-     <width>481</width>
+     <width>521</width>
      <height>181</height>
     </rect>
    </property>
@@ -29,7 +29,7 @@
    </column>
    <column>
     <property name="text">
-     <string>进入时间</string>
+     <string>进入时间         </string>
     </property>
    </column>
    <column>
@@ -77,12 +77,12 @@
       </item>
       <item>
        <property name="text">
-        <string>进入时间(XX-YY-ZZ  AA:BB:CC)</string>
+        <string>进入时间(XX-YY-ZZ AA:BB:CC)</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>离开时间(XX-YY-ZZ  AA:BB:CC)</string>
+        <string>离开时间(XX-YY-ZZ AA:BB:CC)</string>
        </property>
       </item>
       <item>

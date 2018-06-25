@@ -19,7 +19,7 @@ class PyMySQLHelper:
     # 定义一个连接mysql的函数
     def getConnection(self):
         try:
-            conn = pymysql.connect(host='localhost', port=3306, user='root', password='root', db='company_parking_system',use_unicode=True,
+            conn = pymysql.connect(host='localhost', port=3306, user='root', password='271996', db='company_parking_system',use_unicode=True,
                                    charset="utf8")
         except pymysql.Error as e:
             print("pymysql Connection Error:%s" % e)
@@ -132,6 +132,19 @@ class PyMySQLHelper:
             cur = conn.cursor(cursor = pymysql.cursors.DictCursor)
             count = cur.execute(sql)
             result = cur.fetchone()
+            return result
+        except pymysql.Error as e:
+            print("pymysql Error:%s" % e)
+        finally:
+            cur.close()
+            conn.close()
+    def selectalldictcursorByparams(self,sql,params):
+        """返回多行记录，字典类型"""
+        try:
+            conn = self.getConnection()
+            cur = conn.cursor(cursor = pymysql.cursors.DictCursor)
+            count = cur.execute(sql,params)
+            result = cur.fetchall()
             return result
         except pymysql.Error as e:
             print("pymysql Error:%s" % e)
