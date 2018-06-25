@@ -20,7 +20,7 @@ class ParkPlaceImpl(ParkPlaceDao):
             parkplace.parkPlaceID = result['parkPlaceID']
             return parkplace
         else:
-            return -1
+            return None
 
     def findbyid(self,parkplaceid):
         """根据车位号查找车位信息
@@ -35,7 +35,7 @@ class ParkPlaceImpl(ParkPlaceDao):
             parkplace.parkPlaceID =result['parkPlaceID']
             return parkplace
         else:
-            return -1
+            return None
 
     def updatecarnumber(self,parkplace):
         """更新车位中的车辆，车辆进入时写入车牌号
@@ -174,7 +174,7 @@ class ParkPlaceImpl(ParkPlaceDao):
                 list.append(parkplace)
             return list
         else:
-            return -1
+            return None
 
     def findemptybytype(self, type):
         """根据传入车位类型返回空闲车位对象列表"""

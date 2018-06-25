@@ -55,3 +55,7 @@ class ParkPlaceDao(object):
     @abstractmethod
     def updatetypebyparkplaceid(self,parkplaceid,type):
         pass
+
+    @abstractmethod
+    def findbyplateid(self, plate_num):
+        pass
