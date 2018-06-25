@@ -293,7 +293,7 @@ class SeatManage(QWidget):
 
     # 修改 车位设置的信息
     def DB_update(self, id,findtype):
-        self.ui = Update_seat()
+        self.ui = Update_seat(id)
         self.ui.ShowUpdate(id)
 
 
