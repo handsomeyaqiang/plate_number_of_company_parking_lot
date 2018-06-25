@@ -19,6 +19,10 @@ class ChargeController(object):
                  nightbegintime,nightendtime,firsthourprice)
         return ChargeService().updaterule(rule)
 
+    def update(self,rule):
+        """参数为规则对象的方法"""
+        return ChargeService().updaterule(rule)
+
     def  showrule(self):
         """
         获取收费规则
