@@ -6,15 +6,17 @@ class RecordImpl(RecordDao.RecordDao):
 
     # 车辆进入时的信息登记
     def insertRecord(self, record):
-        sql = 'insert into record(platenumber, intime, vehicletype, feestatus) values(%s,%s,%s,%s,%s)'
-        params = (record.platenumber, record.intime, record.vehicletype, record.feestatus)
-        Pymysql.PyMySQLHelper.updateByParam(sql, params)
+        py = Pymysql.PyMySQLHelper()
+        sql = 'insert into record(platenumber, intime, outtime vehicletype, feestatus) values(%s,%s,%s,%s,%s)'
+        params = (record.platenumber, record.intime, record.outtime, record.vehicletype, record.feestatus)
+        py.updateByParam(sql, params)
 
     # 车辆离开时的信息更新
     def updateRecord(self, record):
-        sql = 'update record set outtime = %s, feestatus = %s where platenumber = %s'
-        params = (record.outtime, record.feestatus, record.platenumber)
-        Pymysql.PyMySQLHelper.selectOneByParam(sql, params)
+        py = Pymysql.PyMySQLHelper()
+        sql = 'update record set outtime = %s, leavestatus = %s where platenumber = %s'
+        params = (record.outtime, record.leavestatus, record.platenumber)
+        py.updateByParam(sql, params)
 
     # 根据车辆记录的id删除记录
     def deleteRecordByRid(self, rid):
@@ -35,7 +37,7 @@ class RecordImpl(RecordDao.RecordDao):
     #根据车牌号查找车辆记录
     def findRecordByPlateID(self, platenumber):
         py = Pymysql.PyMySQLHelper()
-        sql = "select platenumber,intime,outtime,vehicletype from record  where platenumber ='%s'"%(platenumber)
+        sql = "select platenumber,intime,outtime,vehicletype,leavestatus from record  where platenumber ='%s'"%(platenumber)
         result = py.selectalldictcursor(sql)
         list = []
         for rs in result:
@@ -43,10 +45,20 @@ class RecordImpl(RecordDao.RecordDao):
             intime = rs['intime']
             outtime = rs['outtime']
             vehicletype = rs['vehicletype']
-            record = Record(PNumber, intime, outtime, vehicletype)
+            feestatus = rs['leavestatus']
+            record = Record(PNumber, intime, outtime, vehicletype, feestatus)
             list.append(record)
         return list
 
+    def getSingleRecordByPlateId(self, plate_num):
+        py = Pymysql.PyMySQLHelper()
+        sql = "select * from record where platenumber = '%s' and leavestatus = 0" %(plate_num)
+        result = py.selectOnedictcursor(sql)
+        if result != None:
+            record = Record(result['platenumber'], result['intime'], result['outtime'], result['vehicletype'], result['leavestatus'])
+            return record
+        else:
+            return -1
 
     # 根据车辆进入时间查找车辆记录
     def findRecordByInTime(self, time):

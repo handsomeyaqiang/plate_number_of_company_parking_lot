@@ -6,19 +6,37 @@ from Python_tensorflow_LicensePlate.entity.ParkPlace import ParkPlace
 class ParkPlaceImpl(ParkPlaceDao):
     """车位操作方法实现"""
 
+    def findbyplateid(self, plate_num):
+        """
+        根据使用的车牌号进行车位查找
+        :param plate_num:车牌号
+        :return:返回车位信息
+        """
+        py = PyMySQLHelper()
+        sql = "select * from parkplace where useCarNumber = '%s'" %(plate_num)
+        result = py.selectOnedictcursor(sql)
+        if result != None:
+            parkplace = ParkPlace(result['lockStatus'], result['parkPlaceType'], result['useCarNumber'])
+            parkplace.parkPlaceID = result['parkPlaceID']
+            return parkplace
+        else:
+            return -1
+
     def findbyid(self,parkplaceid):
         """根据车位号查找车位信息
         :param parkplaceid: 车位id
         :return: ParkPlace对象
         """
+        py = PyMySQLHelper()
         sql = 'select * from parkplace where parkPlaceID = %s' %(parkplaceid)
-        result = PyMySQLHelper().selectOnedictcursor(sql)
+        result = py.selectOnedictcursor(sql)
         if result != None:
             parkplace = ParkPlace(result['lockStatus'],result['parkPlaceType'],result['useCarNumber'])
             parkplace.parkPlaceID =result['parkPlaceID']
             return parkplace
         else:
             return -1
+
     def updatecarnumber(self,parkplace):
         """更新车位中的车辆，车辆进入时写入车牌号
         车辆离开时将车牌号切换为null
