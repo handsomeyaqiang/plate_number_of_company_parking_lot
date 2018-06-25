@@ -1,10 +1,13 @@
-from addSeat import *
+from Python_tensorflow_LicensePlate.front.addSeat import *
 import sys
 import pymysql
+from Python_tensorflow_LicensePlate.controller.ParkPlaceController import ParkPlaceController
 from PyQt5.QtWidgets import *
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QWidget
-from PyQt5 .QtGui import *
+from PyQt5.QtGui import *
+
+
 class AddSeat(QWidget):
     def __init__(self):
         super(AddSeat, self).__init__()
@@ -26,12 +29,24 @@ class AddSeat(QWidget):
 
         self.ui.pushButton.setIcon(QIcon("sure.png"))
         self.ui.pushButton.clicked.connect(self.addseat)
+
     def addseat(self):
         seatNum = self.ui.lineEdit.text()
-        carCategory = self.ui.comboBox.currentText()
-        if seatNum != '' and carCategory != '':
+        parkplaceCategory = self.ui.comboBox.currentText()
+        if seatNum != '' and parkplaceCategory != '':
             # 操作数据库
-            OK = QMessageBox.information(self, ("提示"), ("修改成功！"))
+            pcontrol = ParkPlaceController()
+            number = eval(seatNum)
+            if parkplaceCategory =='临时车位':
+                type = 1
+            elif parkplaceCategory =='员工车位':
+                type = 0
+            result = pcontrol.adddulparkplace(type,number)
+            if result.status ==200:
+                QMessageBox.information(self, ("提示"), ("添加成功！"))
+            else:
+                QMessageBox.information(self, ("提示"), ("添加失败！"))
+
 
 
 if __name__ == '__main__':
