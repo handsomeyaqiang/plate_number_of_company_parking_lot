@@ -65,7 +65,7 @@ class RecordImpl(RecordDao.RecordDao):
         py = Pymysql.PyMySQLHelper()
         # args = ('%'+year+'%')
         # sql = "select platenumber,intime,outtime,vehicletype from record where outtime like '%s'" % args
-        sql = "select platenumber,intime,outtime,vehicletype from record where intime like '%%%s%%'" % (time)
+        sql = "select * from record where intime like '%%%s%%'" % (time)
         result = py.selectalldictcursor(sql)
         list = []
         for rs in result:
@@ -73,14 +73,15 @@ class RecordImpl(RecordDao.RecordDao):
             intime = rs['intime']
             outtime = rs['outtime']
             vehicletype = rs['vehicletype']
-            record = Record(PNumber, intime, outtime, vehicletype)
+            leavestaus = rs['leavestatus']
+            record = Record(PNumber, intime, outtime, vehicletype, leavestaus)
             list.append(record)
         return list
 
     # 根据车辆离开时间查找车辆记录
     def findRecordByOutTime(self, time):
         py = Pymysql.PyMySQLHelper()
-        sql = "select platenumber,intime,outtime,vehicletype from record where outtime like '%%%s%%'" % (time)
+        sql = "select * from record where outtime like '%%%s%%'" % (time)
         result = py.selectalldictcursor(sql)
         list = []
         for rs in result:
@@ -88,14 +89,15 @@ class RecordImpl(RecordDao.RecordDao):
             intime = rs['intime']
             outtime = rs['outtime']
             vehicletype = rs['vehicletype']
-            record = Record(PNumber, intime, outtime, vehicletype)
+            leavestaus = rs['leavestatus']
+            record = Record(PNumber, intime, outtime, vehicletype,leavestaus)
             list.append(record)
         return list
 
     # 根据车辆类型查找车辆记录
     def findRecordByVehicleType(self, type):
         py = Pymysql.PyMySQLHelper()
-        sql = "select platenumber,intime,outtime,vehicletype from record  where vehicletype ='%s'" % (type)
+        sql = "select * from record  where vehicletype ='%s'" % (type)
         result = py.selectalldictcursor(sql)
         list = []
         for rs in result:
@@ -103,7 +105,8 @@ class RecordImpl(RecordDao.RecordDao):
             intime = rs['intime']
             outtime = rs['outtime']
             vehicletype = rs['vehicletype']
-            record = Record(PNumber, intime, outtime, vehicletype)
+            leavestaus = rs['leavestatus']
+            record = Record(PNumber, intime, outtime, vehicletype,leavestaus)
             list.append(record)
         return list
 
