@@ -40,4 +40,7 @@ class FinancialDao(object):
     @abstractmethod
     def listallfinancial(self):
         pass
+    @abstractmethod
+    def listsumeachmonthbyyear(self, year):
+        pass
 
