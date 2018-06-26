@@ -51,11 +51,11 @@ class CarRecord(QWidget):
                     for j in range(len(col)):
                         record = result.data[i]
                         temp_data = record.__getattribute__(col[j])  # 临时记录，不能直接插入表格
-                        if temp_data=='0':
+                        if temp_data==0:
                             temp_data='内部车'
                             data = QTableWidgetItem(str(temp_data))
                             self.ui.tableWidget.setItem(i, j, data)
-                        elif temp_data=='1':
+                        elif temp_data==1:
                             temp_data = '外部车'
                             data = QTableWidgetItem(str(temp_data))
                             self.ui.tableWidget.setItem(i, j, data)
@@ -81,11 +81,11 @@ class CarRecord(QWidget):
                     for j in range(len(col)-1):
                         record = result.data[i]
                         temp_data = record.__getattribute__(col[j])  # 临时记录，不能直接插入表格
-                        if temp_data == '0':
+                        if temp_data == 0:
                             temp_data = '内部车'
                             data = QTableWidgetItem(str(temp_data))
                             self.ui.tableWidget.setItem(i, j, data)
-                        elif temp_data == '1':
+                        elif temp_data == 1:
                             temp_data = '外部车'
                             data = QTableWidgetItem(str(temp_data))
                             self.ui.tableWidget.setItem(i, j, data)
@@ -112,11 +112,11 @@ class CarRecord(QWidget):
                     for j in range(len(col)):
                         record = result.data[i]
                         temp_data = record.__getattribute__(col[j])  # 临时记录，不能直接插入表格
-                        if temp_data == '0':
+                        if temp_data == 0:
                             temp_data = '内部车'
                             data = QTableWidgetItem(str(temp_data))
                             self.ui.tableWidget.setItem(i, j, data)
-                        elif temp_data == '1':
+                        elif temp_data == 1:
                             temp_data = '外部车'
                             data = QTableWidgetItem(str(temp_data))
                             self.ui.tableWidget.setItem(i, j, data)
@@ -144,7 +144,7 @@ class CarRecord(QWidget):
                     for j in range(len(col)):
                         record = result.data[i]
                         temp_data = record.__getattribute__(col[j])  # 临时记录，不能直接插入表格
-                        if temp_data == '0':
+                        if temp_data == 0:
                             temp_data = '内部车'
                             data = QTableWidgetItem(str(temp_data))
                             self.ui.tableWidget.setItem(i, j, data)
@@ -170,7 +170,7 @@ class CarRecord(QWidget):
                     for j in range(len(col)):
                         record = result.data[i]
                         temp_data = record.__getattribute__(col[j])  # 临时记录，不能直接插入表格
-                        if temp_data == '1':
+                        if temp_data == 1:
                             temp_data = '外部车'
                             data = QTableWidgetItem(str(temp_data))
                             self.ui.tableWidget.setItem(i, j, data)
