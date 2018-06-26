@@ -123,5 +123,20 @@ class FinancialDaoImpl(FinancialDao):
                " GROUP BY DATE_FORMAT(chargetime,'%%Y-%%m')")%(year)
         result = PyMySQLHelper().selectalldictcursor(sql)
         return result
+
+    def listsumeachdaybymonth(self, month):
+        """
+        返回某一个月每一天的收入和
+        :param month: 月份 格式为‘2018-06’
+        :return: 返回字典类型列表 [{'totalmonery':value,'mddatetime':value}]
+        """
+        sql =("select SUM(money) as totalmoney ,DATE_FORMAT(chargetime,'%%d')"
+               " as mddatetime from financial where chargetime in"
+               "(select chargetime"
+               " from financial WHERE DATE_FORMAT(chargetime,'%%Y-%%m')='%s'"
+               ")"
+               " GROUP BY DATE_FORMAT(chargetime,'%%d')")%(month)
+        result = PyMySQLHelper().selectalldictcursor(sql)
+        return result
 if __name__ == '__main__':
-    FinancialDaoImpl().listsumeachmonthbyyear(2018)
+    FinancialDaoImpl().listsumeachdaybymonth('2018-06')
