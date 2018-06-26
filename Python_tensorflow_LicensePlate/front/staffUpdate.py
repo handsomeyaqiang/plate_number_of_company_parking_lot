@@ -88,12 +88,8 @@ class Update_Ui(QtWidgets.QDialog):
         result = sc.updStaff(StaffNum, int(carNum), name, phone, gender1, department)
         print(result.status)
         if result.status == 200:
-            # staff.Db_query()
-            reply = QMessageBox.question(self, '提示',
-                                         "修改成功", QMessageBox.Yes |
-                                         QMessageBox.No, QMessageBox.No)
-            if reply == QMessageBox.Yes:
-                self.close()
+            OK = QMessageBox.information(self, ("提示："), ("""修改成功！"""))
+            self.close()
 
         elif result.status == 400:
             OK = QMessageBox.information(self, ("提示："), ("""修改失败！"""))  # 单引号包围font 井号会报错
