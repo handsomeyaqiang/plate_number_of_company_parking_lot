@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_know(object):
     def setupUi(self, know):
         know.setObjectName("know")
-        know.resize(689, 453)
+        know.resize(725, 453)
         self.groupBox = QtWidgets.QGroupBox(know)
         self.groupBox.setGeometry(QtCore.QRect(440, 70, 211, 161))
         self.groupBox.setObjectName("groupBox")
@@ -57,7 +57,7 @@ class Ui_know(object):
         self.textBrowser.setGeometry(QtCore.QRect(250, 300, 256, 61))
         self.textBrowser.setObjectName("textBrowser")
         self.tableWidget = QtWidgets.QTableWidget(know)
-        self.tableWidget.setGeometry(QtCore.QRect(40, 360, 611, 91))
+        self.tableWidget.setGeometry(QtCore.QRect(70, 360, 611, 91))
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(6)
         self.tableWidget.setRowCount(0)
