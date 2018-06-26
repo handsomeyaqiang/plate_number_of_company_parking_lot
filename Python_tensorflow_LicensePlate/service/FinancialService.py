@@ -76,18 +76,22 @@ class FinancialService(object):
         result = ParkResult.ParkResult()
         #获取当前时间
         localtime = time.localtime(time.time())
-        #取月份
-        temp = localtime.tm_mon
-        if temp <10:
-            nowmonth = '0{0}'.format(temp)
-        else:
-            nowmonth = str(temp)
-        print(temp)
+        tempyear = localtime.tm_year
+        if tempyear ==year:
+            #取月份
+            temp = localtime.tm_mon
+            if temp <10:
+                nowmonth = '0{0}'.format(temp)
+            else:
+                nowmonth = str(temp)
+            print(temp)
 
-        pastmonths = []
-        for i in months:
-            if i<=nowmonth:
-                pastmonths.append(i)
+            pastmonths = []
+            for i in months:
+                if i<=nowmonth:
+                    pastmonths.append(i)
+        else:
+            pastmonths =months
         try:
             ymresult = FinancialDaoImpl().listsumeachmonthbyyear(year)
             ymouth = []
