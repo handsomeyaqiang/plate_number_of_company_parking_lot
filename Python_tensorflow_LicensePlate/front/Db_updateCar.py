@@ -8,12 +8,14 @@ from PyQt5 .QtGui import *
 from Python_tensorflow_LicensePlate.controller.VehicleController import VehicleController
 from PyQt5.QtCore import *
 
-class Update_Ui(QWidget):
+class Update_Ui(QtWidgets.QDialog):
 
-    def __init__(self):
+    def __init__(self,id):
         super(Update_Ui, self).__init__()
         self.ui = Ui_Form()
         self.ui.setupUi(self)
+        self.update(id)
+
 
         self.setWindowTitle("修改车辆信息页面")
         self.setFixedSize(self.width(), self.height())  # 实现禁止窗口最大化和禁止窗口拉伸
@@ -66,11 +68,8 @@ class Update_Ui(QWidget):
         vc = VehicleController()
         result=vc.updVehicle(CarNum, name, chejia, staffNum)
         if result.status == 200:
-            reply = QMessageBox.question(self, '提示',
-                                         "修改成功", QMessageBox.Yes |
-                                         QMessageBox.No, QMessageBox.No)
-            if reply == QMessageBox.Yes:
-                self.close()
+            OK = QMessageBox.information(self, ("提示："), ("""修改成功！"""))
+            self.close()
         elif result.status == 400:
             OK = QMessageBox.information(self, ("提示："), ("""修改失败！"""))
 
@@ -78,8 +77,14 @@ class Update_Ui(QWidget):
 
     def update(self, id):
         sc = VehicleController()
-        result = sc.findVehicleByid(id)
+        # result = sc.findVehicleByid(id)
+        print(id)
+        result=sc.findVehicleByplatenum(id)
+        print("得到result")
         vehicle = result.data[0]
+        print(vehicle.SID)
+        print(vehicle.owner)
+        print(vehicle.vehicle_identity)
         self.ui.num_lineEdit.setText(vehicle.SID)
         self.ui.name_lineEdit.setText(vehicle.owner)
         self.ui.Chejia_lineEdit.setText(vehicle.vehicle_identity)
