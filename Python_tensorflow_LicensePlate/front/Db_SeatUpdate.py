@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QWidget
 from PyQt5 .QtGui import *
 from PyQt5.QtCore import *
 from Python_tensorflow_LicensePlate.controller.ParkPlaceController import ParkPlaceController
-class Update_seat(QWidget):
+class Update_seat(QtWidgets.QDialog):
     def __init__(self, parkplace):
         super(Update_seat, self).__init__()
         self.ui = Ui_seatUp()
@@ -41,6 +41,7 @@ class Update_seat(QWidget):
         self.setWindowTitle("车位信息修改")
         self.ui.comboBox.setCurrentText("外部车辆")
         self.parkplace = parkplace
+        self.ShowUpdate()
         # 槽函数
         self.ui.pushButton.clicked.connect(self.updateTip)
         self.ui.pushButton_2.clicked.connect(self.clear)
@@ -71,13 +72,8 @@ class Update_seat(QWidget):
 
             rs = pcontrol.updateparkplace(self.parkplace.parkPlaceID,self.parkplace.lockStatus,self.parkplace.parkPlaceType,self.parkplace.useCarNumber)
             if rs.status ==200:
-                reply = QMessageBox.question(self, '提示',
-                                             "修改成功", QMessageBox.Yes |
-                                             QMessageBox.No, QMessageBox.No)
-                if reply == QMessageBox.Yes:
-                    self.close()
-
-
+                OK = QMessageBox.information(self, ("提示"), ("修改成功！"))
+                self.close()
             else:
                 QMessageBox.information(self, ("提示"), ("error"))
 

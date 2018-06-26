@@ -8,12 +8,13 @@ from PyQt5.QtWidgets import QWidget
 from PyQt5.QtGui import *
 
 
-class nightfee(QWidget):
+class nightfee(QtWidgets.QDialog):
     def __init__(self,rule):
         super(nightfee, self).__init__()
         self.ui = Ui_nightFee()
         self.ui.setupUi(self)
         self.rule =rule
+
         self.setWindowTitle("修改夜晚停车收费")
         self.setFixedSize(self.width(), self.height())  # 实现禁止窗口最大化和禁止窗口拉伸
         self.ui.lineEdit.setClearButtonEnabled(True)
@@ -38,7 +39,7 @@ class nightfee(QWidget):
         self.ui.pushButton_2.setIcon(QIcon("concle.png"))
         self.ui.pushButton.clicked.connect(self.updateTip)
         self.ui.pushButton_2.clicked.connect(self.clearInput)
-
+        self.ShowUpdate()
     def clearInput(self):
         self.ui.lineEdit.clear()
         self.ui.lineEdit_2.clear()
@@ -59,6 +60,8 @@ class nightfee(QWidget):
             # 操作数据库
             rulecontrol.update(self.rule)
             OK = QMessageBox.information(self, ("提示"), ("修改成功！"))
+            self.close()
+
         else:
             if startTime == '':
                 OK = QMessageBox.warning(self, ("提示"), ("开始时间不能为空！"))
