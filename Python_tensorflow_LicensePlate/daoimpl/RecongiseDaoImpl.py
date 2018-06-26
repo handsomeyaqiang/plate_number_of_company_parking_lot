@@ -9,7 +9,7 @@ class RecongiseDaoImpl(RecongiseDao):
         # letter = train_license_letters.predict()
         # digit = train_license_digits.predict()
         # license_num = province + letter + digit
-        return "豫B82343"
+        return "豫A23454"
 
 if __name__ == '__main__':
     r = RecongiseDaoImpl()

@@ -2,26 +2,26 @@ import sys
 import cv2
 import numpy as np
 
-DIR_RECEIVED_IMAGES = "../../resources/images/receivedplateimages"
-DIR_MIDEL_IMAGES = "../../resources/images/midledimages"
-DIR_SPLIT_IMAGES = "../../resources/images/splitplateimages"
+DIR_RECEIVED_IMAGES = "../resources/images/receivedplateimages"
+DIR_MIDEL_IMAGES = "../resources/images/midledimages"
+DIR_SPLIT_IMAGES = "../resources/images/splitplateimages"
 
 # 车牌预处理
 def preprocess(gray):
     # 高斯平滑
     gaussian = cv2.GaussianBlur(gray, (3, 3), 0, 0, cv2.BORDER_DEFAULT)
-    cv2.imshow('gaussian', gaussian)
+    #cv2.imshow('gaussian', gaussian)
     cv2.waitKey(0)
     # 中值滤波
     median = cv2.medianBlur(gaussian, 5)
 
-    cv2.imshow('median', median)
+    #cv2.imshow('median', median)
     cv2.waitKey(0)
 
     # Sobel算子，X方向求梯度
     sobel = cv2.Sobel(median, cv2.CV_8U, 1, 0, ksize=3)
 
-    cv2.imshow('sobel', sobel)
+    #cv2.imshow('sobel', sobel)
     cv2.waitKey(0)
     # 二值化
     ret, binary = cv2.threshold(sobel, 170, 255, cv2.THRESH_BINARY)
@@ -34,7 +34,7 @@ def preprocess(gray):
     erosion = cv2.erode(dilation, element1, iterations=1)
     # 再次膨胀，让轮廓明显一些
     dilation2 = cv2.dilate(erosion, element2, iterations=3)
-    cv2.imshow('dilation2', dilation2)
+    #cv2.imshow('dilation2', dilation2)
     cv2.waitKey(0)
     return dilation2
 
@@ -59,8 +59,8 @@ def findPlateNumberRegion(img):
 
         # 找到最小的矩形，该矩形可能有方向
         rect = cv2.minAreaRect(cnt)
-        print("rect is: ")
-        print(rect)
+        #print("rect is: ")
+        #print(rect)
 
         # box是四个点的坐标 这个函数在opencv2里面需要cv2.cv.BoxPoints(rect)
         box = cv2.boxPoints(rect)
@@ -69,10 +69,10 @@ def findPlateNumberRegion(img):
         # 计算高和宽
         height = abs(box[0][1] - box[2][1])
         width = abs(box[0][0] - box[2][0])
-        print(height, width)
+        #print(height, width)
         # 车牌正常情况下长高比在2.7-5之间
         ratio = float(width) / float(height)
-        print(ratio)
+        #print(ratio)
         if (ratio > 4.8 or ratio < 2):
             continue
         region.append(box)
@@ -106,19 +106,18 @@ def detect(img):
 
     img_org2 = img.copy()
     img_plate = img_org2[y1:y2, x1:x2]
-    cv2.imshow('number plate', img_plate)
+    #cv2.imshow('number plate', img_plate)
     cv2.imwrite(DIR_MIDEL_IMAGES+'/number_plate.jpg', img_plate)
 
-    cv2.namedWindow('img', cv2.WINDOW_NORMAL)
-    cv2.imshow('img', img)
+    #cv2.namedWindow('img', cv2.WINDOW_NORMAL)
+    #cv2.imshow('img', img)
 
     # 带轮廓的图片
     cv2.imwrite(DIR_MIDEL_IMAGES+'/contours.png', img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-if __name__ == '__main__':
-    imagePath = DIR_RECEIVED_IMAGES + "/plate.jpg"
+def get_plateNum():
+    imagePath = DIR_RECEIVED_IMAGES + "/testplate.jpg"
     img = cv2.imread(imagePath)
-    print(img)
     detect(img)

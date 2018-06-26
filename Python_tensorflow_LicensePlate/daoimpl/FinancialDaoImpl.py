@@ -8,7 +8,7 @@ class FinancialDaoImpl(FinancialDao):
         """插入一个financial对象"""
         sql = 'insert into financial (ParkPlaceID, chargetime, money) VALUES (%s,%s,%s)'
         params =(financial.ParkPlaceID,financial.chargetime,financial.money)
-        print(sql)
+        #print(sql)
         count = PyMySQLHelper().updateByParam(sql,params)
         return count
 
@@ -83,7 +83,7 @@ class FinancialDaoImpl(FinancialDao):
         sql ="select * from financial WHERE DATE_FORMAT(chargetime,'%%Y-%%m-%%d') = %s"
         params = (day)
         result = PyMySQLHelper().selectalldictcursorByparams(sql,params)
-        print(result)
+        #print(result)
         list = []
         for rs in result:
             Fid = rs['Fid']
