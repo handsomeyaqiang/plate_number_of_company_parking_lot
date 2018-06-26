@@ -11,9 +11,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_seatUp(object):
     def setupUi(self, seatUp):
         seatUp.setObjectName("seatUp")
-        seatUp.resize(396, 300)
+        seatUp.resize(372, 300)
         self.gridLayoutWidget = QtWidgets.QWidget(seatUp)
-        self.gridLayoutWidget.setGeometry(QtCore.QRect(90, 60, 211, 121))
+        self.gridLayoutWidget.setGeometry(QtCore.QRect(80, 60, 211, 121))
         self.gridLayoutWidget.setObjectName("gridLayoutWidget")
         self.gridLayout = QtWidgets.QGridLayout(self.gridLayoutWidget)
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
@@ -33,7 +33,7 @@ class Ui_seatUp(object):
         self.comboBox.addItem("")
         self.gridLayout.addWidget(self.comboBox, 1, 2, 1, 1)
         self.horizontalLayoutWidget_2 = QtWidgets.QWidget(seatUp)
-        self.horizontalLayoutWidget_2.setGeometry(QtCore.QRect(150, 190, 158, 25))
+        self.horizontalLayoutWidget_2.setGeometry(QtCore.QRect(150, 190, 131, 25))
         self.horizontalLayoutWidget_2.setObjectName("horizontalLayoutWidget_2")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget_2)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
