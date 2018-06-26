@@ -8,13 +8,20 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+from Python_tensorflow_LicensePlate.train.plateutils import getplatenumber
+from Python_tensorflow_LicensePlate.train import plateutils
+from Python_tensorflow_LicensePlate.service.RecongiseService import RecongiseService
+from Python_tensorflow_LicensePlate.front.KnowTest import Ui_know
+from Python_tensorflow_LicensePlate.utils import formattime
 class Know_Ui(QWidget):
     def __init__(self):
         super(Know_Ui, self).__init__()
         self.ui = Ui_know()
         self.ui.setupUi(self)
         self.setWindowTitle("公司停车场管理")
-
+        self.DIR_RECEIVED_IMAGES = "../resources/images/receivedplateimages"
+        self.DIR_MIDEL_IMAGES = "../resources/images/midledimages"
+        self.DIR_SPLIT_IMAGES = "../resources/images/splitplateimages"
         self.ui.label_2.setStyleSheet("QLabel{background:white;}"
                                     "QLabel{color:rgb(300,300,300,120);font-size:10px;font-weight:bold;font-family:宋体;}"
                                     )
@@ -40,6 +47,9 @@ class Know_Ui(QWidget):
         # 将按钮在qt设计时，先跟住窗口建立close()的槽函数，然后在将该按钮手动跟另一个窗口建立连接
         # 这样就实现了打开新窗口时，关闭主窗口的效果
         # self.ui.tableWidget.hide()
+        data = QTableWidgetItem(str(1))  # 转换后可插入表格
+        self.ui.tableWidget.setItem(0, 0, data)
+
     # 显示时间
     def showtime(self):
         datetime = QDateTime.currentDateTime()
@@ -54,6 +64,16 @@ class Know_Ui(QWidget):
     def handRegister(self):
         self.ui1 = hand_Ui()
         self.ui1.show()
+
+    def chargeEvent(self):
+        reply = QMessageBox.question(self, '提示',
+                                     "确定缴费？", QMessageBox.Yes |
+                                     QMessageBox.No, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            self.accept()
+        else:
+            self.ignore()
+
     # 视频识别
     def capPicture(self):
         # self.cap = cv2.VideoCapture(0)
@@ -73,19 +93,52 @@ class Know_Ui(QWidget):
     #                 temp_data = rows[i][j]  # 临时记录，不能直接插入表格
     #                 data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
     #                 self.ui.tableWidget_4.setItem(i, j, data)
-    # # 显示视频时，鼠标点击视频暂停
-    # def mousePressEvent(self, QMouseEvent):
-    #     self.cap.release()
+    # 显示视频时，鼠标点击视频暂停
+    def mousePressEvent(self, QMouseEvent):
+        self.cap.release()
+
     # 关闭视频显示
     def closeVideo(self):
-        cv2.imwrite("face.jpg")
         self.cap.release()
+
+    # 进入识别
+    def judg_recongise(self,imgName):
+        img = cv2.imread(imgName)
+        cv2.imwrite(self.DIR_RECEIVED_IMAGES + "/testplate.jpg", img)
+        # 调用车牌获取
+        getplatenumber.get_plateNum()
+        # 调用车牌字符切割
+        plateutils.getplatenumber
+        # 调用识别业务
+        recongise = RecongiseService()
+        return recongise.judg_recongise()
 
     # 打开图片识别
     def openimage(self):
         imgName, imgType = QFileDialog.getOpenFileName(self, "打开图片", "", "*.jpg;;*.png;;All Files(*)")
         jpg = QtGui.QPixmap(imgName).scaled(self.ui.label.width(), self.ui.label.height())
         self.ui.label.setPixmap(jpg)
+        col = ["plate_num", "intime", "outtime", "vehicle_type", "park_place_id", "money"]
+        self.ui.tableWidget.setRowCount(1)
+        self.ui.tableWidget.setColumnCount(len(col))
+        self.ui.tableWidget.verticalHeader().hide()
+        result = self.judg_recongise(imgName)
+        if result.status == 200:
+            # 识别成功
+            for i in range(len(col)):
+                recongiseResult = result.data
+                if i == 2:
+                    temp_data = formattime.calc_time(recongiseResult.__getattribute__("outtime"), recongiseResult.__getattribute__("intime"))
+                else:
+                    temp_data = recongiseResult.__getattribute__(col[i])  # 临时记录，不能直接插入表格
+                data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
+                self.ui.tableWidget.setItem(0, i, data)
+        else:
+            # 识别失败
+            OK = QMessageBox.information(self, ("警告"), ("""识别异常"""))
+            return
+
+
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     my = Know_Ui()

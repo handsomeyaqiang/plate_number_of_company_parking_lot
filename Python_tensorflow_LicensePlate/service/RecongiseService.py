@@ -13,13 +13,10 @@ import time
 
 class RecongiseService:
 
-    def recongise_in(self):
-        recongiseDao = RecongiseDaoImpl()
+    def recongise_in(self, plate_num):
         result = ParkResult()
         recordService = RecordService()
         try:
-            # 调用车牌识别的实现DaoImpl
-            plate_num = recongiseDao.recongise()
             vehicleService = VehicleService()
             # 根据识别的车牌号进行车辆查询 查到：内部车， 查不到：外部车
             result = vehicleService.findVehicleByPlateNum(plate_num)
@@ -40,7 +37,7 @@ class RecongiseService:
                    result = parkPlaceService.allocateparkplace(plate_num, 0)
                    if result.status == 200:
                        # 分配车位成功
-                       resultData = RecongiseResult(plate_num, 0, result.data, None)
+                       resultData = RecongiseResult(plate_num, 0, result.data, None, str(current_time), None)
                        # 将记录插入到数据库
                        recordService.insert_record(record)
                        return result.ok(resultData)
@@ -54,7 +51,7 @@ class RecongiseService:
                    result = parkPlaceService.allocateparkplace(plate_num, 1)
                    if result.status == 200:
                        # 分配车位成功
-                       resultData = RecongiseResult(plate_num, 1, result.data, None)
+                       resultData = RecongiseResult(plate_num, 1, result.data, None, str(current_time), None)
                        # 将记录插入到数据库
                        recordService.insert_record(record)
                        return result.ok(resultData)
@@ -67,12 +64,9 @@ class RecongiseService:
             print(e)
             return result.error("进入识别出现异常")
 
-    def recongise_out(self):
-        recongiseDao = RecongiseDaoImpl()
+    def recongise_out(self, plate_num):
         result = ParkResult()
         try:
-            # 调用车牌识别的实现DaoImpl
-            plate_num = recongiseDao.recongise()
             vehicleService = VehicleService()
             # 根据识别的车牌号进行车辆查询 查到：内部车， 查不到：外部车
             result = vehicleService.findVehicleByPlateNum(plate_num)
@@ -91,7 +85,7 @@ class RecongiseService:
                     result = parkPlaceService.reclaimparkpalce(plate_num)
                     if result.status == 200:
                         # 收回车位成功
-                        resultData = RecongiseResult(plate_num, 0, result.data, None)
+                        resultData = RecongiseResult(plate_num, 0, result.data, None, str(record.__getattribute__("intime")), str(current_time))
                         # 内部车位不用交费直接放行
                         # 更新停车记录
                         record.__setattr__("leavestatus", 1)
@@ -117,7 +111,7 @@ class RecongiseService:
                         # 更新停车记录离开时间及缴费状态
                         record.__setattr__("leavestatus", 1)
                         recordService.update_record(record)
-                        resultData = RecongiseResult(plate_num, 1, result.data, money)
+                        resultData = RecongiseResult(plate_num, 1, result.data, money, str(record.__getattribute__("intime")), str(current_time))
                         return result.ok(resultData)
                     else:
                         # 收回车位失败
@@ -127,3 +121,18 @@ class RecongiseService:
         except Exception as e:
             print(e)
             return result.error("离开自动识别异常")
+
+    def judg_recongise(self):
+        recongiseDao = RecongiseDaoImpl()
+        # 调用车牌识别的实现DaoImpl
+        plate_num = recongiseDao.recongise()
+        recordService = RecordService()
+        # 根据车牌号查找进入的车辆的停车记录
+        result = recordService.getSingleRecordByPlateId(plate_num)
+        if result.status == 200:
+            if result.data != None:
+                return self.recongise_out()
+            else:
+                return self.recongise_in()
+        else:
+            return result.error("自动识别异常")

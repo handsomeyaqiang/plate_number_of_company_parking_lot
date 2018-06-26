@@ -7,9 +7,15 @@ class FinancialDaoImpl(FinancialDao):
     def insertfinancial(self, financial):
         """插入一个financial对象"""
         sql = 'insert into financial (ParkPlaceID, chargetime, money) VALUES (%s,%s,%s)'
+<<<<<<< HEAD
         params = (financial.ParkPlaceID, financial.chargetime, financial.money)
         print(sql)
         count = PyMySQLHelper().updateByParam(sql, params)
+=======
+        params =(financial.ParkPlaceID,financial.chargetime,financial.money)
+        #print(sql)
+        count = PyMySQLHelper().updateByParam(sql,params)
+>>>>>>> 23558f84717d2a85c6ad74ec64a3a47e43a0d88c
         return count
 
     def deletefinancial(self, financialid):
@@ -81,8 +87,13 @@ class FinancialDaoImpl(FinancialDao):
         参数格式为'2018-6-20'"""
         sql = "select * from financial WHERE DATE_FORMAT(chargetime,'%%Y-%%m-%%d') = %s"
         params = (day)
+<<<<<<< HEAD
         result = PyMySQLHelper().selectalldictcursorByparams(sql, params)
         print(result)
+=======
+        result = PyMySQLHelper().selectalldictcursorByparams(sql,params)
+        #print(result)
+>>>>>>> 23558f84717d2a85c6ad74ec64a3a47e43a0d88c
         list = []
         for rs in result:
             Fid = rs['Fid']
