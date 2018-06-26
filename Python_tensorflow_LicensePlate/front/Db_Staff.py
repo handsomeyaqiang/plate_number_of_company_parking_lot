@@ -130,17 +130,27 @@ class tableB(QtWidgets.QMainWindow):
 
                 for i in range(row):
                     for j in range(len(col)):
+
                         staff = result.data[i]
-                        temp_data = staff.__getattribute__(col[j])  # 临时记录，不能直接插入表格
-                        data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
-                        self.ui.tableWidget.setItem(i, j, data)
-                    # 数据库因为从0开始计数，所以列数减一
-                        if j == len(col) - 1:
-                        # print(rows[i][0])
-                        # 传入id rows[i][0]
-                            staff = result.data[i]
-                            self.ui.tableWidget.setCellWidget(i, j + 1,
-                                                          self.buttonForRow(str(staff.__getattribute__(col[0]))))
+                        if col[j] == 'gender':
+                            temp_data = staff.__getattribute__(col[j])
+                            if temp_data == 0:
+                                temp_data = '女'
+                                data = QTableWidgetItem(str(temp_data))
+                                self.ui.tableWidget.setItem(i, j, data)
+                            elif temp_data == 1:
+                                temp_data = '男'
+                                data = QTableWidgetItem(str(temp_data))
+                                self.ui.tableWidget.setItem(i, j, data)
+                        else:
+                            temp_data = staff.__getattribute__(col[j])  # 临时记录，不能直接插入表格
+                            data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
+                            self.ui.tableWidget.setItem(i, j, data)
+                            if j == len(col) - 1:
+                                staff = result.data[i]
+                                self.ui.tableWidget.setCellWidget(i, j + 1, self.buttonForRow(
+                                    str(staff.__getattribute__(col[0]))))
+
                 self.ui.statusbar.showMessage("查询成功")
             else:
                 self.ui.statusbar.showMessage("查询异常", 2000)  # 单引号包围font 井号会报错
@@ -160,16 +170,27 @@ class tableB(QtWidgets.QMainWindow):
 
                 for i in range(row):
                     for j in range(len(col)):
+
                         staff = result.data[i]
-                        temp_data = staff.__getattribute__(col[j])  # 临时记录，不能直接插入表格
-                        data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
-                        self.ui.tableWidget.setItem(i, j, data)
-                        # 数据库因为从0开始计数，所以列数减一
-                        if j == len(col) - 1:
-                            # print(rows[i][0])
-                            # 传入id rows[i][0]
-                            staff = result.data[i]
-                            self.ui.tableWidget.setCellWidget(i, j + 1,self.buttonForRow(str(staff.__getattribute__(col[0]))))
+                        if col[j] == 'gender':
+                            temp_data = staff.__getattribute__(col[j])
+                            if temp_data == 0:
+                                temp_data = '女'
+                                data = QTableWidgetItem(str(temp_data))
+                                self.ui.tableWidget.setItem(i, j, data)
+                            elif temp_data == 1:
+                                temp_data = '男'
+                                data = QTableWidgetItem(str(temp_data))
+                                self.ui.tableWidget.setItem(i, j, data)
+                        else:
+                            temp_data = staff.__getattribute__(col[j])  # 临时记录，不能直接插入表格
+                            data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
+                            self.ui.tableWidget.setItem(i, j, data)
+                            if j == len(col) - 1:
+                                staff = result.data[i]
+                                self.ui.tableWidget.setCellWidget(i, j + 1, self.buttonForRow(
+                                    str(staff.__getattribute__(col[0]))))
+
                 self.ui.statusbar.showMessage("查询成功")
             else:
                 self.ui.statusbar.showMessage("查询异常", 2000)  # 单引号包围font 井号会报错
@@ -189,16 +210,27 @@ class tableB(QtWidgets.QMainWindow):
 
                 for i in range(row):
                     for j in range(len(col)):
+
                         staff = result.data[i]
-                        temp_data = staff.__getattribute__(col[j])  # 临时记录，不能直接插入表格
-                        data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
-                        self.ui.tableWidget.setItem(i, j, data)
-                        # 数据库因为从0开始计数，所以列数减一
-                        if j == len(col) - 1:
-                            # print(rows[i][0])
-                            # 传入id rows[i][0]
-                            staff = result.data[i]
-                            self.ui.tableWidget.setCellWidget(i, j + 1, self.buttonForRow(str(staff.__getattribute__(col[0]))))
+                        if col[j] == 'gender':
+                            temp_data = staff.__getattribute__(col[j])
+                            if temp_data == 0:
+                                temp_data = '女'
+                                data = QTableWidgetItem(str(temp_data))
+                                self.ui.tableWidget.setItem(i, j, data)
+                            elif temp_data == 1:
+                                temp_data = '男'
+                                data = QTableWidgetItem(str(temp_data))
+                                self.ui.tableWidget.setItem(i, j, data)
+                        else:
+                            temp_data = staff.__getattribute__(col[j])  # 临时记录，不能直接插入表格
+                            data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
+                            self.ui.tableWidget.setItem(i, j, data)
+                            if j == len(col) - 1:
+                                staff = result.data[i]
+                                self.ui.tableWidget.setCellWidget(i, j + 1, self.buttonForRow(
+                                    str(staff.__getattribute__(col[0]))))
+
                 self.ui.statusbar.showMessage("查询成功")
             else:
                 self.ui.statusbar.showMessage("查询异常", 2000)  # 单引号包围font 井号会报错
@@ -215,10 +247,10 @@ class tableB(QtWidgets.QMainWindow):
         phone = self.ui.phone_lineEdit.text()
 
         if self.ui.nan_radioButton.isChecked():
-            gender = '男'
+            gender = 1
             gender1='男'
         else:
-            gender = '女'
+            gender = 0
             gender1='女'
         department = self.ui.depart_lineEdit.text()
 
@@ -237,10 +269,11 @@ class tableB(QtWidgets.QMainWindow):
 
         #开始添加员工信息的数据库操作
         sc = StaffController()
-        result = sc.insertStaff(StaffNum,carNum,name,phone,gender1,department)
+        result = sc.insertStaff(StaffNum,carNum,name,phone,gender,department)
         print(result.status)
         if result.status == 200:
             OK = QMessageBox.information(self,("提示："), ("""添加成功！"""))
+            self.DB_query()
         elif result.status == 400:
             OK = QMessageBox.information(self, ("提示："),("""添加失败！"""))  # 单引号包围font 井号会报错
 
@@ -279,19 +312,26 @@ class tableB(QtWidgets.QMainWindow):
             self.ui.tableWidget.setColumnCount(len(col)+1)  # 加1，开辟一列放操作按钮
             self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
             self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers)   # 将单元格设为不可更改类型
-
             for i in range(row):
                 for j in range(len(col)):
                     staff = result.data[i]
-                    temp_data = staff.__getattribute__(col[j]) # 临时记录，不能直接插入表格
-                    data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
-                    self.ui.tableWidget.setItem(i, j, data)
-                    # 数据库因为从0开始计数，所以列数减一
-                    if j == len(col)-1:
-                        # print(rows[i][0])
-                        # 传入id rows[i][0]
-                        staff = result.data[i]
-                        self.ui.tableWidget.setCellWidget(i, j+1, self.buttonForRow(str(staff.__getattribute__(col[0]))))
+                    if col[j]=='gender':
+                        temp_data = staff.__getattribute__(col[j])
+                        if  temp_data==0:
+                            temp_data = '女'
+                            data = QTableWidgetItem(str(temp_data))
+                            self.ui.tableWidget.setItem(i, j, data)
+                        elif temp_data == 1:
+                            temp_data = '男'
+                            data = QTableWidgetItem(str(temp_data))
+                            self.ui.tableWidget.setItem(i, j, data)
+                    else:
+                        temp_data = staff.__getattribute__(col[j]) # 临时记录，不能直接插入表格
+                        data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
+                        self.ui.tableWidget.setItem(i, j, data)
+                        if j == len(col)-1:
+                            staff = result.data[i]
+                            self.ui.tableWidget.setCellWidget(i, j+1, self.buttonForRow(str(staff.__getattribute__(col[0]))))
             self.ui.statusbar.showMessage("查询成功")
         else:
             self.ui.statusbar.showMessage("查询异常", 2000) # 单引号包围font 井号会报错
