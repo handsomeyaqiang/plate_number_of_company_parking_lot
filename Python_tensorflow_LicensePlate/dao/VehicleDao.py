@@ -26,6 +26,16 @@ class VehicleDao(object):
     def findVehicleByPlateID(self,PlateID):
         pass
 
+    #通过车主查找车辆信息
+    @abstractmethod
+    def findVehicleByOwner(self,name):
+        pass
+
+    #通过车架号查找车辆信息
+    @abstractmethod
+    def findVehicleByVehicleid(self,hid):
+        pass
+
     #显示所有车辆信息
     @abstractmethod
     def showallVehicle(self):

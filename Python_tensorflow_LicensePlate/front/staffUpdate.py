@@ -8,12 +8,14 @@ from PyQt5 .QtGui import *
 from PyQt5.QtCore import *
 from Python_tensorflow_LicensePlate.controller.StaffController import StaffController
 from Db_Staff import *
-class Update_Ui(QWidget):
+class Update_Ui(QtWidgets.QDialog):
 
-    def __init__(self):
+    def __init__(self,id):
         super(Update_Ui, self).__init__()
         self.ui = Ui_Form()
         self.ui.setupUi(self)
+
+        self.update(id)
 
         self.setWindowTitle("修改职工信息页面")
         self.ui.name_lineEdit.setFrame(False)  # 无边框
@@ -86,21 +88,8 @@ class Update_Ui(QWidget):
         result = sc.updStaff(StaffNum, int(carNum), name, phone, gender1, department)
         print(result.status)
         if result.status == 200:
-            # staff.Db_query()
-            reply = QMessageBox.question(self, '提示',
-                                         "修改成功", QMessageBox.Yes |
-                                         QMessageBox.No, QMessageBox.No)
-            if reply == QMessageBox.Yes:
-                self.close()
-            self.ui = tableB()
-            self.ui.show()
-            if self.ui.flag == 0:
-                self.ui.DB_query()
-            else :
-                self.ui.QueryBySid()
-
-
-        # ！！！！！！！！！！！这里添加自己关闭窗口的操作！！！！！！！！！！
+            OK = QMessageBox.information(self, ("提示："), ("""修改成功！"""))
+            self.close()
 
         elif result.status == 400:
             OK = QMessageBox.information(self, ("提示："), ("""修改失败！"""))  # 单引号包围font 井号会报错

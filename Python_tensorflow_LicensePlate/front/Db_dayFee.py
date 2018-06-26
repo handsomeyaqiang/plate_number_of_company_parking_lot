@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QWidget
 from PyQt5.QtGui import *
 
 
-class dayfee(QWidget):
+class dayfee(QtWidgets.QDialog):
     def __init__(self, rule):
         super(dayfee, self).__init__()
         self.ui = Ui_dayFee()
@@ -41,6 +41,7 @@ class dayfee(QWidget):
         self.ui.pushButton_2.setIcon(QIcon("concle.png"))
         self.ui.pushButton.clicked.connect(self.updateTip)
         self.ui.pushButton_2.clicked.connect(self.clearInput)
+        self.ShowUpdate()
 
     def clearInput(self):
         self.ui.lineEdit.clear()
@@ -65,6 +66,7 @@ class dayfee(QWidget):
             self.rule.nightendtime = startTime
             rulecontrol.update(self.rule)
             QMessageBox.information(self, ("提示"), ("修改成功！"))
+            self.close()
         else:
             if startTime == '':
                 QMessageBox.warning(self, ("提示"), ("开始时间不能为空！"))

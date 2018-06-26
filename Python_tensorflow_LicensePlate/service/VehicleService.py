@@ -68,4 +68,27 @@ class VehicleService(object):
             return result.error("查询员工信息失败！")
 
 
+    # 按照车主查找车辆信息
+    def findVehicleByOwer(self,name):
+        result = ParkResult()
+        try:
+            s = VehilceDaoImpl()
+            list = s.findVehicleByOwner(name)
+            return result.ok(list)
+        except Exception as e:
+            print(e)
+            return result.error("查询员工信息失败！")
+
+    # 按照车架号查找车辆信息
+    def findVehicleByVehicleId(self,vid):
+        result = ParkResult()
+        try:
+            s = VehilceDaoImpl()
+            list = s.findVehicleByVehicleid(vid)
+            return result.ok(list)
+        except Exception as e:
+            print(e)
+            return result.error("查询员工信息失败！")
+
+
 

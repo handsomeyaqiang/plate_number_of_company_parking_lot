@@ -33,6 +33,14 @@ class VehicleController:
         s = VehicleService()
         return s.findVehicleByPlateNum(platenum)
 
+    def findVehicleByowner(self,owner):
+        s = VehicleService()
+        return s.findVehicleByOwer(owner)
+
+    def findVehicleByvehicleid(self,vid):
+        s = VehicleService()
+        return s.findVehicleByVehicleId(vid)
+
 
 
 

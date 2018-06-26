@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QWidget
 from PyQt5.QtGui import *
 
 
-class AddSeat(QWidget):
+class AddSeat(QtWidgets.QDialog):
     def __init__(self):
         super(AddSeat, self).__init__()
         self.ui = Ui_addSeat()
@@ -43,7 +43,13 @@ class AddSeat(QWidget):
                 type = 0
             result = pcontrol.adddulparkplace(type,number)
             if result.status ==200:
-                QMessageBox.information(self, ("提示"), ("添加成功！"))
+                reply = QMessageBox.question(self, '提示',
+                                             "添加成功，继续添加吗？", QMessageBox.Yes |
+                                             QMessageBox.No, QMessageBox.No)
+                if reply == QMessageBox.Yes:
+                    pass
+                else:
+                    self.close()
             else:
                 QMessageBox.information(self, ("提示"), ("添加失败！"))
 

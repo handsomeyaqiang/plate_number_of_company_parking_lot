@@ -1,6 +1,7 @@
 from Python_tensorflow_LicensePlate.daoimpl.FinancialDaoImpl import FinancialDaoImpl
 from Python_tensorflow_LicensePlate.utils import ParkResult
-
+import calendar
+import time
 
 class FinancialService(object):
 
@@ -63,3 +64,49 @@ class FinancialService(object):
         except Exception as e:
             print(e)
             return result.errror("获取报表失败！")
+
+    def listmonthsumbyyear(self,year):
+        """
+        获取某年的已发生的每个月的金额和，将数据库中没有收入的月份收入置为0
+        :param year: 年份，输入格式为 '2018'
+        :return: 返回元素为字典类型的列表
+        """
+        #月份
+        months = ['01','02','03','04','05','06','07','08','09','10','11','12']
+        result = ParkResult.ParkResult()
+        #获取当前时间
+        localtime = time.localtime(time.time())
+        #取月份
+        temp = localtime.tm_mon
+        if temp <10:
+            nowmonth = '0{0}'.format(temp)
+        else:
+            nowmonth = str(temp)
+        print(temp)
+
+        pastmonths = []
+        for i in months:
+            if i<=nowmonth:
+                pastmonths.append(i)
+        try:
+            ymresult = FinancialDaoImpl().listsumeachmonthbyyear(year)
+            ymouth = []
+            for i in ymresult:
+                ymouth.append((i['ymdatetime']))
+            for i in pastmonths:
+                if i in ymouth:
+                    pass
+                else:
+                    ymresult.append({'totalmoney':0,'ymdatetime': i})
+            sortedym = sorted(ymresult, key=lambda e: e.__getitem__('ymdatetime'))
+            return result.ok(sortedym)
+        except Exception as e:
+            print(e)
+            return result.error("发生意外！")
+
+if __name__ == '__main__':
+    FinancialService().listmonthsumbyyear(2018)
+
+
+
+
