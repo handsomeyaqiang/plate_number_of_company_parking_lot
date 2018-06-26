@@ -110,10 +110,7 @@ class tableB(QtWidgets.QMainWindow):
     #条件查询
     def QueryBySid(self):
         #获得输入  最好提供姓名和工号都可以查询，或者模糊查询
-
         text = self.ui.lineEdit_5.text()
-        print(text)
-        print(self.ui.comboBox.currentText())
 
     #按照工号查询
         if self.ui.comboBox.currentText() == '按工号':
@@ -130,7 +127,6 @@ class tableB(QtWidgets.QMainWindow):
 
                 for i in range(row):
                     for j in range(len(col)):
-
                         staff = result.data[i]
                         if col[j] == 'gender':
                             temp_data = staff.__getattribute__(col[j])
@@ -270,7 +266,6 @@ class tableB(QtWidgets.QMainWindow):
         #开始添加员工信息的数据库操作
         sc = StaffController()
         result = sc.insertStaff(StaffNum,carNum,name,phone,gender,department)
-        print(result.status)
         if result.status == 200:
             OK = QMessageBox.information(self,("提示："), ("""添加成功！"""))
             self.DB_query()
@@ -282,9 +277,16 @@ class tableB(QtWidgets.QMainWindow):
     # 更新
     def DB_update(self, id):
         # 引入更新界面
-        self.ui = Update_Ui()
-        self.ui.update(id)
-        self.ui.show()
+        # self.ui = Update_Ui()
+        # self.ui.update(id)
+        # self.ui.show()
+        self.m=Update_Ui(id)
+        self.m.exec()
+        if self.flag == 0:
+            self.DB_query()
+        else:
+            self.QueryBySid()
+
 
 
     # 删除  先根据id删除数据，然后查找所有刷新展示页面
