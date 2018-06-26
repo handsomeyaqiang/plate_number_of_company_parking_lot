@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QWidget
 from PyQt5 .QtGui import *
 from PyQt5.QtCore import *
 from Python_tensorflow_LicensePlate.controller.StaffController import StaffController
+from Db_Staff import *
 class Update_Ui(QWidget):
 
     def __init__(self):
@@ -61,11 +62,11 @@ class Update_Ui(QWidget):
         phone = self.ui.phone_lineEdit.text()
 
         if self.ui.radioButton.isChecked():
-            gender = '男'
-            gender1 = 1
-        else:
             gender = '女'
             gender1 = 0
+        else:
+            gender = '男'
+            gender1 = 1
         department = self.ui.depart_lineEdit.text()
 
         if carNum == '':
@@ -91,6 +92,13 @@ class Update_Ui(QWidget):
                                          QMessageBox.No, QMessageBox.No)
             if reply == QMessageBox.Yes:
                 self.close()
+            self.ui = tableB()
+            self.ui.show()
+            if self.ui.flag == 0:
+                self.ui.DB_query()
+            else :
+                self.ui.QueryBySid()
+
 
         # ！！！！！！！！！！！这里添加自己关闭窗口的操作！！！！！！！！！！
 
@@ -110,7 +118,7 @@ class Update_Ui(QWidget):
             self.ui.phone_lineEdit.setText(staff.phoneNumber)
             if staff.gender == 0:
                 self.ui.radioButton.setChecked(True)
-            else:
+            elif staff.gender == 1:
                 self.ui.radioButton_2.setChecked(True)
             self.ui.depart_lineEdit.setText(staff.department)
 
