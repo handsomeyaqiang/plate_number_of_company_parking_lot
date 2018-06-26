@@ -17,7 +17,7 @@ class Know_Ui(QWidget):
 
         self.ui.label_2.setStyleSheet("QLabel{background:white;}"
                                     "QLabel{color:rgb(300,300,300,120);font-size:10px;font-weight:bold;font-family:宋体;}"
-                                    )
+                                     )
 
         # 动态显示时间在label上
         timer = QtCore.QTimer(self)
@@ -32,30 +32,35 @@ class Know_Ui(QWidget):
         self.timer = QTimer()
         self.timer.start()
         self.timer.setInterval(100)
+        # self.ui.tableWidget.horizontalHeader().hide() # 隐藏表头信息
 
-        self.ui.pushButton.clicked.connect(self.openimage)
+        # 槽函数
+        self.ui.pushButton.clicked.connect(self.openimage1) # 进入图片识别
         self.ui.pushButton_3.clicked.connect(self.handRegister)
-        self.ui.pushButton_2.clicked.connect(self.start)
+        self.ui.pushButton_2.clicked.connect(self.start1) # 进入视频识别
         self.ui.pushButton_4.clicked.connect(self.closeVideo)
         # 将按钮在qt设计时，先跟住窗口建立close()的槽函数，然后在将该按钮手动跟另一个窗口建立连接
         # 这样就实现了打开新窗口时，关闭主窗口的效果
         # self.ui.tableWidget.hide()
-    # 显示时间
+
+
+        # 显示时间
     def showtime(self):
         datetime = QDateTime.currentDateTime()
         text = datetime.toString()
         self.ui.label_2.setText("  " + text)
 
-    def start(self, event):
+    def start1(self, event):
         self.cap = cv2.VideoCapture(0)
-        self.timer.timeout.connect(self.capPicture)
+        self.timer.timeout.connect(self.capPicture1)
 
     #手动登记
     def handRegister(self):
         self.ui1 = hand_Ui()
         self.ui1.show()
-    # 视频识别
-    def capPicture(self):
+
+    # 进入视频识别
+    def capPicture1(self):
         # self.cap = cv2.VideoCapture(0)
         if (self.cap.isOpened()):
             # get a frame
@@ -78,14 +83,17 @@ class Know_Ui(QWidget):
     #     self.cap.release()
     # 关闭视频显示
     def closeVideo(self):
-        cv2.imwrite("face.jpg")
+        # cv2.imwrite("face.jpg")
         self.cap.release()
 
-    # 打开图片识别
-    def openimage(self):
+    # 进入停车场打开图片识别
+    def openimage1(self):
         imgName, imgType = QFileDialog.getOpenFileName(self, "打开图片", "", "*.jpg;;*.png;;All Files(*)")
         jpg = QtGui.QPixmap(imgName).scaled(self.ui.label.width(), self.ui.label.height())
         self.ui.label.setPixmap(jpg)
+
+
+
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     my = Know_Ui()
