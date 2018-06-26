@@ -57,9 +57,9 @@ class Ui_know(object):
         self.textBrowser.setGeometry(QtCore.QRect(250, 300, 256, 61))
         self.textBrowser.setObjectName("textBrowser")
         self.tableWidget = QtWidgets.QTableWidget(know)
-        self.tableWidget.setGeometry(QtCore.QRect(130, 360, 511, 91))
+        self.tableWidget.setGeometry(QtCore.QRect(40, 360, 611, 91))
         self.tableWidget.setObjectName("tableWidget")
-        self.tableWidget.setColumnCount(5)
+        self.tableWidget.setColumnCount(6)
         self.tableWidget.setRowCount(0)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(0, item)
@@ -71,6 +71,8 @@ class Ui_know(object):
         self.tableWidget.setHorizontalHeaderItem(3, item)
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(4, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(5, item)
 
         self.retranslateUi(know)
         QtCore.QMetaObject.connectSlotsByName(know)
@@ -95,5 +97,7 @@ class Ui_know(object):
         item = self.tableWidget.horizontalHeaderItem(3)
         item.setText(_translate("know", "车辆类型"))
         item = self.tableWidget.horizontalHeaderItem(4)
+        item.setText(_translate("know", "车位号"))
+        item = self.tableWidget.horizontalHeaderItem(5)
         item.setText(_translate("know", "应缴费用(元)"))
 

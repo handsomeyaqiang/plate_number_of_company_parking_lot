@@ -148,9 +148,9 @@
   <widget class="QTableWidget" name="tableWidget">
    <property name="geometry">
     <rect>
-     <x>130</x>
+     <x>40</x>
      <y>360</y>
-     <width>511</width>
+     <width>611</width>
      <height>91</height>
     </rect>
    </property>
@@ -172,6 +172,11 @@
    <column>
     <property name="text">
      <string>车辆类型</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>车位号</string>
     </property>
    </column>
    <column>
