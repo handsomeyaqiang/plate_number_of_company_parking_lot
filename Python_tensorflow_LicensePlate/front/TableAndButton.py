@@ -175,6 +175,6 @@ class Ui_MainWindow(object):
         self.label_6.setText(_translate("MainWindow", "请输入"))
         self.comboBox.setItemText(0, _translate("MainWindow", "按姓名"))
         self.comboBox.setItemText(1, _translate("MainWindow", "按部门"))
-        self.comboBox.setItemText(2, _translate("MainWindow", "按车牌号"))
+        self.comboBox.setItemText(2, _translate("MainWindow", "按工号"))
         self.pushButton_2.setText(_translate("MainWindow", "确定"))
 
