@@ -97,13 +97,22 @@ class Finance(QtWidgets.QMainWindow):
 
         self.setWindowTitle("财务管理")
         self.setFixedSize(self.width(), self.height())  # 实现禁止窗口最大化和禁止窗口拉伸
-        # self.ui.graphicsView.hide()
+
         palette = QPalette()
-        icon = QPixmap('cw.jpg').scaled(850, 550)
+        icon = QPixmap('f5.gif').scaled(850, 550)
         palette.setBrush(self.backgroundRole(), QBrush(icon))
         self.setPalette(palette)
         self.ui.tableWidget.verticalHeader().hide()  # 水平表头隐藏
+        #隐藏控件
+        self.ui.groupBox_3.hide()
+        self.ui.groupBox_2.hide()
+        self.ui.graphicsView.hide()
+        self.ui.tableWidget.hide()
 
+        self.gif = QMovie('f5.gif')
+        self.ui.label_3.setScaledContents(True)
+        self.ui.label_3.setMovie(self.gif)
+        self.gif.start()
         # 动态显示时间在label上
         timer = QtCore.QTimer(self)
         timer.timeout.connect(self.showtime)
@@ -114,12 +123,22 @@ class Finance(QtWidgets.QMainWindow):
         self.ui.pushButton_4.clicked.connect(self.finance) # 折线统计图显示
         self.ui.pushButton_3.clicked.connect(self.table)# table显示财务
 
+    def mousePressEvent(self, QMouseEvent):
+        self.ui.label_3.hide()
+
+
+    def mouseReleaseEvent(self, QMouseEvent):
+        self.ui.label_3.show()
+
 
     def showtime(self):
         datetime = QDateTime.currentDateTime()
         text = datetime.toString()
         self.ui.label_2.setText("  " + text)
     def table(self):
+        self.ui.label_3.hide()
+        self.ui.groupBox_3.show()
+        self.ui.tableWidget.show()
        # 根据需求自己自己设置table的行列数
         self.ui.tableWidget.setRowCount(1)
         self.ui.tableWidget.setColumnCount(3)
@@ -140,6 +159,9 @@ class Finance(QtWidgets.QMainWindow):
     # month()，因为按天和按年的坐标轴不同,同时输入的数据传入 Figure_Canvas()中的方法函数中，根据这个查询数据库中数据，画图
     def finance(self):
         # 获得输入
+        self.ui.label_3.hide()
+        self.ui.groupBox_2.show()
+        self.ui.graphicsView.show()
         category = self.ui.comboBox.currentText()
         input = self.ui.lineEdit.text()
 
