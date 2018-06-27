@@ -17,6 +17,7 @@ class Update_Ui(QtWidgets.QDialog):
         self.update(id)
 
 
+
         self.setWindowTitle("修改车辆信息页面")
         self.setFixedSize(self.width(), self.height())  # 实现禁止窗口最大化和禁止窗口拉伸
         self.ui.name_lineEdit.setFrame(False)  # 无边框
@@ -77,14 +78,8 @@ class Update_Ui(QtWidgets.QDialog):
 
     def update(self, id):
         sc = VehicleController()
-        # result = sc.findVehicleByid(id)
-        print(id)
-        result=sc.findVehicleByplatenum(id)
-        print("得到result")
+        result=sc.findVehicleByplatenumvague(id)
         vehicle = result.data[0]
-        print(vehicle.SID)
-        print(vehicle.owner)
-        print(vehicle.vehicle_identity)
         self.ui.num_lineEdit.setText(vehicle.SID)
         self.ui.name_lineEdit.setText(vehicle.owner)
         self.ui.Chejia_lineEdit.setText(vehicle.vehicle_identity)
