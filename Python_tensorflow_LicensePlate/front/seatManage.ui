@@ -123,8 +123,8 @@
    <property name="geometry">
     <rect>
      <x>200</x>
-     <y>80</y>
-     <width>511</width>
+     <y>130</y>
+     <width>551</width>
      <height>171</height>
     </rect>
    </property>
@@ -157,15 +157,15 @@
   <widget class="QTableWidget" name="tableWidget_2">
    <property name="geometry">
     <rect>
-     <x>280</x>
-     <y>100</y>
-     <width>281</width>
-     <height>71</height>
+     <x>290</x>
+     <y>190</y>
+     <width>311</width>
+     <height>51</height>
     </rect>
    </property>
    <row>
     <property name="text">
-     <string>已占车位(个)</string>
+     <string>已占车位（个）</string>
     </property>
    </row>
    <column>
@@ -178,12 +178,17 @@
      <string>外部车位</string>
     </property>
    </column>
+   <item row="0" column="1">
+    <property name="text">
+     <string/>
+    </property>
+   </item>
   </widget>
   <widget class="QGroupBox" name="groupBox_2">
    <property name="geometry">
     <rect>
-     <x>230</x>
-     <y>160</y>
+     <x>250</x>
+     <y>80</y>
      <width>441</width>
      <height>251</height>
     </rect>
@@ -194,7 +199,7 @@
    <widget class="QTableWidget" name="tableWidget_4">
     <property name="geometry">
      <rect>
-      <x>70</x>
+      <x>60</x>
       <y>80</y>
       <width>341</width>
       <height>161</height>
@@ -346,10 +351,10 @@
   <widget class="QTableWidget" name="tableWidget">
    <property name="geometry">
     <rect>
-     <x>190</x>
-     <y>310</y>
-     <width>511</width>
-     <height>71</height>
+     <x>200</x>
+     <y>190</y>
+     <width>541</width>
+     <height>51</height>
     </rect>
    </property>
    <column>
@@ -381,15 +386,28 @@
   <widget class="QTableWidget" name="tableWidget_5">
    <property name="geometry">
     <rect>
-     <x>260</x>
-     <y>300</y>
-     <width>411</width>
-     <height>71</height>
+     <x>270</x>
+     <y>190</y>
+     <width>421</width>
+     <height>51</height>
     </rect>
    </property>
    <column>
     <property name="text">
      <string>开始时间</string>
+    </property>
+    <property name="font">
+     <font>
+      <family>Castellar</family>
+      <weight>75</weight>
+      <italic>false</italic>
+      <bold>true</bold>
+      <strikeout>false</strikeout>
+      <kerning>true</kerning>
+     </font>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
     </property>
    </column>
    <column>
