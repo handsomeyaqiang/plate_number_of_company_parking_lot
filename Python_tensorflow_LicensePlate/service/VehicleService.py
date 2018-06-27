@@ -14,10 +14,10 @@ class VehicleService(object):
             return result.error("添加车辆失败！")
 
     #删除车辆信息
-    def deleteVehicle(self,SID):
+    def deleteVehicle(self,PID):
         result = ParkResult()
         try:
-            VehilceDaoImpl().deleteVehicleBySID(SID)
+            VehilceDaoImpl().deleteVehicleByPlateID(PID)
             return result.ok2()
         except Exception as e:
             print(e)
