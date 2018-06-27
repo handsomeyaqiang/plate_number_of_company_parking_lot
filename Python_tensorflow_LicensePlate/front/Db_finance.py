@@ -49,16 +49,9 @@ class Figure_Canvas(
         self.axes.set_ylabel("收入(元)")
         fcontrol = FinancialController()
         print(year_month)
-        result = fcontrol.listdaysumbymonth(year_month)
+        x,y = fcontrol.listdaysumbymonth(year_month)
 
-        x = []
-        y = []
-        if result.status == 200:
-            if result.data is not None:
-                mds = result.data
-                for md in mds:
-                    x.append(md['mddatetime'])
-                    y.append(md['totalmoney'])
+
         print(x)
         print(y)
 
@@ -76,17 +69,8 @@ class Figure_Canvas(
         self.axes.set_ylabel("收入(元)")
 
         fcontrol = FinancialController()
-        result = fcontrol.listmonthsumbyyear(eval(year))
-        x = []
-        y = []
-        if result.status == 200:
-            if result.data is not None:
-                yms = result.data
-                for ym in yms:
-                    x.append(ym['ymdatetime'])
-                    y.append(ym['totalmoney'])
-        print(x)
-        print(y)
+        x,y = fcontrol.listmonthsumbyyear(eval(year))
+
         for a, b in zip(x, y):
             self.axes.text(a, b, b, ha='center', va='bottom', fontsize=12)  # 显示折线点的纵坐标值
         self.axes.plot(x, y, color='r', linewidth=1.0, markerfacecolor='blue', marker='o')
