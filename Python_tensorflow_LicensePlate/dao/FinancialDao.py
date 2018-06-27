@@ -46,4 +46,7 @@ class FinancialDao(object):
     @abstractmethod
     def listsumeachdaybymonth(self,month):
         pass
+    @abstractmethod
+    def listsumeachhourbyday(self,day):
+        pass
 
