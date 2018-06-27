@@ -67,6 +67,17 @@ class VehicleService(object):
             print(e)
             return result.error("查询员工信息失败！")
 
+        # 按照车牌号模糊查找车辆信息
+    def findVehicleByPlateNumVague(self, pid):
+        result = ParkResult()
+        try:
+            s = VehilceDaoImpl()
+            list = s.findVehicleByPlateIDvague(pid)
+            return result.ok(list)
+        except Exception as e:
+            print(e)
+            return result.error("查询员工信息失败！")
+
 
     # 按照车主查找车辆信息
     def findVehicleByOwer(self,name):
