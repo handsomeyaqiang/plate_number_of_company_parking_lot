@@ -169,16 +169,16 @@ class carManage(QtWidgets.QMainWindow):
                 self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
                 for i in range(row):
                     for j in range(len(col)):
-                        staff = result.data[i]
-                        temp_data = staff.__getattribute__(col[j])  # 临时记录，不能直接插入表格
+                        vehicle = result.data[i]
+                        temp_data = vehicle.__getattribute__(col[j])  # 临时记录，不能直接插入表格
                         data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
                         self.ui.tableWidget.setItem(i, j, data)
                         # 数据库因为从0开始计数，所以列数减一
                         if j == len(col) - 1:
                                     # print(rows[i][0])
                                     # 传入id rows[i][0]
-                            staff = result.data[i]
-                            self.ui.tableWidget.setCellWidget(i, j + 1,self.buttonForRow(str(staff.__getattribute__(col[1]))))
+                            vehicle = result.data[i]
+                            self.ui.tableWidget.setCellWidget(i, j + 1,self.buttonForRow(str(vehicle.__getattribute__(col[1]))))
                 self.ui.statusbar.showMessage("查询成功")
             else:
                 self.ui.statusbar.showMessage("查询异常", 2000)  # 单引号包围font 井号会报错
@@ -189,7 +189,7 @@ class carManage(QtWidgets.QMainWindow):
             sc = VehicleController()
             result = sc.findVehicleByplatenum(text)
             if result.status == 200:
-                row = len(result.data)
+                row = 1
                 col = ["SID", "PlateID", "owner", "vehicle_identity"]
                 self.ui.tableWidget.setRowCount(row)  # 控件的名字保持一致，切莫想当然
                 self.ui.tableWidget.setColumnCount(len(col) + 1)  # 加1，开辟一列放操作按钮
@@ -197,14 +197,14 @@ class carManage(QtWidgets.QMainWindow):
                 self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
                 for i in range(row):
                     for j in range(len(col)):
-                        staff = result.data[i]
-                        temp_data = staff.__getattribute__(col[j])  # 临时记录，不能直接插入表格
+                        vehicle = result.data
+                        temp_data = vehicle.__getattribute__(col[j])  # 临时记录，不能直接插入表格
                         data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
                         self.ui.tableWidget.setItem(i, j, data)
                                 # 数据库因为从0开始计数，所以列数减一
                         if j == len(col) - 1:
-                            staff = result.data[i]
-                            self.ui.tableWidget.setCellWidget(i, j + 1, self.buttonForRow(str(staff.__getattribute__(col[1]))))
+                            vehicle = result.data
+                            self.ui.tableWidget.setCellWidget(i, j + 1, self.buttonForRow(str(vehicle.__getattribute__(col[1]))))
                 self.ui.statusbar.showMessage("查询成功")
             else:
                 self.ui.statusbar.showMessage("查询异常", 2000)  # 单引号包围font 井号会报错
@@ -222,17 +222,17 @@ class carManage(QtWidgets.QMainWindow):
                 self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
                 for i in range(row):
                     for j in range(len(col)):
-                        staff = result.data[i]
-                        temp_data = staff.__getattribute__(col[j])  # 临时记录，不能直接插入表格
+                        vehicle = result.data[i]
+                        temp_data = vehicle.__getattribute__(col[j])  # 临时记录，不能直接插入表格
                         data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
                         self.ui.tableWidget.setItem(i, j, data)
                         # 数据库因为从0开始计数，所以列数减一
                         if j == len(col) - 1:
                             # print(rows[i][0])
                             # 传入id rows[i][0]
-                            staff = result.data[i]
+                            vehicle = result.data[i]
                             self.ui.tableWidget.setCellWidget(i, j + 1, self.buttonForRow(
-                                str(staff.__getattribute__(col[1]))))
+                                str(vehicle.__getattribute__(col[1]))))
                 self.ui.statusbar.showMessage("查询成功")
             else:
                 self.ui.statusbar.showMessage("查询异常", 2000)  # 单引号包围font 井号会报错
@@ -250,17 +250,17 @@ class carManage(QtWidgets.QMainWindow):
                 self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
                 for i in range(row):
                     for j in range(len(col)):
-                        staff = result.data[i]
-                        temp_data = staff.__getattribute__(col[j])  # 临时记录，不能直接插入表格
+                        vehicle = result.data[i]
+                        temp_data = vehicle.__getattribute__(col[j])  # 临时记录，不能直接插入表格
                         data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
                         self.ui.tableWidget.setItem(i, j, data)
                         # 数据库因为从0开始计数，所以列数减一
                         if j == len(col) - 1:
                             # print(rows[i][0])
                             # 传入id rows[i][0]
-                            staff = result.data[i]
+                            vehicle = result.data[i]
                             self.ui.tableWidget.setCellWidget(i, j + 1, self.buttonForRow(
-                                str(staff.__getattribute__(col[1]))))
+                                str(vehicle.__getattribute__(col[1]))))
                 self.ui.statusbar.showMessage("查询成功")
             else:
                 self.ui.statusbar.showMessage("查询异常", 2000)  # 单引号包围font 井号会报错
