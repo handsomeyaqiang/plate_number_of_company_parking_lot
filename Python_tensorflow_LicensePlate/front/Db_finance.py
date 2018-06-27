@@ -124,7 +124,12 @@ class Finance(QtWidgets.QMainWindow):
         self.ui.pushButton_3.clicked.connect(self.table)# table显示财务
 
     def mousePressEvent(self, QMouseEvent):
+        self.ui.label_3.hide()
+
+
+    def mouseReleaseEvent(self, QMouseEvent):
         self.ui.label_3.show()
+
 
     def showtime(self):
         datetime = QDateTime.currentDateTime()
