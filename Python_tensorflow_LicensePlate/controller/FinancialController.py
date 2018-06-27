@@ -68,3 +68,11 @@ class FinancialController(object):
         """
         rs = FinancialService().listdaysumbymonth(year_month)
         return rs
+    def listhoursbyday(self,year_month_day):
+        """
+        返回某一天的每个时间段的收入和
+        :param year_month_day: 格式为‘2018-06-22’
+        :return:
+        """
+        rs = FinancialService().listhoursumbyday(year_month_day)
+        return  rs
