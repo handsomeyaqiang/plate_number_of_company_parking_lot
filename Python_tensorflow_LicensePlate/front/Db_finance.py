@@ -99,7 +99,7 @@ class Finance(QtWidgets.QMainWindow):
         self.setFixedSize(self.width(), self.height())  # 实现禁止窗口最大化和禁止窗口拉伸
 
         palette = QPalette()
-        icon = QPixmap('f5.gif').scaled(850, 550)
+        icon = QPixmap('f1.gif').scaled(850, 550)
         palette.setBrush(self.backgroundRole(), QBrush(icon))
         self.setPalette(palette)
         self.ui.tableWidget.verticalHeader().hide()  # 水平表头隐藏
