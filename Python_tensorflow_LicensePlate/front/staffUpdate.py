@@ -1,13 +1,12 @@
-from updatePage import *
+from Python_tensorflow_LicensePlate.front.updatePage import *
 import sys
-import Db_Staff
 from PyQt5.QtWidgets import *
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QWidget
 from PyQt5 .QtGui import *
 from PyQt5.QtCore import *
 from Python_tensorflow_LicensePlate.controller.StaffController import StaffController
-from Db_Staff import *
+from Python_tensorflow_LicensePlate.front.Db_Staff import *
 class Update_Ui(QtWidgets.QDialog):
 
     def __init__(self,id):

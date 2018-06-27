@@ -1,10 +1,7 @@
-import sys
-import pymysql
-from staffUpdate import *
+from Python_tensorflow_LicensePlate.front.staffUpdate import *
 #from updatePage import *    #直接调用ui转化来的文件闪退，还是需第三方py文件调用
-from TableAndButton import *
+from Python_tensorflow_LicensePlate.front.TableAndButton import *
 from PyQt5.QtWidgets import *
-from Python_tensorflow_LicensePlate.entity.Staff import Staff
 from Python_tensorflow_LicensePlate.controller.StaffController import StaffController
 
 # 导入文件的顺序不同会导致文件类识别异常，原因未知

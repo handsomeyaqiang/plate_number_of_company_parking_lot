@@ -1,15 +1,12 @@
-import sys
-import pymysql
-from Python_tensorflow_LicensePlate.utils.Pymysql import *
 from PyQt5.QtWidgets import *
-from FPwd import *   # 导入文件的顺序不同会导致文件类识别异常，原因未知
+from Python_tensorflow_LicensePlate.front.FPwd import *   # 导入文件的顺序不同会导致文件类识别异常，原因未知
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtCore import *
-from loginUI import *
-from register import *
-from Db_finance import *
-from ComInfoManager import *
-from Db_seatManager import *
+from Python_tensorflow_LicensePlate.front.loginUI import *
+from Python_tensorflow_LicensePlate.front.register import *
+from Python_tensorflow_LicensePlate.front.Db_finance import *
+from Python_tensorflow_LicensePlate.front.ComInfoManager import *
+from Python_tensorflow_LicensePlate.front.Db_seatManager import *
 
 
 from PyQt5.QtWidgets import QWidget
@@ -114,7 +111,6 @@ class Login(QWidget):
         #  因为数据库登录人员的身份设计为整形，0表示财务管理，1表示信息管理，2表示停车场管理
         if name != '' and pwd != '':
             if identity == 0:
-
                 sql = "select * from administrater where username = '" + name + "' and password = '" + pwd + "' and identity= 0 "
                 print(sql)
                 # cursor.execute(sql)

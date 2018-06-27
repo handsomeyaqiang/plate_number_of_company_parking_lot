@@ -1,7 +1,5 @@
 from Python_tensorflow_LicensePlate.front.SeatUpda_Ui import *
-
 import sys
-import pymysql
 from PyQt5.QtWidgets import *
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QWidget

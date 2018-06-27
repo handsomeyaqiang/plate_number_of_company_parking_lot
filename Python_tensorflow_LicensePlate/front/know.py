@@ -1,9 +1,5 @@
-from KnowTest import *
 import cv2
-import sys
-import pymysql
-from PyQt5.QtWidgets import *
-from hand_Register import *
+from Python_tensorflow_LicensePlate.front.hand_Register import *
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtGui import *
@@ -13,6 +9,7 @@ from Python_tensorflow_LicensePlate.train import plateutils
 from Python_tensorflow_LicensePlate.service.RecongiseService import RecongiseService
 from Python_tensorflow_LicensePlate.front.KnowTest import Ui_know
 from Python_tensorflow_LicensePlate.utils import formattime
+from Python_tensorflow_LicensePlate.front.hand_Register import hand_Ui
 class Know_Ui(QWidget):
     def __init__(self):
         super(Know_Ui, self).__init__()
@@ -87,13 +84,7 @@ class Know_Ui(QWidget):
             # 转为QImage对象
             self.image = QImage(img.data, width, height, bytesPerLine, QImage.Format_RGB888)
             self.ui.label.setPixmap(QPixmap.fromImage(self.image).scaled(self.ui.label.width(), self.ui.label.height()))
-    # 查询停车费用
-    #         for i in range(row):
-    #             for j in range(col):
-    #                 temp_data = rows[i][j]  # 临时记录，不能直接插入表格
-    #                 data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
-    #                 self.ui.tableWidget_4.setItem(i, j, data)
-    # 显示视频时，鼠标点击视频暂停
+
     def mousePressEvent(self, QMouseEvent):
         self.cap.release()
 

@@ -1,10 +1,8 @@
-from ComInfoManage import *
-from Db_Staff import *
-from Db_car import *
-from Db_carRecord import *
+from Python_tensorflow_LicensePlate.front.ComInfoManage import *
+from Python_tensorflow_LicensePlate.front.Db_Staff import *
+from Python_tensorflow_LicensePlate.front.Db_car import *
+from Python_tensorflow_LicensePlate.front.Db_carRecord import *
 import sys
-import pymysql
-from PyQt5.QtWidgets import *
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QWidget
 from PyQt5 .QtGui import *

@@ -1,11 +1,9 @@
-from carRecord import *
+from Python_tensorflow_LicensePlate.front.carRecord import *
 import sys
-import pymysql
 from PyQt5.QtWidgets import *
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QWidget
 from PyQt5 .QtGui import *
-from PyQt5.QtCore import *
 from Python_tensorflow_LicensePlate.controller.RecordController import RecordController
 
 class CarRecord(QWidget):

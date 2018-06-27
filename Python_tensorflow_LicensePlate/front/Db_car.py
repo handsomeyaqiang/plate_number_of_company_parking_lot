@@ -1,7 +1,5 @@
-import sys
-import pymysql
-from CarInformation import *
-from Db_updateCar import *
+from Python_tensorflow_LicensePlate.front.CarInformation import *
+from Python_tensorflow_LicensePlate.front.Db_updateCar import *
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *

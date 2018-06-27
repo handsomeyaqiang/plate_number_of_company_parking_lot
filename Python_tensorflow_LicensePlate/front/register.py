@@ -2,9 +2,8 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from Python_tensorflow_LicensePlate.utils.Pymysql import *
 from PyQt5.QtCore import *
-from register_Ui import *
+from Python_tensorflow_LicensePlate.front.register_Ui import *
 import sys
-import pymysql
 from PyQt5 import QtCore, QtGui, QtWidgets
 class reUi(QWidget):
     def __init__(self):

@@ -1,7 +1,5 @@
-from Hand_regis import *
+from Python_tensorflow_LicensePlate.front.Hand_regis import *
 import sys
-import pymysql
-from PyQt5.QtWidgets import *
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QWidget
 from PyQt5 .QtGui import *
@@ -33,16 +31,18 @@ class hand_Ui(QWidget):
         self.ui.pushButton_2.setStyleSheet("QPushButton{color:blue}"
                                          "QPushButton:hover{color:red}"
                                          )
-        # self.ui.pushButton.clicked.connect(self.register)
+        self.ui.pushButton.clicked.connect(self.register)
         self.ui.pushButton_2.clicked.connect(self.clear)
 
-    # s手动登记函数
+    # 手动登记函数
     # def register(self):
     #     carNum = self.ui.lineEdit()
     #     if carNum != '':
     #         # 操作数据库
+
     def clear(self):
         self.ui.lineEdit.clear()
+
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     my = hand_Ui()

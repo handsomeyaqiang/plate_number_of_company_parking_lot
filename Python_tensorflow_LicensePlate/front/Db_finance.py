@@ -1,15 +1,10 @@
 from Python_tensorflow_LicensePlate.front.finance_Ui import *
-from Python_tensorflow_LicensePlate.front.Login import *
 from Python_tensorflow_LicensePlate.controller.FinancialController import FinancialController
-import sys
 from PyQt5.QtWidgets import *
 from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtWidgets import QWidget
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-import matplotlib.pyplot as plt
 from pylab import *
-import matplotlib
 # matplotlib.use("Qt5Agg")  # 声明使用QT5
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
