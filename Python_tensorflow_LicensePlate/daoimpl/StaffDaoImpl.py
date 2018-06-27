@@ -54,7 +54,7 @@ class staffDaoImpl(staffDao):
     #根据员工姓名查找员工信息实现
     def findStaffByName(self, name):
         py = Pymysql.PyMySQLHelper()
-        sql = "select * from staff where name like '%%%s%%'" % (name)
+        sql = "select * from staff where name = '%s'"%(name)
         result = py.selectalldictcursor(sql)
         list = []
         for rs in result:

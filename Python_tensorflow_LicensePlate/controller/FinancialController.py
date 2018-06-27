@@ -66,5 +66,5 @@ class FinancialController(object):
         :param year_month: 格式为‘2018-06’
         :return:
         """
-        rs = FinancialService().listdaybymonth(year_month)
+        rs = FinancialService().listdaysumbymonth(year_month)
         return rs

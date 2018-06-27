@@ -68,7 +68,6 @@ class SeatManage(QWidget):
 
     def nightFee(self):
         """夜间价格显示"""
-        self.ui.tableWidget_5.verticalHeader().hide()
         self.ui.tableWidget_2.hide()
         self.ui.groupBox_2.hide()
         self.ui.groupBox_3.hide()
@@ -83,14 +82,9 @@ class SeatManage(QWidget):
             col = 3
             self.ui.tableWidget_5.setRowCount(row)  # 控件的名字保持一致，切莫想当然
             self.ui.tableWidget_5.setColumnCount(col + 1)  # 加1，开辟一列放操作按钮
-            self.ui.tableWidget_5.setSelectionBehavior(QTableWidget.SelectColumns)  # 选中行
+            self.ui.tableWidget_5.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
             self.ui.tableWidget_5.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
-            # table字体等布局
-            for index in range(self.ui.tableWidget_5.columnCount()):
-                headItem = self.ui.tableWidget_5.horizontalHeaderItem(index)
-                headItem.setFont(QFont("song", 10, QFont.Bold))
-                headItem.setForeground(QBrush(Qt.darkBlue))
-                headItem.setTextAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+
             data = QTableWidgetItem(str(rule.nightbegintime))
             # 转换后可插入表格
             self.ui.tableWidget_5.setItem(0, 0, data)
@@ -102,7 +96,6 @@ class SeatManage(QWidget):
 
     def dayTimeFee(self):
         """白天价格显示"""
-        self.ui.tableWidget.verticalHeader().hide()
         self.ui.tableWidget_2.hide()
         self.ui.groupBox_2.hide()
         self.ui.groupBox_3.hide()
@@ -111,24 +104,15 @@ class SeatManage(QWidget):
         self.ui.tableWidget.show()
         rulecontrol = ChargeController()
         result = rulecontrol.showrule()
-
         if result.status == 200:
             rule = result.data
             row = 1
             col = 4
-            self.ui.tableWidget.setColumnWidth(3, 130)
             self.ui.tableWidget.setRowCount(row)
             self.ui.tableWidget.setColumnCount(col + 1)  # 加1，开辟一列放操作按钮
-            self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectColumns)  # 选中行
+            self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
             self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
 
-
-            # table字体等布局
-            for index in range(self.ui.tableWidget.columnCount()):
-                headItem = self.ui.tableWidget.horizontalHeaderItem(index)
-                headItem.setFont(QFont("song", 10, QFont.Bold))
-                headItem.setForeground(QBrush(Qt.darkBlue))
-                headItem.setTextAlignment(Qt.AlignLeft | Qt.AlignVCenter)
             data = QTableWidgetItem(str(rule.daybegintime))
             self.ui.tableWidget.setItem(0, 0, data)
             data = QTableWidgetItem(str(rule.dayendtime))

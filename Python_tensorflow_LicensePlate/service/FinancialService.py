@@ -112,7 +112,12 @@ class FinancialService(object):
             print(e)
             return result.error("发生意外！")
 
-    def listdaybymonth(self, year_month):
+    def listdaysumbymonth(self, year_month):
+        """
+        获取某月已反生的每天的收入和
+        :param year_month: 月份 输入格式为'2018-06'
+        :return: 将数据库中没有的时间段添加到列表中，收入设置为零返回字典列表
+        """
         result = ParkResult.ParkResult()
 
         # 分割字符串 将年份和月份分离出来
@@ -122,24 +127,24 @@ class FinancialService(object):
         year = int(tempyearmonth[0])
         month = int(tempyearmonth[1])
 
-        #利用日历模块求某月天数
-        monthdays = calendar.monthrange(year,month)[1]
+        # 利用日历模块求某月天数
+        monthdays = calendar.monthrange(year, month)[1]
         print(monthdays)
 
-        #获取当前日期
+        # 获取当前日期
         nowtime = time.localtime(time.time())
-        #获取当前
+        # 获取当前
         nowyear = nowtime.tm_year
         nowmonth = nowtime.tm_mon
         nowday = nowtime.tm_mday
-        #如果所检索月份为当前月，则要考虑只显示当前天之前的信息，不显示剩下没有发生的天数的信息
-        if year ==nowyear and month ==nowmonth:
+        # 如果所检索月份为当前月，则要考虑只显示当前天之前的信息，不显示剩下没有发生的天数的信息
+        if year == nowyear and month == nowmonth:
             monthdaysrange = nowday
         else:
             monthdaysrange = monthdays
         days = []
-        for i in range(1,monthdaysrange+1):
-            day =str(i)
+        for i in range(1, monthdaysrange + 1):
+            day = str(i)
             day = day.zfill(2)
             print(day)
             days.append(day)
@@ -152,10 +157,10 @@ class FinancialService(object):
             for i in dmresult:
                 daysresult.append(i['mddatetime'])
             for day in days:
-                if  day in daysresult:
+                if day in daysresult:
                     pass
                 else:
-                    dmresult.append({'totalmoney':0,'mddatetime':day})
+                    dmresult.append({'totalmoney': 0, 'mddatetime': day})
             print(dmresult)
             # sortedym = sorted(dmresult, key=lambda e: e.__getitem__('mddatetime'))
             sorteddmresult = sorted(dmresult, key=lambda e: e.__getitem__('mddatetime'))
@@ -166,7 +171,63 @@ class FinancialService(object):
             print(e)
             return result.error("发生意外！")
 
+    def listhoursumbyday(self, year_month_day):
+        """
+        获取某天的每个时间段的数据
+        :param year_month_day:
+        :return:
+        """
+        result = ParkResult.ParkResult()
+        # 分割字符串 将年份和月份分离出来
+        tempyearmonthday = year_month_day.split('-')
+        # print(tempyearmonthday)
+        # 转换为int 类型
+        year = int(tempyearmonthday[0])
+        month = int(tempyearmonthday[1])
+        day = int(tempyearmonthday[2])
+
+        # 获取当前时间 年月日
+        nowtime = time.localtime(time.time())
+        nowyear = nowtime.tm_year
+        nowmonth = nowtime.tm_mon
+        nowday = nowtime.tm_mday
+        nowhour = nowtime.tm_hour
+
+        # 判断所选天是否为当前日期，如果为当前日期则考虑只显示当前hour之前的数据
+        # 如果非当前天，则可以显示一整天的数据
+        if year == nowyear and month == nowmonth and day == nowday:
+            hourrange = nowhour
+        else:
+            hourrange = 23
+        hours = []
+        # 如果小于两位则填充前置0
+        for i in range(hourrange + 1):
+            hour = str(i).zfill(2)
+            hours.append(hour)
+        # print(hours)
+        try:
+            dhrs= FinancialDaoImpl().listsumeachhourbyday(year_month_day)
+            rshour = []
+            #获取数据库中取得的小时列表
+            for i in dhrs:
+                rshour.append(i['dhdatetime'])
+            # print(rshour)
+            #遍历 将没有出现在rshour 中的添加进dhrs
+            for hour in hours:
+                if hours in rshour:
+                    pass
+                else:
+                    dhrs.append({'totalmoney':0,'dhdatetime':hour})
+            sorteddhrs = sorted(dhrs,key=lambda e: e.__getitem__('dhdatetime'))
+            # print(dhrs)
+            # print(sorteddhrs)
+            return result.ok(sorteddhrs)
+        except Exception as e:
+            print(e)
+            return result.error("发生意外！")
+
 
 if __name__ == '__main__':
-    FinancialService().listmonthsumbyyear(2018)
-    FinancialService().listdaybymonth('2018-06')
+    # FinancialService().listmonthsumbyyear(2015)
+    # FinancialService().listdaybymonth('2018-06')
+    FinancialService().listhoursumbyday('2018-06-20')

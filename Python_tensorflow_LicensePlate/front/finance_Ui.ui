@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>842</width>
-    <height>585</height>
+    <width>843</width>
+    <height>592</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -92,9 +92,9 @@
     <property name="geometry">
      <rect>
       <x>663</x>
-      <y>80</y>
+      <y>90</y>
       <width>20</width>
-      <height>451</height>
+      <height>441</height>
      </rect>
     </property>
     <property name="orientation">
@@ -145,8 +145,8 @@
      <rect>
       <x>10</x>
       <y>70</y>
-      <width>641</width>
-      <height>231</height>
+      <width>651</width>
+      <height>241</height>
      </rect>
     </property>
     <property name="title">
@@ -158,20 +158,17 @@
        <x>70</x>
        <y>20</y>
        <width>551</width>
-       <height>201</height>
+       <height>211</height>
       </rect>
      </property>
     </widget>
-    <zorder>graphicsView</zorder>
-    <zorder>groupBox_3</zorder>
-    <zorder>groupBox_3</zorder>
    </widget>
    <widget class="QGroupBox" name="groupBox_3">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>300</y>
-      <width>641</width>
+      <y>310</y>
+      <width>651</width>
       <height>231</height>
      </rect>
     </property>
@@ -184,42 +181,18 @@
        <x>70</x>
        <y>10</y>
        <width>551</width>
-       <height>201</height>
+       <height>211</height>
       </rect>
      </property>
     </widget>
-    <zorder>tableWidget</zorder>
-    <zorder>label_3</zorder>
    </widget>
-   <widget class="QLabel" name="label_3">
-    <property name="geometry">
-     <rect>
-      <x>3</x>
-      <y>70</y>
-      <width>661</width>
-      <height>471</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <zorder>line</zorder>
-   <zorder>horizontalLayoutWidget</zorder>
-   <zorder>label_2</zorder>
-   <zorder>line_2</zorder>
-   <zorder>groupBox</zorder>
-   <zorder>groupBox_2</zorder>
-   <zorder>groupBox_3</zorder>
-   <zorder>label_3</zorder>
-   <zorder>label_3</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>842</width>
+     <width>843</width>
      <height>23</height>
     </rect>
    </property>

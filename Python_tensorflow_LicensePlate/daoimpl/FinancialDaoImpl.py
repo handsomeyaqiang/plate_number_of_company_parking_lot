@@ -10,12 +10,6 @@ class FinancialDaoImpl(FinancialDao):
         params = (financial.ParkPlaceID, financial.chargetime, financial.money)
         print(sql)
         count = PyMySQLHelper().updateByParam(sql, params)
-        params =(financial.ParkPlaceID,financial.chargetime,financial.money)
-        #print(sql)
-        count = PyMySQLHelper().updateByParam(sql,params)
-        params = (financial.ParkPlaceID, financial.chargetime, financial.money)
-        print(sql)
-        count = PyMySQLHelper().updateByParam(sql, params)
         return count
 
     def deletefinancial(self, financialid):
@@ -87,12 +81,6 @@ class FinancialDaoImpl(FinancialDao):
         参数格式为'2018-6-20'"""
         sql = "select * from financial WHERE DATE_FORMAT(chargetime,'%%Y-%%m-%%d') = %s"
         params = (day)
-
-        result = PyMySQLHelper().selectalldictcursorByparams(sql, params)
-        print(result)
-        result = PyMySQLHelper().selectalldictcursorByparams(sql,params)
-        #print(result)
-
         result = PyMySQLHelper().selectalldictcursorByparams(sql, params)
         print(result)
         list = []

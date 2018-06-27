@@ -170,7 +170,7 @@ class Ui_seat(object):
         item = QtWidgets.QTableWidgetItem()
         self.tableWidget.setHorizontalHeaderItem(4, item)
         self.tableWidget_5 = QtWidgets.QTableWidget(seat)
-        self.tableWidget_5.setGeometry(QtCore.QRect(260, 190, 411, 51))
+        self.tableWidget_5.setGeometry(QtCore.QRect(270, 190, 421, 51))
         self.tableWidget_5.setObjectName("tableWidget_5")
         self.tableWidget_5.setColumnCount(4)
         self.tableWidget_5.setRowCount(0)
