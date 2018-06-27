@@ -22,8 +22,18 @@ class FinancialController(object):
         :param day: 日期 格式为：‘2018-06-05’
         :return:
         """
-        rs = FinancialService().listbyday(day)
-        return rs
+
+        resultlist = []
+        result = FinancialService().listbyday(day)
+        if result.status == 200:
+            rsfinlist = result.data
+            for findic in rsfinlist:
+                finlist = []
+                finlist.append(findic.ParkPlaceID)
+                finlist.append(findic.chargetime)
+                finlist.append(findic.money)
+                resultlist.append(finlist)
+        return resultlist
 
     def listbymonth(self, month):
         """
@@ -31,8 +41,17 @@ class FinancialController(object):
         :param month: 月份 格式为‘2018-06’
         :return:
         """
-        rs = FinancialService().listbymonth(month)
-        return rs
+        resultlist = []
+        result =  FinancialService().listbymonth(month)
+        if result.status == 200:
+            rsfinlist = result.data
+            for findic in rsfinlist:
+                finlist = []
+                finlist.append(findic.ParkPlaceID)
+                finlist.append(findic.chargetime)
+                finlist.append(findic.money)
+                resultlist.append(finlist)
+        return resultlist
 
     def listbyyear(self, year):
         """
@@ -40,8 +59,17 @@ class FinancialController(object):
         :param year:年份 格式为‘2018’
         :return:
         """
-        rs = FinancialService().listbyyear(year)
-        return rs
+        resultlist =[]
+        result = FinancialService().listbyyear(year)
+        if result.status==200:
+            rsfinlist = result.data
+            for findic in rsfinlist:
+                finlist =[]
+                finlist.append(findic.ParkPlaceID)
+                finlist.append(findic.chargetime)
+                finlist.append(findic.money)
+                resultlist.append(finlist)
+        return resultlist
 
     def listbyparkolaceid(self, parkplaceid):
         """
@@ -106,4 +134,5 @@ class FinancialController(object):
         print(y)
         return x, y
 if __name__ == '__main__':
-    FinancialController().listdaysumbymonth('2018-06')
+    # FinancialController().listdaysumbymonth('2018-06')
+        FinancialController().listbyyear('2018')

@@ -38,7 +38,7 @@ class Figure_Canvas(
         self.axes.set_xlabel("时间(小时)")
         self.axes.set_ylabel("收入(元)")
         fcontrol = FinancialController()
-        x,y = fcontrol.listhoursbyday(year_month_day)
+        x, y = fcontrol.listhoursbyday(year_month_day)
         for a, b in zip(x, y):
             # self.axes.text(a, b, (a, b), ha='center', va='bottom', fontsize=10)#显示两个坐标
             self.axes.text(a, b, b, ha='center', va='bottom', fontsize=12)  # 显示折线点的纵坐标值
@@ -49,8 +49,7 @@ class Figure_Canvas(
         self.axes.set_ylabel("收入(元)")
         fcontrol = FinancialController()
         print(year_month)
-        x,y = fcontrol.listdaysumbymonth(year_month)
-
+        x, y = fcontrol.listdaysumbymonth(year_month)
 
         print(x)
         print(y)
@@ -69,7 +68,7 @@ class Figure_Canvas(
         self.axes.set_ylabel("收入(元)")
 
         fcontrol = FinancialController()
-        x,y = fcontrol.listmonthsumbyyear(eval(year))
+        x, y = fcontrol.listmonthsumbyyear(eval(year))
 
         for a, b in zip(x, y):
             self.axes.text(a, b, b, ha='center', va='bottom', fontsize=12)  # 显示折线点的纵坐标值
@@ -126,13 +125,30 @@ class Finance(QtWidgets.QMainWindow):
         self.ui.groupBox_3.show()
         self.ui.tableWidget.show()
         # 根据需求自己自己设置table的行列数
-        self.ui.tableWidget.setRowCount(1)
+        category = self.ui.comboBox.currentText()
+        input = self.ui.lineEdit.text()
+        fcontrol = FinancialController()
+        data = []
+        if input != '':
+            if category == '按日':
+                data = fcontrol.listbyday(input)
+            elif category == '按月':
+                data = fcontrol.listbymonth(input)
+            elif category == '按年':
+                data = fcontrol.listbyyear(input)
+        self.ui.tableWidget.setRowCount(len(data))
         self.ui.tableWidget.setColumnCount(3)
-        data = '竹指'
-        data = QTableWidgetItem(str(data))
-        self.ui.tableWidget.setItem(0, 0, data)
-        self.ui.tableWidget.setHorizontalHeaderLabels(['姓名', '身高', '体重'])  # 设置table的表头信息
-
+        self.ui.tableWidget.setHorizontalHeaderLabels(['车位号', '收费时间', '金额（元）'])  # 设置table的表头信息
+        i = 0
+        for fin in data:
+            tparkid, tchargetime, tmoney = fin
+            parkid = QTableWidgetItem(str(tparkid))
+            self.ui.tableWidget.setItem(i, 0, parkid)
+            chargetime = QTableWidgetItem(str(tchargetime))
+            self.ui.tableWidget.setItem(i, 1, chargetime)
+            money = QTableWidgetItem(str(tmoney))
+            self.ui.tableWidget.setItem(i, 2, money)
+            i = i+1
         self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectColumns)  # 选中行
         self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
         # table字体等布局
@@ -161,8 +177,8 @@ class Finance(QtWidgets.QMainWindow):
                 dr.month(input)
             elif category == '按年':
                 dr.year(input)
-            else:
-                QMessageBox.information(self, ("提示"), ("修改成功！"))
+            # else:
+            #     QMessageBox.information(self, ("提示"), ("修改成功！"))
 
         graphicscene = QtWidgets.QGraphicsScene()  # 第三步，创建一个QGraphicsScene，因为加载的图形（FigureCanvas）不能直接放到graphicview控件中，必须先放到graphicScene，然后再把graphicscene放到graphicview中
         graphicscene.addWidget(dr)  # 第四步，把图形放到QGraphicsScene中，注意：图形是作为一个QWidget放到QGraphicsScene中的
