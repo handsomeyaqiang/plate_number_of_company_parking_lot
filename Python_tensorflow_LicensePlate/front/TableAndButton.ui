@@ -261,17 +261,17 @@
       <widget class="QComboBox" name="comboBox">
        <item>
         <property name="text">
+         <string>按工号</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
          <string>按姓名</string>
         </property>
        </item>
        <item>
         <property name="text">
          <string>按部门</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>按车牌号</string>
         </property>
        </item>
       </widget>
