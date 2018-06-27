@@ -104,13 +104,18 @@ class RecongiseService:
                         # 收回车位成功
                         # 外部车缴费
 
-                        # 录入缴费记录
+                        # 封装缴费记录
                         financialService = FinancialService()
                         financial = Financial(result.data, current_time, money)
+
+                        # 补充record
+                        record.__setattr__("leavestatus", 1)
+
+                        # 录入缴费记录
                         financialService.insertFinancial(financial)
                         # 更新停车记录离开时间及缴费状态
-                        record.__setattr__("leavestatus", 1)
                         recordService.update_record(record)
+
                         resultData = RecongiseResult(plate_num, 1, result.data, money, str(record.__getattribute__("intime")), str(current_time))
                         return result.ok(resultData)
                     else:
@@ -131,8 +136,8 @@ class RecongiseService:
         result = recordService.getSingleRecordByPlateId(plate_num)
         if result.status == 200:
             if result.data != None:
-                return self.recongise_out()
+                return self.recongise_out(plate_num)
             else:
-                return self.recongise_in()
+                return self.recongise_in(plate_num)
         else:
             return result.error("自动识别异常")

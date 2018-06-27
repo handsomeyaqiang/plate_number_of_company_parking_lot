@@ -14,24 +14,24 @@ from PIL import Image
 SIZE = 1280
 WIDTH = 32
 HEIGHT = 40
-NUM_CLASSES = 26
 iterations_num = 500
 
 SAVER_DIR = "../resources/model/letter/"
 TRAIN_DIR = "../resources/train-images/training-set/letters/"
 VALIDATION_DIR = "../resources/train-images/validation-set/"
-PREDICT_DIR = "../resource/images/splitplateimages/"
-
-LETTERS_DIGITS = (
-"A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
-"I", "O")
+PREDICT_DIR = "../resources/images/splitplateimages/"
+letter_lables = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L',
+                'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+letter_Train_Dirs = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L',
+                    'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+letter_NUM_CLASSES = len(letter_lables)
 
 
 
 
 # 定义输入节点，对应于图片像素值矩阵集合和图片标签(即所代表的数字)
 x = tf.placeholder(tf.float32, shape=[None, SIZE])
-y_ = tf.placeholder(tf.float32, shape=[None, NUM_CLASSES])
+y_ = tf.placeholder(tf.float32, shape=[None, letter_NUM_CLASSES])
 
 x_image = tf.reshape(x, [-1, WIDTH, HEIGHT, 1])
 
@@ -52,68 +52,76 @@ def train():
     time_begin = time.time()
     # 第一次遍历图片目录是为了获取图片总数
     input_count = 0
-    for i in range(0 + 10, NUM_CLASSES + 10):
-        dir = TRAIN_DIR + "%s/" % i  # 这里可以改成你自己的图片目录，i为分类标签
+    for dir_name in letter_Train_Dirs:
+        dir = TRAIN_DIR + "%s/" % dir_name  #
         for rt, dirs, files in os.walk(dir):
             for filename in files:
                 input_count += 1
 
                 # 定义对应维数和各维长度的数组
     input_images = np.array([[0] * SIZE for i in range(input_count)])
-    input_labels = np.array([[0] * NUM_CLASSES for i in range(input_count)])
+    input_labels = np.array([[0] * letter_NUM_CLASSES for i in range(input_count)])
 
     # 第二次遍历图片目录是为了生成图片数据和标签
     index = 0
-    for i in range(0 + 10, NUM_CLASSES + 10):
-        dir = TRAIN_DIR + "%s/" % i  # 这里可以改成你自己的图片目录，i为分类标签
+    hot = 0
+    for dir_name in letter_Train_Dirs:
+        dir = TRAIN_DIR + "%s/" % dir_name  # i为分类目录
         for rt, dirs, files in os.walk(dir):
             for filename in files:
                 filename = dir + filename
                 img = Image.open(filename)
-                width = img.size[0]
-                height = img.size[1]
+                gray = img.convert("L")
+                # 将图片转化为灰度图
+                width = gray.size[0]
+                height = gray.size[1]
                 for h in range(0, height):
                     for w in range(0, width):
+                        # 将读取的图片数据的每行数据一次放入input_images中
                         # 通过这样的处理，使数字的线条变细，有利于提高识别准确率
-                        if img.getpixel((w, h)) > 230:
+                        if gray.getpixel((w, h)) > 230:
                             input_images[index][w + h * width] = 0
                         else:
                             input_images[index][w + h * width] = 1
-                            # print ("i=%d, index=%d" % (i, index))
-                input_labels[index][i - 10] = 1
+                # 是每张图片的标签对应的值为1其他的值为0 例如：[0,0,0,1,0]
+                input_labels[index][hot] = 1
+                # print(hot, input_labels[index])
                 index += 1
-
-                # 第一次遍历图片目录是为了获取图片总数
+        hot += 1
+    # 第一次遍历图片目录是为了获取图片总数
     val_count = 0
-    for i in range(0 + 10, NUM_CLASSES + 10):
-        dir = VALIDATION_DIR + "%s/" % i  # 这里可以改成你自己的图片目录，i为分类标签
+    for dir_name in letter_Train_Dirs:
+        dir = VALIDATION_DIR + "%s/" % dir_name  # i为分类目录
         for rt, dirs, files in os.walk(dir):
             for filename in files:
                 val_count += 1
 
                 # 定义对应维数和各维长度的数组
     val_images = np.array([[0] * SIZE for i in range(val_count)])
-    val_labels = np.array([[0] * NUM_CLASSES for i in range(val_count)])
+    val_labels = np.array([[0] * letter_NUM_CLASSES for i in range(val_count)])
 
-    # 第二次遍历图片目录是为了生成图片数据和标签
+    # 第二次遍历图片目录是为了生成验证图片数据和标签
     index = 0
-    for i in range(0 + 10, NUM_CLASSES + 10):
-        dir = VALIDATION_DIR + "%s/" % i  # 这里可以改成你自己的图片目录，i为分类标签
+    hot = 0
+    for dir_name in letter_Train_Dirs:
+        dir = VALIDATION_DIR + "%s/" % dir_name  # i为分类目录
         for rt, dirs, files in os.walk(dir):
             for filename in files:
                 filename = dir + filename
                 img = Image.open(filename)
-                width = img.size[0]
-                height = img.size[1]
+                gray = img.convert("L")
+                width = gray.size[0]
+                height = gray.size[1]
                 for h in range(0, height):
                     for w in range(0, width):
                         # 通过这样的处理，使数字的线条变细，有利于提高识别准确率
-                        if img.getpixel((w, h)) > 230:
+                        if gray.getpixel((w, h)) > 230:
                             val_images[index][w + h * width] = 0
                         else:
                             val_images[index][w + h * width] = 1
-                val_labels[index][i - 10] = 1
+                val_labels[index][hot] = 1
                 index += 1
+        hot += 1
 
     with tf.Session() as sess:
         # 第一个卷积层
@@ -144,8 +152,8 @@ def train():
         h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob)
 
         # readout层
-        W_fc2 = tf.Variable(tf.truncated_normal([512, NUM_CLASSES], stddev=0.1), name="W_fc2")
-        b_fc2 = tf.Variable(tf.constant(0.1, shape=[NUM_CLASSES]), name="b_fc2")
+        W_fc2 = tf.Variable(tf.truncated_normal([512, letter_NUM_CLASSES], stddev=0.1), name="W_fc2")
+        b_fc2 = tf.Variable(tf.constant(0.1, shape=[letter_NUM_CLASSES]), name="b_fc2")
 
         # 定义优化器和训练op
         y_conv = tf.matmul(h_fc1_drop, W_fc2) + b_fc2
@@ -172,6 +180,7 @@ def train():
 
         # 执行训练迭代
         for it in range(iterations):
+            print("第" + str(it) + "次迭代开始......")
             # 这里的关键是要把输入数组转为np.array
             for n in range(batches_count):
                 train_step.run(feed_dict={x: input_images[n * batch_size:(n + 1) * batch_size],
@@ -181,26 +190,25 @@ def train():
                 train_step.run(feed_dict={x: input_images[start_index:input_count - 1],
                                           y_: input_labels[start_index:input_count - 1], keep_prob: 0.5})
 
-                # 每完成五次迭代，判断准确度是否已达到100%，达到则退出迭代循环
+            # 每完成五次迭代，判断准确度是否已达到100%，达到则退出迭代循环
             iterate_accuracy = 0
             if it % 5 == 0:
                 iterate_accuracy = accuracy.eval(feed_dict={x: val_images, y_: val_labels, keep_prob: 1.0})
                 print('第 %d 次训练迭代: 准确率 %0.5f%%' % (it, iterate_accuracy * 100))
-                if iterate_accuracy >= 0.9999 and it >= 300:
-                    break;
+                if iterate_accuracy >= 0.9999 and it >= 350:
+                    break
 
         print('完成训练!')
         time_elapsed = time.time() - time_begin
         print("训练耗费时间：%d秒" % time_elapsed)
-        time_begin = time.time()
 
         # 保存训练结果
         if not os.path.exists(SAVER_DIR):
             print('不存在训练数据保存目录，现在创建保存目录')
             os.makedirs(SAVER_DIR)
-            # 初始化saver
+        # 初始化saver
         saver = tf.train.Saver()
-        saver_path = saver.save(sess, "%smodel.ckpt" % (SAVER_DIR))
+        saver.save(sess, "%smodel.ckpt" % (SAVER_DIR))
 
 def predict():
     saver = tf.train.import_meta_graph("%smodel.ckpt.meta" % (SAVER_DIR))
@@ -242,7 +250,7 @@ def predict():
         # 定义优化器和训练op
         conv = tf.nn.softmax(tf.matmul(h_fc1_drop, W_fc2) + b_fc2)
         license_num = ""
-        for n in range(2, 3):
+        for n in range(1, 2):
             path = PREDICT_DIR + "%s.jpg" % n
             img = Image.open(path)
             width = img.size[0]
@@ -264,7 +272,7 @@ def predict():
             max1_index = 0
             max2_index = 0
             max3_index = 0
-            for j in range(NUM_CLASSES):
+            for j in range(letter_NUM_CLASSES):
                 if result[0][j] > max1:
                     max1 = result[0][j]
                     max1_index = j
@@ -280,9 +288,9 @@ def predict():
 
             if n == 3:
                 license_num += "-"
-            license_num = license_num + LETTERS_DIGITS[max1_index]
+            license_num = license_num + letter_lables[max1_index]
             print("概率：  [%s %0.2f%%]    [%s %0.2f%%]    [%s %0.2f%%]" % (
-            LETTERS_DIGITS[max1_index], max1 * 100, LETTERS_DIGITS[max2_index], max2 * 100, LETTERS_DIGITS[max3_index],
+                letter_lables[max1_index], max1 * 100, letter_lables[max2_index], max2 * 100, letter_lables[max3_index],
             max3 * 100))
 
         print("城市代号是: 【%s】" % license_num)
