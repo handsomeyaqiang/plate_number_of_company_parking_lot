@@ -1,6 +1,5 @@
-from updateCar import *
+from Python_tensorflow_LicensePlate.front.updateCar import *
 import sys
-import pymysql
 from PyQt5.QtWidgets import *
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QWidget
@@ -15,6 +14,7 @@ class Update_Ui(QtWidgets.QDialog):
         self.ui = Ui_Form()
         self.ui.setupUi(self)
         self.update(id)
+
 
 
         self.setWindowTitle("修改车辆信息页面")
@@ -77,14 +77,8 @@ class Update_Ui(QtWidgets.QDialog):
 
     def update(self, id):
         sc = VehicleController()
-        # result = sc.findVehicleByid(id)
-        print(id)
-        result=sc.findVehicleByplatenum(id)
-        print("得到result")
+        result=sc.findVehicleByplatenumvague(id)
         vehicle = result.data[0]
-        print(vehicle.SID)
-        print(vehicle.owner)
-        print(vehicle.vehicle_identity)
         self.ui.num_lineEdit.setText(vehicle.SID)
         self.ui.name_lineEdit.setText(vehicle.owner)
         self.ui.Chejia_lineEdit.setText(vehicle.vehicle_identity)

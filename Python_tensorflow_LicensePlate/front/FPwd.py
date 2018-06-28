@@ -2,13 +2,13 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from Python_tensorflow_LicensePlate.utils.Pymysql import *
-from findPwd import *
+from Python_tensorflow_LicensePlate.front.findPwd import *
 import sys
-import pymysql
 from PyQt5 import QtCore, QtGui, QtWidgets
 from threading import Timer
 import time
-class FPwd_ui(QtWidgets.QWidget):
+
+class FPwd_ui(QWidget):
     def __init__(self):
         super(FPwd_ui, self).__init__()
         self.ui = Ui_Form()

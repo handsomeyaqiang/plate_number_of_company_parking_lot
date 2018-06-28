@@ -1,16 +1,18 @@
-import sys
-import pymysql
-from Python_tensorflow_LicensePlate.utils.Pymysql import *
 from PyQt5.QtWidgets import *
 from Python_tensorflow_LicensePlate.front.FPwd import *   # 导入文件的顺序不同会导致文件类识别异常，原因未知
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-from loginUI import *
-from register import *
-from Db_finance import *
-from ComInfoManager import *
-from Db_seatManager import *
+from Python_tensorflow_LicensePlate.front.loginUI import *
+from Python_tensorflow_LicensePlate.front.register import *
+from Python_tensorflow_LicensePlate.front.Db_finance import *
+from Python_tensorflow_LicensePlate.front.ComInfoManager import *
+from Python_tensorflow_LicensePlate.front.Db_seatManager import *
+from Python_tensorflow_LicensePlate.front.loginUI import *
+from Python_tensorflow_LicensePlate.front.register import *
+from Python_tensorflow_LicensePlate.front.Db_finance import *
+from Python_tensorflow_LicensePlate.front.ComInfoManager import *
+from Python_tensorflow_LicensePlate.front.Db_seatManager import *
 
 
 from PyQt5.QtWidgets import QWidget
@@ -134,6 +136,8 @@ class Login(QtWidgets.QDialog):
             if identity == '0':
                 sql = "select * from administrater where username = '" + name + "' and " \
                      "password = '" + pwd + "' and identity= '" + identity + "' "
+            if identity == 0:
+                sql = "select * from administrater where username = '" + name + "' and password = '" + pwd + "' and identity= 0 "
                 print(sql)
 
                 results = db.selectALL(sql)
@@ -180,6 +184,13 @@ class Login(QtWidgets.QDialog):
                 OK = QMessageBox.warning(self, ("警告"), ("""请输入账号！"""))
             if pwd == '':
                 OK = QMessageBox.warning(self, ("警告"), ("""请输入密码！"""))
+
+        # cursor.close()
+        # conn.close()
+    def slotRegister(self):
+        # Dialog = QtWidgets.QWidget()   #定义前必须加self 不然跳转的页面闪一下就会消失
+         self.u = reUi()
+         self.u.exec()
 
     def slotRegister(self):
         self.i = reUi()  # self.i的窗口命名不能重复

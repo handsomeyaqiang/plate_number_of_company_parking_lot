@@ -2,10 +2,13 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from Python_tensorflow_LicensePlate.utils.Pymysql import *
 from PyQt5.QtCore import *
-from register_Ui import *
+from Python_tensorflow_LicensePlate.front.register_Ui import *
 import sys
+<<<<<<< HEAD
 from Login import *
 import pymysql
+=======
+>>>>>>> 6f7eca0474e2b0ea4484d1dee44342f48e2a0c79
 from PyQt5 import QtCore, QtGui, QtWidgets
 class reUi(QtWidgets.QDialog):
     def __init__(self):

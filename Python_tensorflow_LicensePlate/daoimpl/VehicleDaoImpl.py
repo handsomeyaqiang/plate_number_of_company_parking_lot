@@ -59,7 +59,7 @@ class VehilceDaoImpl(VehicleDao):
     # 通过车牌号查找车辆信息实现
     def findVehicleByPlateID(self, PlateID):
         py = Pymysql.PyMySQLHelper()
-        sql = "select * from vehicle where PlateID like '%s'" % (PlateID)
+        sql = "select * from vehicle where PlateID like '%%%s%%'" % (PlateID)
         rs = py.selectOnedictcursor(sql)
         if rs != None:
             SID = rs['SID']
@@ -86,6 +86,7 @@ class VehilceDaoImpl(VehicleDao):
             vehicle = Vehicle(SID, PlateID, owner, vehicle_identity)
             list.append(vehicle)
         return list
+
 
     # 通过车主查找车辆信息
     def findVehicleByOwner(self,name):

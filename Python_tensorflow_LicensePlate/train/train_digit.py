@@ -13,21 +13,15 @@ from PIL import Image
 SIZE = 1280
 WIDTH = 32
 HEIGHT = 40
-iterations = 300
-SAVER_DIR = "./model/digit/"
-province_labels = ['川', '鄂', '赣', '甘', '贵', '桂', '黑', '沪', '冀', '津', '京', '吉', '辽',
-                   '鲁', '蒙', '闽', '宁', '青', '琼', '陕', '苏', '晋', '皖', '湘', '新', '豫',
-                   '渝', '粤', '云', '藏', '浙']
+iterations = 400
+SAVER_DIR = "../resources/model/digit/"
+TRAIN_DIR = "../resources/train-images/training-set/"
+VALIDATION_DIR = "../resources/train-images/validation-set/"
+PREDICT_DIR = "../resources/images/splitplateimages/"
 digit_lables = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L',
                 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-province_Train_Dirs = ['zh_cuan', 'zh_e', 'zh_gan', 'zh_gan1', 'zh_gui', 'zh_gui1', 'zh_hei',
-                       'zh_hu', 'zh_ji', 'zh_jin', 'zh_jing', 'zh_j1', 'zh_liao', 'zh_lu',
-                       'zh_meng', 'zh_min', 'zh_ning', 'zh_qing', 'zh_qiong', 'zh_shan',
-                       'zh_su', 'zh_sx', 'zh_wan','zh_xiang', 'zh_xin', 'zh_yu', 'zh_yu1', 'zh_yue',
-                       'zh_yun', 'zh_zang', 'zh_zhe']
 digit_Train_Dirs = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K',
                     'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-provice_NUM_CLASSES = len(province_labels)
 digit_NUM_CLASSES = len(digit_lables)
 
 # 定义输入节点，对应于图片像素值矩阵集合和图片标签(即所代表的数字)
@@ -54,7 +48,7 @@ def train_license():
     # 第一次遍历图片目录是为了获取图片总数
     input_count = 0
     for dir_name in digit_Train_Dirs:
-        dir = './train-images/train-set/%s/' % dir_name  # dir_name为分类目录
+        dir = TRAIN_DIR + "%s/" % dir_name  # dir_name为分类目录
         for rt, dirs, files in os.walk(dir):
             for filename in files:
                 input_count += 1
@@ -67,7 +61,7 @@ def train_license():
     index = 0
     hot = 0
     for dir_name in digit_Train_Dirs:
-        dir = './train-images/train-set/%s/' % dir_name  # i为分类目录
+        dir = TRAIN_DIR + "%s/" % dir_name  # i为分类目录
         for rt, dirs, files in os.walk(dir):
             for filename in files:
                 filename = dir + filename
@@ -93,7 +87,7 @@ def train_license():
     # 第一次遍历图片目录是为了获取验证图片总数
     val_count = 0
     for dir_name in digit_Train_Dirs:
-        dir = './train-images/validation-set/%s/' % dir_name  # i为分类目录
+        dir = VALIDATION_DIR + "%s/" % dir_name  # i为分类目录
         for rt, dirs, files in os.walk(dir):
             for filename in files:
                 val_count += 1
@@ -106,7 +100,7 @@ def train_license():
     index = 0
     hot = 0
     for dir_name in digit_Train_Dirs:
-        dir = './train-images/validation-set/%s/' % dir_name  # i为分类目录
+        dir = VALIDATION_DIR + "%s/" % dir_name  # i为分类目录
         for rt, dirs, files in os.walk(dir):
             for filename in files:
                 filename = dir + filename
@@ -199,13 +193,12 @@ def train_license():
             if it % 5 == 0:
                 iterate_accuracy = accuracy.eval(feed_dict={x: val_images, y_: val_labels, keep_prob: 1.0})
                 print('第 %d 次训练迭代: 准确率 %0.5f%%' % (it, iterate_accuracy * 100))
-                if iterate_accuracy >= 0.99 and it >= 200:
-                    break;
+                if iterate_accuracy >= 0.99 and it >= 300:
+                    break
 
         print('完成训练!')
         time_elapsed = time.time() - time_begin
         print("训练耗费时间：%d秒" % time_elapsed)
-        time_begin = time.time()
 
         # 保存训练结果
         if not os.path.exists(SAVER_DIR):
@@ -254,8 +247,8 @@ def predict_license():
         # 定义优化器和训练op
         conv = tf.nn.softmax(tf.matmul(h_fc1_drop, W_fc2) + b_fc2)
 
-        for n in range(2, 8):
-            path = "./test_images/%s.bmp" % n
+        for n in range(3, 8):
+            path = PREDICT_DIR + "%s.jpg" % n
             img = Image.open(path)
             gray = img.convert("L")
             width = gray.size[0]

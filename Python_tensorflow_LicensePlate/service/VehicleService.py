@@ -14,10 +14,10 @@ class VehicleService(object):
             return result.error("添加车辆失败！")
 
     #删除车辆信息
-    def deleteVehicle(self,SID):
+    def deleteVehicle(self,PID):
         result = ParkResult()
         try:
-            VehilceDaoImpl().deleteVehicleBySID(SID)
+            VehilceDaoImpl().deleteVehicleByPlateID(PID)
             return result.ok2()
         except Exception as e:
             print(e)
@@ -62,6 +62,17 @@ class VehicleService(object):
         try:
             s = VehilceDaoImpl()
             list = s.findVehicleByPlateID(pid)
+            return result.ok(list)
+        except Exception as e:
+            print(e)
+            return result.error("查询员工信息失败！")
+
+        # 按照车牌号模糊查找车辆信息
+    def findVehicleByPlateNumVague(self, pid):
+        result = ParkResult()
+        try:
+            s = VehilceDaoImpl()
+            list = s.findVehicleByPlateIDvague(pid)
             return result.ok(list)
         except Exception as e:
             print(e)

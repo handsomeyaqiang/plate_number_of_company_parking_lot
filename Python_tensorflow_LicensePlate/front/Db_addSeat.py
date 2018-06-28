@@ -1,10 +1,8 @@
 from Python_tensorflow_LicensePlate.front.addSeat import *
 import sys
-import pymysql
 from Python_tensorflow_LicensePlate.controller.ParkPlaceController import ParkPlaceController
 from PyQt5.QtWidgets import *
 from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtWidgets import QWidget
 from PyQt5.QtGui import *
 
 
