@@ -37,6 +37,11 @@ class Update_Ui(QtWidgets.QDialog):
 
         self.ui.depart_lineEdit.setClearButtonEnabled(True)
 
+        palette = QPalette()
+        icon = QPixmap('cord.jpg').scaled(800, 600)
+        palette.setBrush(self.backgroundRole(), QBrush(icon))
+        self.setPalette(palette)
+
         # 槽函数
         self.ui.pushButton.clicked.connect(self.DB_insert)
         self.ui.pushButton_2.clicked.connect(self.clearInput)
@@ -55,22 +60,17 @@ class Update_Ui(QtWidgets.QDialog):
     # 更改员工信息， 更改成功后，应该在把更改的信息展示出来，调用Db_Staff函数里的查询所有
     def DB_insert(self):
         # 获得界面输入
-        # staff = tableB()
-
         StaffNum = self.ui.lineEdit.text()
         carNum = self.ui.car_lineEdit.text()
         name = self.ui.name_lineEdit.text()
         phone = self.ui.phone_lineEdit.text()
-
         if self.ui.radioButton.isChecked():
-            gender = '女'
-            gender1 = 0
+            gender = 0
         else:
-            gender = '男'
-            gender1 = 1
+            gender = 1
         department = self.ui.depart_lineEdit.text()
 
-        if carNum == '':
+        if carNum == '':  # 空检查
             OK = QMessageBox.information(self, ("警告"), ("""请输入拥有的车辆数"""))
             return
         if name == '':
@@ -82,18 +82,30 @@ class Update_Ui(QtWidgets.QDialog):
         if department == '':
             OK = QMessageBox.information(self, ("警告"), ("""部门不能为空"""))
             return
-        # 更新员工信息的数据库操作
-        sc = StaffController()
-        result = sc.updStaff(StaffNum, int(carNum), name, phone, gender1, department)
-        print(result.status)
-        if result.status == 200:
-            OK = QMessageBox.information(self, ("提示："), ("""修改成功！"""))
-            self.close()
-
-        elif result.status == 400:
-            OK = QMessageBox.information(self, ("提示："), ("""修改失败！"""))  # 单引号包围font 井号会报错
-        # 获得界面输入
-
+        if carNum.isdigit() == False:  # 车辆数检查判断
+            OK = QMessageBox.information(self, ("提示："), ("""车辆数必须为数字，请检查您的输入！"""))
+            return
+        if StaffNum.isdigit() == False:  # 员工号是否为数字检查判断
+            OK = QMessageBox.information(self, ("提示："), ("""员工号必须为数字，请检查您的输入！"""))
+            return
+        if phone.isdigit() == False:  # 电话号是否为数字检查判断
+            OK = QMessageBox.information(self, ("提示："), ("""电话号必须为数字，请检查您的输入！"""))
+            return
+        if len(str(StaffNum)) > 8:  # 员工号长度检查判断
+            OK = QMessageBox.information(self, ("提示："), ("""员工号最多8位，请检查您的输入！"""))
+            return
+        if len(str(phone)) == 11 or len(str(phone)) == 7:  # 电话号长度检查判断
+            # 开始添加员工信息的数据库操作
+            sc = StaffController()
+            result = sc.updStaff(StaffNum, int(carNum), name, phone, gender, department)
+            if result.status == 200:
+                OK = QMessageBox.information(self, ("提示："), ("""修改成功！"""))
+                self.close()
+            elif result.status == 400:
+                OK = QMessageBox.information(self, ("提示："), ("""修改失败！"""))  # 单引号包围font 井号会报错
+        else:
+            OK = QMessageBox.information(self, ("提示："), ("""电话号位数不正确，请检查您的输入！"""))
+            return
 
     def update(self, id):
           #获得当前要修改的员工信息，填入文本框中
