@@ -8,6 +8,8 @@ from pylab import *
 # matplotlib.use("Qt5Agg")  # 声明使用QT5
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
+import re
+import datetime
 
 
 class Figure_Canvas(
@@ -158,22 +160,60 @@ class Finance(QtWidgets.QMainWindow):
     def finance(self):
         # 获得输入
         self.ui.label_3.hide()
-        self.ui.groupBox_2.show()
-        self.ui.graphicsView.show()
+
+
         category = self.ui.comboBox.currentText()
         input = self.ui.lineEdit.text()
+        print(input+'5')
+
+
 
         dr = Figure_Canvas()
         # 实例化一个FigureCanvas
         if input != '':
             if category == '按日':
-                dr.day(input)  # 画图
+                    try:
+                        temp_year,temp_month,temp_day = input.split('-')
+                        print(temp_year,temp_month,temp_day )
+                        a= datetime.date(int(temp_year),int(temp_month),int(temp_day))
+                        year_month_day = temp_year+'-'+temp_month.zfill(2)+'-'+temp_day.zfill(2)
+
+
+
+                    except Exception:
+                        QMessageBox.warning(self, '提示', '输入数据有误！')
+                    else:
+                        self.ui.groupBox_2.show()
+                        self.ui.graphicsView.show()
+                        dr.day(year_month_day)  # 画图
             elif category == '按月':
-                dr.month(input)
+                try:
+                    temp_year, temp_month= input.split('-')
+                    temp_day = '01'
+                    print(temp_year, temp_month, temp_day)
+                    datetime.date(int(temp_year), int(temp_month), int(temp_day))
+                    year_month = temp_year + '-' + temp_month.zfill(2)
+                except Exception:
+                    QMessageBox.warning(self, '提示', '输入数据有误！')
+                else:
+                    self.ui.groupBox_2.show()
+                    self.ui.graphicsView.show()
+                    dr.month(year_month)
             elif category == '按年':
-                dr.year(input)
-            # else:
-            #     QMessageBox.information(self, ("提示"), ("修改成功！"))
+                try:
+                    temp_year = input
+                    temp_day = '01'
+                    temp_month ='01'
+                    datetime.date(int(temp_year), int(temp_month), int(temp_day))
+                except Exception:
+                    QMessageBox.warning(self, '提示', '输入数据有误！')
+                else:
+                    self.ui.groupBox_2.show()
+                    self.ui.graphicsView.show()
+                    dr.year(input)
+
+
+
 
         graphicscene = QtWidgets.QGraphicsScene()  # 第三步，创建一个QGraphicsScene，因为加载的图形（FigureCanvas）不能直接放到graphicview控件中，必须先放到graphicScene，然后再把graphicscene放到graphicview中
         graphicscene.addWidget(dr)  # 第四步，把图形放到QGraphicsScene中，注意：图形是作为一个QWidget放到QGraphicsScene中的
