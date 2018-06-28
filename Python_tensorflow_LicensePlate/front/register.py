@@ -4,9 +4,10 @@ from Python_tensorflow_LicensePlate.utils.Pymysql import *
 from PyQt5.QtCore import *
 from register_Ui import *
 import sys
+from Login import *
 import pymysql
 from PyQt5 import QtCore, QtGui, QtWidgets
-class reUi(QWidget):
+class reUi(QtWidgets.QDialog):
     def __init__(self):
         super(reUi, self).__init__()
         self.ui = Ui_register_2()
@@ -20,9 +21,19 @@ class reUi(QWidget):
 
         self.ui.label_2.setFont(labelFont)
         self.ui.label_3.setFont(labelFont)
-
-        self.ui.firmpushButton_2.setStyleSheet("background-color:lightblue")
-        self.ui.concelpushButton.setStyleSheet("background-color:lightblue")
+        self.ui.firmpushButton_2.setStyleSheet("QPushButton{color:blue}"
+                                         "QPushButton:hover{color:red}"
+                                        "QPushButton{background-color:lightblue}"
+                                        "QPushButton{border:2px}"
+                                        "QPushButton{border-radius:10px}")
+        self.ui.concelpushButton.setStyleSheet("QPushButton{color:blue}"
+                                               "QPushButton:hover{color:red}"
+                                               "QPushButton{background-color:lightblue}"
+                                               "QPushButton{border:2px}"
+                                               "QPushButton{border-radius:10px}"
+                                               "QPushButton{padding:2px 4px}")
+        # self.ui.concelpushButton.setStyleSheet("border:2px groove gray;border-radius:10px;padding:2px 4px;");
+        # self.ui.firmpushButton_2.setStyleSheet("background-color:lightblue"
         self.ui.firmpushButton_2.setFixedSize(80, 28)
         self.ui.concelpushButton.setFixedSize(80, 28)
         # 设置背景
@@ -39,6 +50,11 @@ class reUi(QWidget):
         self.ui.comboBox.setFixedSize(130, 24)
         self.ui.comboBox_2.setFixedSize(130, 24)
 
+        self.ui.namelineEdit.setFocus()
+
+        self.ui.pwdlineEdit.setEchoMode(QLineEdit.Password)
+        self.ui.surePwdlineEdit.setEchoMode(QLineEdit.Password)
+        self.ui.emalineEdit_3.setEchoMode(QLineEdit.Password)
         self.ui.namelineEdit.setClearButtonEnabled(True)
         self.ui.phonelineEdit.setClearButtonEnabled(True)
         self.ui.emalineEdit_3.setClearButtonEnabled(True)
@@ -47,6 +63,9 @@ class reUi(QWidget):
         # 槽函数
         self.ui.firmpushButton_2.clicked.connect(self.addAdmin)
         self.ui.concelpushButton.clicked.connect(self.clearInput)
+
+
+        # self.setModal(False)
 
         # 用clear()方法出现未知错误
 
@@ -58,7 +77,15 @@ class reUi(QWidget):
         self.ui.surePwdlineEdit.setText("")
         self.ui.phonelineEdit.setText("")
         self.ui.emalineEdit_3.setText("")
+    def quit1(self):
 
+        # q = QtWidgets.QApplication.instance()
+
+        sys.exit(q.exec_())
+    def login(self, name, pwd):
+        self.ui1 = Login()
+        self.ui1.userlineEdit.setText(name)
+        self.ui1.pwdlineEdit.setText(pwd)
     def addAdmin(self):
 
         name = self.ui.namelineEdit.text()
@@ -90,7 +117,7 @@ class reUi(QWidget):
         # print('姓名：%s 密码：%s 确认密码：%s 手机号：%s  性别：%s 密保问题：%s 密保答案：%s' %
         #       (name, pwd, repwd, phone, Gender, MbQuestion, MbAnswer))
         db = PyMySQLHelper()
-        if name != "" and pwd != "" and repwd != "" and phone != "" and MbQuestion != "" and Gender != '':
+        if name != "" and pwd != "" and repwd != "" and phone != "" and MbQuestion != "" and Gender != ''and MbAnswer != "":
             if pwd != repwd:
                 OK = QMessageBox.warning(self, ("警告"), ("""两次密码输入不一致！"""))
             else:
@@ -111,11 +138,12 @@ class reUi(QWidget):
                                                                                                                         "'" + identity + "')"
                     print(sql)
                     db.update(sql)
-                    # cursor.execute(sql)
-                    # conn.commit()
-                    # cursor.close()
-                    # conn.close()
                     OK = QMessageBox.information(self, ("提示"), ("注册成功！"))
+                    self.close()
+                    # self.quit1()
+
+
+
         else:
             if name == "" and pwd == "" and repwd == "" and phone == "" and MbAnswer == '':
                 OK = QMessageBox.warning(self, ("警告"), ("请输入用户信息！"))
@@ -134,15 +162,15 @@ class reUi(QWidget):
                     OK = QMessageBox.warning(self, ("警告"), ("密保答案不能为空！"))
 
 
-
-    def closeEvent(self, QCloseEvent):
-        reply = QMessageBox.question(self, '提示',
-                                     "确定退出？", QMessageBox.Yes |
-                                     QMessageBox.No, QMessageBox.No)
-        if reply == QMessageBox.Yes:
-            QCloseEvent.accept()
-        else:
-            QCloseEvent.ignore()
+    #
+    # def closeEvent(self, QCloseEvent):
+    #     reply = QMessageBox.question(self, '提示',
+    #                                  "确定退出？", QMessageBox.Yes |
+    #                                  QMessageBox.No, QMessageBox.No)
+    #     if reply == QMessageBox.Yes:
+    #         QCloseEvent.accept()
+    #     else:
+    #         QCloseEvent.ignore()
 
 if __name__=="__main__":
     app = QtWidgets.QApplication(sys.argv)

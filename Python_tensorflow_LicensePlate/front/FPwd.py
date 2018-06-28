@@ -8,7 +8,7 @@ import pymysql
 from PyQt5 import QtCore, QtGui, QtWidgets
 from threading import Timer
 import time
-class FPwd_ui(QWidget):
+class FPwd_ui(QtWidgets.QWidget):
     def __init__(self):
         super(FPwd_ui, self).__init__()
         self.ui = Ui_Form()
@@ -46,9 +46,9 @@ class FPwd_ui(QWidget):
         self.ui.pushButton_3.setFixedSize(65, 24)
         # self.ui.pushButton_2.setStyleSheet("background-color:lightbule")
 
-        self.ui.pushButton_4.setStyleSheet("QPushButton{color:blue}"
-                                         "QPushButton:hover{color:red}"
-                                         )
+        # self.ui.pushButton_4.setStyleSheet("QPushButton{color:blue}"
+        #                                  "QPushButton:hover{color:red}"
+        #                                  )
 
         self.ui.pushButton_2.setStyleSheet("QPushButton{color:blue}"
                                          "QPushButton:hover{color:red}"
@@ -119,10 +119,10 @@ class FPwd_ui(QWidget):
                 if results:
                     # 插入新密码
                     sql_up = "update administrater set password = '" + pwd + "'where username = '" + name + "' " \
-                                                                                                            "and question = '" + question + "' and answer='" + answer + "'"
+                                                "and question = '" + question + "' and answer='" + answer + "'"
                     # cursor.execute(sql_up)
                     # conn.commit()\
-                    db.update(sql)
+                    db.update(sql_up)
                     self.ui.textBrowser.setText('密码更新成功！')
                 else:
                     OK = QMessageBox.warning(self, ("警告"), ("""密保问题或密保答案错误！"""))
