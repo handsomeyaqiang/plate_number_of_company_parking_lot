@@ -149,24 +149,43 @@ class carManage(QtWidgets.QMainWindow):
 
             if num < vnum:                  #登记数量大于已添加的该员工名下的车辆的数量
                 print("可以继续添加")
-                result = vc.insertVehicle(carNum, name, driverNum, staffNum)
-                if result.status == 200:
-                    OK = QMessageBox.information(self, ("提示："), (""" 添加成功！"""))
-                    self.DB_queryAll()
-                elif result.status == 400:
-                    OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>添加失败！</font>"""))  # 单引号包围font 井号会报错
-                self.Clear()
+                isexist1=vc.findVehicleByplatenumvague(carNum)
+                isexist2=vc.findVehicleByvehicleid(driverNum)
+                exist= len(isexist1.data)
+                exist2=len(isexist2.data)
+                if exist>0 or exist2>0:                    #判断车牌号和车架号是否唯一
+                    OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>该车牌号或车架号已经存在，请仔细检查您的输入！</font>"""))
+                    self.Clear()
+                    return
+                else:
+                    result = vc.insertVehicle(carNum, name, driverNum, staffNum)
+                    if result.status == 200:
+                        OK = QMessageBox.information(self, ("提示："), (""" 添加成功！"""))
+                        self.DB_queryAll()
+                    elif result.status == 400:
+                        OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>添加失败！</font>"""))  # 单引号包围font 井号会报错
+                    self.Clear()
+
             elif num == vnum:                #登记数量等于已添加的该员工名下的车辆的数量，添加车辆后员工的车辆数也要添加
                 print("该员工已添加满")
-                result = vc.insertVehicle(carNum, name, driverNum, staffNum)
-                if result.status == 200:
-                    stanum = num + 1
-                    sc.updStaff(staff.SID, stanum, staff.name, staff.phoneNumber, staff.gender, staff.department)
-                    OK = QMessageBox.information(self, ("提示："), ("""添加成功！"""))
-                    self.DB_queryAll()
-                elif result.status == 400:
-                    OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>添加失败！</font>"""))  # 单引号包围font 井号会报错
-                self.Clear()
+                isexist = vc.findVehicleByplatenumvague(carNum)
+                isexist2 = vc.findVehicleByvehicleid(driverNum)
+                exist = len(isexist.data)
+                exist2 = len(isexist2.data)
+                if exist > 0 or exist2>0:                  #判断车牌号是否唯一
+                    OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>该车牌号或车架号已经存在，请仔细检查您的输入！</font>"""))
+                    self.Clear()
+                    return
+                else:
+                    result = vc.insertVehicle(carNum, name, driverNum, staffNum)
+                    if result.status == 200:
+                        stanum = num + 1
+                        sc.updStaff(staff.SID, stanum, staff.name, staff.phoneNumber, staff.gender, staff.department)
+                        OK = QMessageBox.information(self, ("提示："), (""" 添加成功！"""))
+                        self.DB_queryAll()
+                    elif result.status == 400:
+                        OK = QMessageBox.information(self, ("提示："),("""<font color='red'>添加失败！</font>"""))  # 单引号包围font 井号会报错
+                    self.Clear()
             else:
                 print("错误！")
                 self.Clear()
