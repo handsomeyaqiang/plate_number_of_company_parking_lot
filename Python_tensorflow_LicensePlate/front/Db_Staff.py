@@ -87,6 +87,7 @@ class tableB(QtWidgets.QMainWindow):
         self.ui.phone_lineEdit.clear()
         self.ui.num_lineEdit.clear()
 
+
     def closeEvent(self, QCloseEvent):
         reply = QMessageBox.question(self, '提示',
                                      "确定退出？", QMessageBox.Yes |
@@ -114,6 +115,9 @@ class tableB(QtWidgets.QMainWindow):
             self.flag=3
             sc = StaffController()
             result = sc.findStaffByid(text)
+            if len(result.data)==0:
+                OK = QMessageBox.information(self, ("提示："), ("""未查询到记录！"""))
+                return
             if result.status == 200:
                 row = len(result.data)
                 col = ["SID", "vehicleQuantity", "name", "phoneNumber", "gender", "department"]
@@ -153,6 +157,9 @@ class tableB(QtWidgets.QMainWindow):
             self.flag=2
             sc = StaffController()
             result = sc.findStaffByname(text)
+            if len(result.data)==0:
+                OK = QMessageBox.information(self, ("提示："), ("""未查询到记录！"""))
+                return
             if result.status == 200:
                 row = len(result.data)
                 col = ["SID", "vehicleQuantity", "name", "phoneNumber", "gender", "department"]
@@ -193,6 +200,9 @@ class tableB(QtWidgets.QMainWindow):
             sc = StaffController()
             result = sc.findStaffBydepart(text)
             self.flag=1
+            if len(result.data)==0:
+                OK = QMessageBox.information(self, ("提示："), ("""未查询到记录！"""))
+                return
             if result.status == 200:
                 row = len(result.data)
                 col = ["SID", "vehicleQuantity", "name", "phoneNumber", "gender", "department"]
