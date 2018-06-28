@@ -5,7 +5,7 @@ from PyQt5.QtCore import *
 from Python_tensorflow_LicensePlate.front.register_Ui import *
 import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
-class reUi(QWidget):
+class reUi(QtWidgets.QDialog):
     def __init__(self):
         super(reUi, self).__init__()
         self.ui = Ui_register_2()

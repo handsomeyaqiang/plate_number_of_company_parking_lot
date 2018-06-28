@@ -162,8 +162,8 @@ class Login(QWidget):
         # conn.close()
     def slotRegister(self):
         # Dialog = QtWidgets.QWidget()   #定义前必须加self 不然跳转的页面闪一下就会消失
-         self.ui = reUi()
-         self.ui.show()
+         self.u = reUi()
+         self.u.exec()
 
 
 if __name__ == '__main__':
