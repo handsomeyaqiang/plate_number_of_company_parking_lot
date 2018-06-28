@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from Python_tensorflow_LicensePlate.controller.VehicleController import VehicleController
-
+from Python_tensorflow_LicensePlate.controller.StaffController import StaffController
 
 class carManage(QtWidgets.QMainWindow):
     def __init__(self):
@@ -133,15 +133,44 @@ class carManage(QtWidgets.QMainWindow):
             OK = QMessageBox.information(self, ("警告"), ("""车架号不能为空"""))
             return
 
-        vc = VehicleController()
-        result=vc.insertVehicle(carNum, name, driverNum, staffNum)
-        if result.status == 200:
-            OK = QMessageBox.information(self, ("提示："), ("""添加成功！"""))
-            self.DB_queryAll()
-        elif result.status == 400:
-            OK = QMessageBox.information(self, ("提示："), ("""添加失败！"""))  # 单引号包围font 井号会报错
+        sc = StaffController()
+        result1 = sc.findStaffByid(staffNum)
+        len2 = len(result1.data)
+        if len2==0:                     #该员工不存在，不能添加
+            OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>该员工不存在，无法添加他的车辆信息!</font>"""))
+            self.Clear()
+            return
+        else:
+            staff = result1.data[0]
+            vnum = staff.vehicleQuantity    #想要添加的员工登记的车辆数
+            vc = VehicleController()
+            result2 = vc.findVehicleByid(staffNum)
+            num = len(result2.data)
 
-
+            if num < vnum:                  #登记数量大于已添加的该员工名下的车辆的数量
+                print("可以继续添加")
+                result = vc.insertVehicle(carNum, name, driverNum, staffNum)
+                if result.status == 200:
+                    OK = QMessageBox.information(self, ("提示："), (""" 添加成功！"""))
+                    self.DB_queryAll()
+                elif result.status == 400:
+                    OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>添加失败！</font>"""))  # 单引号包围font 井号会报错
+                self.Clear()
+            elif num == vnum:                #登记数量等于已添加的该员工名下的车辆的数量，添加车辆后员工的车辆数也要添加
+                print("该员工已添加满")
+                result = vc.insertVehicle(carNum, name, driverNum, staffNum)
+                if result.status == 200:
+                    stanum = num + 1
+                    sc.updStaff(staff.SID, stanum, staff.name, staff.phoneNumber, staff.gender, staff.department)
+                    OK = QMessageBox.information(self, ("提示："), ("""添加成功！"""))
+                    self.DB_queryAll()
+                elif result.status == 400:
+                    OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>添加失败！</font>"""))  # 单引号包围font 井号会报错
+                self.Clear()
+            else:
+                print("错误！")
+                self.Clear()
+                return
 
         # 查询
 
