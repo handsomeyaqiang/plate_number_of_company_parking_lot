@@ -126,13 +126,39 @@ class Finance(QtWidgets.QMainWindow):
         input = self.ui.lineEdit.text()
         fcontrol = FinancialController()
         data = []
+
         if input != '':
             if category == '按日':
-                data = fcontrol.listbyday(input)
+                try:
+                    temp_year, temp_month, temp_day = input.split('-')
+                    print(temp_year, temp_month, temp_day)
+                    a = datetime.date(int(temp_year), int(temp_month), int(temp_day))
+                    year_month_day = temp_year + '-' + temp_month.zfill(2) + '-' + temp_day.zfill(2)
+                except Exception:
+                    QMessageBox.warning(self, '提示', '输入数据有误！')
+                else:
+                     data = fcontrol.listbyday(year_month_day)
             elif category == '按月':
-                data = fcontrol.listbymonth(input)
+                try:
+                    temp_year, temp_month= input.split('-')
+                    temp_day = '01'
+                    print(temp_year, temp_month, temp_day)
+                    datetime.date(int(temp_year), int(temp_month), int(temp_day))
+                    year_month = temp_year + '-' + temp_month.zfill(2)
+                except Exception:
+                    QMessageBox.warning(self, '提示', '输入数据有误！')
+                else:
+                    data = fcontrol.listbymonth(year_month)
             elif category == '按年':
-                data = fcontrol.listbyyear(input)
+                try:
+                    temp_year = input
+                    temp_day = '01'
+                    temp_month = '01'
+                    datetime.date(int(temp_year), int(temp_month), int(temp_day))
+                except Exception:
+                    QMessageBox.warning(self, '提示', '输入数据有误！')
+                else:
+                    data = fcontrol.listbyyear(input)
         self.ui.tableWidget.setRowCount(len(data))
         self.ui.tableWidget.setColumnCount(3)
         self.ui.tableWidget.setHorizontalHeaderLabels(['车位号', '收费时间', '金额（元）'])  # 设置table的表头信息
@@ -164,7 +190,6 @@ class Finance(QtWidgets.QMainWindow):
 
         category = self.ui.comboBox.currentText()
         input = self.ui.lineEdit.text()
-        print(input+'5')
 
 
 
@@ -210,10 +235,12 @@ class Finance(QtWidgets.QMainWindow):
                 else:
                     self.ui.groupBox_2.show()
                     self.ui.graphicsView.show()
+
                     dr.year(input)
 
 
-
+            # else:
+            #     QMessageBox.information(self, ("提示"), ("修改成功！"))
 
         graphicscene = QtWidgets.QGraphicsScene()  # 第三步，创建一个QGraphicsScene，因为加载的图形（FigureCanvas）不能直接放到graphicview控件中，必须先放到graphicScene，然后再把graphicscene放到graphicview中
         graphicscene.addWidget(dr)  # 第四步，把图形放到QGraphicsScene中，注意：图形是作为一个QWidget放到QGraphicsScene中的

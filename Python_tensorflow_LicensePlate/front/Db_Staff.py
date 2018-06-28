@@ -87,7 +87,6 @@ class tableB(QtWidgets.QMainWindow):
         self.ui.phone_lineEdit.clear()
         self.ui.num_lineEdit.clear()
 
-
     def closeEvent(self, QCloseEvent):
         reply = QMessageBox.question(self, '提示',
                                      "确定退出？", QMessageBox.Yes |
@@ -117,6 +116,7 @@ class tableB(QtWidgets.QMainWindow):
             result = sc.findStaffByid(text)
             if len(result.data)==0:
                 OK = QMessageBox.information(self, ("提示："), ("""未查询到记录！"""))
+                self.ui.tableWidget.clear()
                 return
             if result.status == 200:
                 row = len(result.data)
@@ -159,6 +159,7 @@ class tableB(QtWidgets.QMainWindow):
             result = sc.findStaffByname(text)
             if len(result.data)==0:
                 OK = QMessageBox.information(self, ("提示："), ("""未查询到记录！"""))
+                self.ui.tableWidget.clear()
                 return
             if result.status == 200:
                 row = len(result.data)
@@ -202,6 +203,7 @@ class tableB(QtWidgets.QMainWindow):
             self.flag=1
             if len(result.data)==0:
                 OK = QMessageBox.information(self, ("提示："), ("""未查询到记录！"""))
+                self.ui.tableWidget.clear()
                 return
             if result.status == 200:
                 row = len(result.data)
@@ -248,7 +250,6 @@ class tableB(QtWidgets.QMainWindow):
         carNum = self.ui.car_lineEdit.text()
         name = self.ui.name_lineEdit.text()
         phone = self.ui.phone_lineEdit.text()
-
         if self.ui.nan_radioButton.isChecked():
             gender = 1
             gender1='男'
@@ -257,7 +258,7 @@ class tableB(QtWidgets.QMainWindow):
             gender1='女'
         department = self.ui.depart_lineEdit.text()
 
-        if carNum == '':
+        if carNum == '':                                    #空检查
             OK = QMessageBox.information(self, ("警告"), ("""请输入拥有的车辆数"""))
             return
         if name == '':
@@ -269,24 +270,42 @@ class tableB(QtWidgets.QMainWindow):
         if department == '':
             OK = QMessageBox.information(self, ("警告"), ("""部门不能为空"""))
             return
-
-        #开始添加员工信息的数据库操作
-        sc = StaffController()
-        result = sc.insertStaff(StaffNum,carNum,name,phone,gender,department)
-        if result.status == 200:
-            OK = QMessageBox.information(self,("提示："), ("""添加成功！"""))
-            self.DB_query()
-        elif result.status == 400:
-            OK = QMessageBox.information(self, ("提示："),("""添加失败！"""))  # 单引号包围font 井号会报错
-
+        if carNum.isdigit()==False:                 #车辆数检查判断
+            OK = QMessageBox.information(self, ("提示："), ("""车辆数必须为数字，请检查您的输入！"""))
+            return
+        if StaffNum.isdigit()==False:                 #员工号是否为数字检查判断
+            OK = QMessageBox.information(self, ("提示："), ("""员工号必须为数字，请检查您的输入！"""))
+            return
+        if phone.isdigit()==False:                 #电话号是否为数字检查判断
+            OK = QMessageBox.information(self, ("提示："), ("""电话号必须为数字，请检查您的输入！"""))
+            return
+        if len(str(StaffNum))>8:                 #员工号长度检查判断
+            OK = QMessageBox.information(self, ("提示："), ("""员工号最多8位，请检查您的输入！"""))
+            return
+        if len(str(phone))==11 or len(str(phone))==7:                 #电话号长度检查判断
+            # 开始添加员工信息的数据库操作
+            sc = StaffController()
+            isexist = sc.findStaffByid(StaffNum)                    #判断该员工号是否存在
+            exist = len(isexist.data)
+            if exist>0:
+                OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>该员工号已经存在，请仔细检查您的输入！</font>"""))
+                return
+            else:
+                result = sc.insertStaff(StaffNum, carNum, name, phone, gender, department)
+                if result.status == 200:
+                    OK = QMessageBox.information(self, ("提示："), ("""添加成功！"""))
+                    self.clearInput()
+                    self.DB_query()
+                elif result.status == 400:
+                    OK = QMessageBox.information(self, ("提示："), ("""添加失败！"""))  # 单引号包围font 井号会报错
+        else:
+            OK = QMessageBox.information(self, ("提示："), ("""电话号位数不正确，请检查您的输入！"""))
+            return
 
 
     # 更新
     def DB_update(self, id):
         # 引入更新界面
-        # self.ui = Update_Ui()
-        # self.ui.update(id)
-        # self.ui.show()
         self.m = Update_Ui(id)
         self.m.exec()
         if self.flag == 0:

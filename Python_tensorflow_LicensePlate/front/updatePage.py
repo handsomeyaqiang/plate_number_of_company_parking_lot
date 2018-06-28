@@ -88,7 +88,7 @@ class Ui_Form(object):
         self.radioButton_2.setText(_translate("Form", "男"))
         self.label_6.setText(_translate("Form", " 工 号："))
         self.pushButton.setText(_translate("Form", "确定"))
-        self.pushButton_2.setText(_translate("Form", "取消"))
+        self.pushButton_2.setText(_translate("Form", "清空输入"))
 
 if __name__ == '__main__':
 
