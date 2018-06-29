@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import *
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 from pylab import *
 # matplotlib.use("Qt5Agg")  # 声明使用QT5
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
@@ -82,7 +83,7 @@ class Finance(QtWidgets.QMainWindow):
         self.setFixedSize(self.width(), self.height())  # 实现禁止窗口最大化和禁止窗口拉伸
 
         palette = QPalette()
-        icon = QPixmap('f1.gif').scaled(850, 550)
+        icon = QPixmap('cw.jpg').scaled(850, 550)
         palette.setBrush(self.backgroundRole(), QBrush(icon))
         self.setPalette(palette)
         self.ui.tableWidget.verticalHeader().hide()  # 水平表头隐藏
@@ -100,6 +101,20 @@ class Finance(QtWidgets.QMainWindow):
         timer = QtCore.QTimer(self)
         timer.timeout.connect(self.showtime)
         timer.start()
+        # 控制表格属性
+        for index in range(self.ui.tableWidget.columnCount()):
+            headItem = self.ui.tableWidget.horizontalHeaderItem(index)
+
+            headItem.setFont(QFont("song", 14, QFont.Bold))
+            headItem.setForeground(QBrush(Qt.darkMagenta))
+            # headItem.setBackgroundColor(QColor(0, 60, 10))# 不能设置颜色，原因未知
+            headItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        self.ui.tableWidget.setColumnWidth(1, 250)
+        self.ui.tableWidget.setColumnWidth(2, 150)
+        self.ui.tableWidget.setColumnWidth(0, 149)
+        # self.ui.tableWidget.verticalHeader().setVisible(False)
+        # table字体等布局
+
 
         # time = self.ui.dateTimeEdit.dateTime()
         self.ui.pushButton.clicked.connect(self.finance)
@@ -121,6 +136,7 @@ class Finance(QtWidgets.QMainWindow):
         self.ui.label_3.hide()
         self.ui.groupBox_3.show()
         self.ui.tableWidget.show()
+
         # 根据需求自己自己设置table的行列数
         category = self.ui.comboBox.currentText()
         input = self.ui.lineEdit.text()
@@ -135,39 +151,33 @@ class Finance(QtWidgets.QMainWindow):
                 data = fcontrol.listbyyear(input)
         self.ui.tableWidget.setRowCount(len(data))
         self.ui.tableWidget.setColumnCount(3)
-        self.ui.tableWidget.setHorizontalHeaderLabels(['车位号', '收费时间', '金额（元）'])  # 设置table的表头信息
+        # self.ui.tableWidget.setHorizontalHeaderLabels(['车位号', '收费时间', '金额（元）'])  # 设置table的表头信息
         i = 0
         for fin in data:
             tparkid, tchargetime, tmoney = fin
             parkid = QTableWidgetItem(str(tparkid))
             self.ui.tableWidget.setItem(i, 0, parkid)
+            self.ui.tableWidget.item(i, 0).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             chargetime = QTableWidgetItem(str(tchargetime))
             self.ui.tableWidget.setItem(i, 1, chargetime)
+            self.ui.tableWidget.item(i, 1).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             money = QTableWidgetItem(str(tmoney))
             self.ui.tableWidget.setItem(i, 2, money)
+            self.ui.tableWidget.item(i, 2).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             i = i+1
-        self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectColumns)  # 选中行
+
+
+        self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
         self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
-        # table字体等布局
-        for index in range(self.ui.tableWidget.columnCount()):
-            headItem = self.ui.tableWidget.horizontalHeaderItem(index)
-            headItem.setFont(QFont("song", 10, QFont.Bold))
-            headItem.setForeground(QBrush(Qt.darkBlue))
-            headItem.setTextAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
     # 查询思路：在finance获得界面输入，判断搜索的类型， 由类型判断调用Figure_Canvas()里的哪一个构图类型day(),year(),
     # month()，因为按天和按年的坐标轴不同,同时输入的数据传入 Figure_Canvas()中的方法函数中，根据这个查询数据库中数据，画图
     def finance(self):
         # 获得输入
         self.ui.label_3.hide()
-
-
         category = self.ui.comboBox.currentText()
         input = self.ui.lineEdit.text()
         print(input+'5')
-
-
-
         dr = Figure_Canvas()
         # 实例化一个FigureCanvas
         if input != '':
@@ -177,9 +187,6 @@ class Finance(QtWidgets.QMainWindow):
                         print(temp_year,temp_month,temp_day )
                         a= datetime.date(int(temp_year),int(temp_month),int(temp_day))
                         year_month_day = temp_year+'-'+temp_month.zfill(2)+'-'+temp_day.zfill(2)
-
-
-
                     except Exception:
                         QMessageBox.warning(self, '提示', '输入数据有误！')
                     else:
@@ -211,10 +218,6 @@ class Finance(QtWidgets.QMainWindow):
                     self.ui.groupBox_2.show()
                     self.ui.graphicsView.show()
                     dr.year(input)
-
-
-
-
         graphicscene = QtWidgets.QGraphicsScene()  # 第三步，创建一个QGraphicsScene，因为加载的图形（FigureCanvas）不能直接放到graphicview控件中，必须先放到graphicScene，然后再把graphicscene放到graphicview中
         graphicscene.addWidget(dr)  # 第四步，把图形放到QGraphicsScene中，注意：图形是作为一个QWidget放到QGraphicsScene中的
         self.ui.graphicsView.setScene(graphicscene)  # 第五步，把QGraphicsScene放入QGraphicsView
