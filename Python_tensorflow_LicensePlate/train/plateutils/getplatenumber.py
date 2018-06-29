@@ -2,9 +2,9 @@ import sys
 import cv2
 import numpy as np
 
-DIR_RECEIVED_IMAGES = "../resources/images/receivedplateimages"
-DIR_MIDEL_IMAGES = "../resources/images/midledimages"
-DIR_SPLIT_IMAGES = "../resources/images/splitplateimages"
+DIR_RECEIVED_IMAGES = "../../resources/images/receivedplateimages"
+DIR_MIDEL_IMAGES = "../../resources/images/midledimages"
+DIR_SPLIT_IMAGES = "../../resources/images/splitplateimages"
 
 # 车牌预处理
 def preprocess(gray):
@@ -118,6 +118,9 @@ def detect(img):
     cv2.destroyAllWindows()
 
 def get_plateNum():
-    imagePath = DIR_RECEIVED_IMAGES + "/testplate.jpg"
+    imagePath = DIR_RECEIVED_IMAGES + "/plate.jpg"
     img = cv2.imread(imagePath)
     detect(img)
+
+if __name__ == '__main__':
+    get_plateNum()
