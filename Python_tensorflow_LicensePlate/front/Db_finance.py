@@ -260,6 +260,7 @@ class Finance(QtWidgets.QMainWindow):
         graphicscene.addWidget(dr)  # 第四步，把图形放到QGraphicsScene中，注意：图形是作为一个QWidget放到QGraphicsScene中的
         self.ui.graphicsView.setScene(graphicscene)  # 第五步，把QGraphicsScene放入QGraphicsView
         self.ui.graphicsView.show()  # 最后，调用show方法呈现图形
+        self.table()
 
 
 if __name__ == '__main__':
