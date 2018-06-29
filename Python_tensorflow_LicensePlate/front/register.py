@@ -4,11 +4,9 @@ from Python_tensorflow_LicensePlate.utils.Pymysql import *
 from PyQt5.QtCore import *
 from Python_tensorflow_LicensePlate.front.register_Ui import *
 import sys
-<<<<<<< HEAD
 from Login import *
 import pymysql
-=======
->>>>>>> 6f7eca0474e2b0ea4484d1dee44342f48e2a0c79
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 class reUi(QtWidgets.QDialog):
     def __init__(self):
@@ -67,28 +65,17 @@ class reUi(QtWidgets.QDialog):
         self.ui.firmpushButton_2.clicked.connect(self.addAdmin)
         self.ui.concelpushButton.clicked.connect(self.clearInput)
 
-
-        # self.setModal(False)
-
-        # 用clear()方法出现未知错误
-
-
-
+        # self.setModal(False)#设置为非模态
     def clearInput(self):
         self.ui.namelineEdit.setText("")
         self.ui.pwdlineEdit.setText("")
         self.ui.surePwdlineEdit.setText("")
         self.ui.phonelineEdit.setText("")
         self.ui.emalineEdit_3.setText("")
-    def quit1(self):
-
-        # q = QtWidgets.QApplication.instance()
-
-        sys.exit(q.exec_())
-    def login(self, name, pwd):
-        self.ui1 = Login()
-        self.ui1.userlineEdit.setText(name)
-        self.ui1.pwdlineEdit.setText(pwd)
+    # def login(self, name, pwd):
+    #     self.ui1 = Login()
+    #     self.ui1.userlineEdit.setText(name)
+    #     self.ui1.pwdlineEdit.setText(pwd)
     def addAdmin(self):
 
         name = self.ui.namelineEdit.text()
@@ -111,12 +98,6 @@ class reUi(QtWidgets.QDialog):
             identity = 2
         Gender = str(Gender) #Expected type 'int', got 'str' instead的错误 把性别和identity转化成str 用str()
         identity = str(identity)
-        #
-        # conn = pymysql.connect(host='127.0.0.1',
-        #                        port=3306, user='root', password='271996', db='company_parking_system',
-        #                        charset='utf8')
-        # cursor = conn.cursor()
-
         # print('姓名：%s 密码：%s 确认密码：%s 手机号：%s  性别：%s 密保问题：%s 密保答案：%s' %
         #       (name, pwd, repwd, phone, Gender, MbQuestion, MbAnswer))
         db = PyMySQLHelper()
@@ -165,7 +146,6 @@ class reUi(QtWidgets.QDialog):
                     OK = QMessageBox.warning(self, ("警告"), ("密保答案不能为空！"))
 
 
-    #
     # def closeEvent(self, QCloseEvent):
     #     reply = QMessageBox.question(self, '提示',
     #                                  "确定退出？", QMessageBox.Yes |

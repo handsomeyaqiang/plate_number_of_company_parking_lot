@@ -136,12 +136,8 @@ class Login(QtWidgets.QDialog):
             if identity == '0':
                 sql = "select * from administrater where username = '" + name + "' and " \
                      "password = '" + pwd + "' and identity= '" + identity + "' "
-            if identity == 0:
-                sql = "select * from administrater where username = '" + name + "' and password = '" + pwd + "' and identity= 0 "
                 print(sql)
-
                 results = db.selectALL(sql)
-
                 if results:
                     self.ui1 = Finance()
                     # self.ui1.exec()
@@ -151,7 +147,6 @@ class Login(QtWidgets.QDialog):
                     OK = QMessageBox.warning(self, ("警告"), ("""账号或密码错误！"""))
 
             if identity == '1':
-
                 sql = "select * from administrater where username = '" + name + "' and " \
                        "password = '" + pwd + "' and identity= '" + identity + "' "
                 print(sql)
@@ -171,26 +166,19 @@ class Login(QtWidgets.QDialog):
 
                 results = db.selectALL(sql)
                 # print(identity)
-
                 if results:
                     self.ui3 = SeatManage()
                     self.ui3.show()
                     self.close()
                 else:
                     OK = QMessageBox.warning(self, ("警告"), ("""账号或密码错误！"""))
-
         else:
             if name == '':
                 OK = QMessageBox.warning(self, ("警告"), ("""请输入账号！"""))
             if pwd == '':
                 OK = QMessageBox.warning(self, ("警告"), ("""请输入密码！"""))
 
-        # cursor.close()
-        # conn.close()
-    def slotRegister(self):
-        # Dialog = QtWidgets.QWidget()   #定义前必须加self 不然跳转的页面闪一下就会消失
-         self.u = reUi()
-         self.u.exec()
+
 
     def slotRegister(self):
         self.i = reUi()  # self.i的窗口命名不能重复

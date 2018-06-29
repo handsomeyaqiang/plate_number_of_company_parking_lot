@@ -44,18 +44,27 @@ class FPwd_ui(QWidget):
         self.ui.pushButton_2.setFixedSize(65, 24)
         self.ui.pushButton_4.setFixedSize(65, 24)
         self.ui.pushButton_3.setFixedSize(65, 24)
-        # self.ui.pushButton_2.setStyleSheet("background-color:lightbule")
-
         # self.ui.pushButton_4.setStyleSheet("QPushButton{color:blue}"
         #                                  "QPushButton:hover{color:red}"
         #                                  )
 
-        self.ui.pushButton_2.setStyleSheet("QPushButton{color:blue}"
-                                         "QPushButton:hover{color:red}"
-                                         )
-        self.ui.pushButton_3.setStyleSheet("QPushButton{color:blue}"
-                                           "QPushButton:hover{color:red}"
-                                           )
+        # self.ui.pushButton_2.setStyleSheet("QPushButton{color:blue}"
+        #                                  "QPushButton:hover{color:red}"
+        #                                  )
+
+        self.ui.pushButton_4.setStyleSheet("QPushButton{color:black}"
+                                             "QPushButton:hover{color:Seagreen}"
+                                             "QPushButton{background-color:pink}"
+                                             "QPushButton{border:2px}"
+                                             "QPushButton{border-radius:10px}"
+                                             "QPushButton{padding:2px 4px}")
+
+        self.ui.pushButton_2.setStyleSheet("QPushButton{color:black}"
+                                             "QPushButton:hover{color:Seagreen}"
+                                             "QPushButton{background-color:pink}"
+                                             "QPushButton{border:2px}"
+                                             "QPushButton{border-radius:10px}"
+                                             "QPushButton{padding:2px 4px}")
         # time.sleep(3)# 主程序3庙后显示输出
         # self.ui.textBrowser.clear()
         self.ui.pushButton_3.hide()
