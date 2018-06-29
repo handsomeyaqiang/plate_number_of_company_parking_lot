@@ -20,6 +20,7 @@ class SeatManage(QWidget):
         self.ui.setupUi(self)
 
         self.setWindowTitle("车位管理")
+        self.setWindowIcon(QIcon('cz1.png'))
         self.setFixedSize(self.width(), self.height())  # 实现禁止窗口最大化和禁止窗口拉伸
 
         self.ui.tableWidget_2.hide()
@@ -29,18 +30,62 @@ class SeatManage(QWidget):
         self.ui.tableWidget_5.hide()
         self.ui.tableWidget.hide()
         self.ui.tableWidget_4.hide()
+        self.ui.label_8.hide()# 收费规则标签
+        self.ui.label_9.hide() # 车位状态标签
+        self.ui.label_8.setFixedWidth(180)
 
         # 设置lineEdit的删除
 
         self.ui.lineEdit_3.setClearButtonEnabled(True)
         self.ui.lineEdit_2.setClearButtonEnabled(True)
-        pixmap = QPixmap("seat.jpg")  # 按指定路径找到图片，注意路径必须用双引号包围，不能用单引号
+        pixmap = QPixmap("cz2.jpg")  # 按指定路径找到图片，注意路径必须用双引号包围，不能用单引号
         self.ui.label.setPixmap(pixmap)  # 在label上显示图片
         self.ui.label.setScaledContents(True)  # 让图片自适应label大小
 
+        palette = QPalette()
+        icon = QPixmap('cz2.jpg').scaled(800, 600)
+        palette.setBrush(self.backgroundRole(), QBrush(icon))
+        self.setPalette(palette)
+        self.ui.pushButton_2.setFixedSize(90, 28)
+        self.ui.pushButton_3.setFixedSize(90, 28)
+        self.ui.pushButton_4.setFixedSize(90, 28)
+        self.ui.pushButton_9.setFixedSize(90, 28)
+        self.ui.pushButton_10.setFixedSize(90, 28)
+        self.ui.groupBox.setStyleSheet("QGroupBox{color:HotPink;font-family:宋体}")
+        self.ui.pushButton_2.setStyleSheet("QPushButton{color:black}"
+                                               "QPushButton:hover{color:red}"
+                                               "QPushButton{background-color:lightblue}"
+                                               "QPushButton{border:2px}"
+                                               "QPushButton{border-radius:10px}")
+        self.ui.pushButton_3.setStyleSheet("QPushButton{color:black}"
+                                           "QPushButton:hover{color:red}"
+                                           "QPushButton{background-color:violet}"
+                                           "QPushButton{border:2px}"
+                                           "QPushButton{border-radius:10px}")
+        self.ui.pushButton_4.setStyleSheet("QPushButton{color:black}"
+                                           "QPushButton:hover{color:red}"
+                                           "QPushButton{background-color:springgreen}"
+                                           "QPushButton{border:2px}"
+                                           "QPushButton{border-radius:10px}")
+        self.ui.pushButton_9.setStyleSheet("QPushButton{color:black}"
+                                           "QPushButton:hover{color:Lime}"
+                                           "QPushButton{background-color:GoldEnrod}"
+                                           "QPushButton{border:2px}"
+                                           "QPushButton{border-radius:10px}")
+        self.ui.pushButton_10.setStyleSheet("QPushButton{color:black}"
+                                           "QPushButton:hover{color:blue}"
+                                           "QPushButton{background-color:Tomato}"
+                                           "QPushButton{border:2px}"
+                                           "QPushButton{border-radius:10px}")
         self.ui.label_2.setStyleSheet("QLabel{background:white;}"
                                       "QLabel{color:rgb(300,300,300,120);font-size:12px;font-weight:bold;font-family:宋体;}"
                                       )
+        self.ui.label_8.setStyleSheet(
+                                      "QLabel{color:DeepPink;font-size:12px;font-weight:bold;font-family:宋体;}"
+                                      )
+        self.ui.label_9.setStyleSheet(
+                                       "QLabel{color:DeepPink;font-size:12px;font-weight:bold;font-family:宋体;}"
+        )
         self.ui.pushButton_5.setStyleSheet('text-align: center;'
                                            'width:40;'
                                            'height:20;'
@@ -49,6 +94,9 @@ class SeatManage(QWidget):
                                            'width:40;'
                                            'height:20;'
                                            'background:lightgreen;')
+        self.ui.label_7.setStyleSheet(
+                                      "QLabel{color:hotpink;font-size:17px;font-weight:bold;font-family:宋体;}"
+                                    )
         # 车位状态表格布局
         self.ui.tableWidget_3.verticalHeader().hide()
         for index in range(self.ui.tableWidget_3.columnCount()):
@@ -85,6 +133,9 @@ class SeatManage(QWidget):
         self.ui.tableWidget_3.hide()
         self.ui.tableWidget_5.show()
         self.ui.tableWidget.hide()
+        self.ui.label_9.hide()
+        self.ui.label_8.setText("车位晚上收费规则")
+        self.ui.label_8.show()
 
         rulecontrol = ChargeController()
         result = rulecontrol.showrule()
@@ -120,6 +171,9 @@ class SeatManage(QWidget):
 
     def dayTimeFee(self):
         """白天价格显示"""
+        self.ui.label_9.hide()
+        self.ui.label_8.setText("车位白天收费规则")
+        self.ui.label_8.show()
         self.ui.tableWidget_2.hide()
         self.ui.groupBox_2.hide()
         self.ui.groupBox_3.hide()
@@ -165,7 +219,7 @@ class SeatManage(QWidget):
         # 修改
         updateBtn = QPushButton('修改')
         updateBtn.setStyleSheet(''' text-align : center;
-                                                        background-color : DarkSeaGreen;
+                                                        background-color : HotPink;
                                                         height : 30px;
                                                         border-style: outset;
                                                         font : 13px  ''')
@@ -190,7 +244,7 @@ class SeatManage(QWidget):
         # 修改
         updateBtn = QPushButton('修改')
         updateBtn.setStyleSheet(''' text-align : center;
-                                                      background-color : DarkSeaGreen;
+                                                      background-color : HotPink;
                                                       height : 30px;
                                                       border-style: outset;
                                                       font : 13px  ''')
@@ -344,6 +398,8 @@ class SeatManage(QWidget):
         self.ui.tableWidget_3.hide()
         self.ui.tableWidget_5.hide()
         self.ui.tableWidget.hide()
+        self.ui.label_8.hide()
+        self.ui.label_9.hide()
         # 操作数据库 需要规范化
 
         pcontrol = ParkPlaceController()
@@ -374,6 +430,8 @@ class SeatManage(QWidget):
         self.ui.tableWidget_3.hide()
         self.ui.tableWidget_5.hide()
         self.ui.tableWidget.hide()
+        self.ui.label_8.hide()
+        self.ui.label_9.hide()
 
     # 车位操作的控制逻辑
     def operateSeat2(self):
@@ -452,12 +510,14 @@ class SeatManage(QWidget):
     # 车位锁状态  查询所有，获得车位的id后进行打开关闭操作，点击打开时，先调用是否确认打开的提示
     # 然后根据id 查询到该车位的 车位状态，根据id 修改，在查询所有，放在table上
     def lockState(self):
+        self.ui.label_9.show()
         self.ui.tableWidget_3.show()
         self.ui.tableWidget_2.hide()
         self.ui.groupBox_3.hide()
         self.ui.groupBox_2.hide()
         self.ui.tableWidget_5.hide()
         self.ui.tableWidget.hide()
+        self.ui.label_8.hide()
         pcontrol = ParkPlaceController()
         result = pcontrol.showparkplaceinformation()
         if result.status == 200:
