@@ -28,6 +28,7 @@ class SeatManage(QWidget):
         self.ui.groupBox_3.hide()
         self.ui.tableWidget_5.hide()
         self.ui.tableWidget.hide()
+        self.ui.tableWidget_4.hide()
 
         # 设置lineEdit的删除
 
@@ -48,7 +49,16 @@ class SeatManage(QWidget):
                                            'width:40;'
                                            'height:20;'
                                            'background:lightgreen;')
-
+        # 车位状态表格布局
+        self.ui.tableWidget_3.verticalHeader().hide()
+        for index in range(self.ui.tableWidget_3.columnCount()):
+            headItem = self.ui.tableWidget_3.horizontalHeaderItem(index)
+            headItem.setFont(QFont("song", 10, QFont.Bold))
+            headItem.setForeground(QBrush(Qt.darkMagenta))
+            # headItem.setBackgroundColor(QColor(0, 60, 10))# 不能设置颜色，原因未知
+            headItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        # 车位初始设置按钮隐藏
+        self.ui.pushButton.hide()
         # 槽函数
         self.ui.pushButton.clicked.connect(self.seatSet)  # 显示车位设置窗口
         self.ui.pushButton_2.clicked.connect(self.lockState)  # 显示车位锁状态窗口
@@ -60,6 +70,7 @@ class SeatManage(QWidget):
         self.ui.pushButton_7.clicked.connect(self.addSeat)  # 添加车位
         self.ui.pushButton_9.clicked.connect(self.dayTimeFee)
         self.ui.pushButton_10.clicked.connect(self.nightFee)
+
 
     # 添加车位
     def addSeat(self):
@@ -74,6 +85,7 @@ class SeatManage(QWidget):
         self.ui.tableWidget_3.hide()
         self.ui.tableWidget_5.show()
         self.ui.tableWidget.hide()
+
         rulecontrol = ChargeController()
         result = rulecontrol.showrule()
         if result.status == 200:
@@ -82,16 +94,28 @@ class SeatManage(QWidget):
             col = 3
             self.ui.tableWidget_5.setRowCount(row)  # 控件的名字保持一致，切莫想当然
             self.ui.tableWidget_5.setColumnCount(col + 1)  # 加1，开辟一列放操作按钮
-            self.ui.tableWidget_5.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
+            self.ui.tableWidget_5.setSelectionBehavior(QTableWidget.SelectColumns)  # 选中行
             self.ui.tableWidget_5.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
+            # 设置表格属性
+            for index in range(self.ui.tableWidget_5.columnCount()):
+                headItem = self.ui.tableWidget_5.horizontalHeaderItem(index)
 
+                headItem.setFont(QFont("song", 10, QFont.Bold))
+                headItem.setForeground(QBrush(Qt.darkBlue))
+                # headItem.setBackgroundColor(QColor(0, 60, 10))# 不能设置颜色，原因未知
+                headItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+
+            self.ui.tableWidget_5.verticalHeader().hide()
             data = QTableWidgetItem(str(rule.nightbegintime))
             # 转换后可插入表格
             self.ui.tableWidget_5.setItem(0, 0, data)
+            self.ui.tableWidget_5.item(0, 0).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             data = QTableWidgetItem(str(rule.nightendtime))
             self.ui.tableWidget_5.setItem(0, 1, data)
+            self.ui.tableWidget_5.item(0, 1).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             data = QTableWidgetItem(str(rule.nightprice))
             self.ui.tableWidget_5.setItem(0, 2, data)
+            self.ui.tableWidget_5.item(0, 2).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             self.ui.tableWidget_5.setCellWidget(0, 3, self.buttonForRow3(rule))
 
     def dayTimeFee(self):
@@ -110,17 +134,29 @@ class SeatManage(QWidget):
             col = 4
             self.ui.tableWidget.setRowCount(row)
             self.ui.tableWidget.setColumnCount(col + 1)  # 加1，开辟一列放操作按钮
-            self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
-            self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
+            self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectColumns)  # 选中行
+            self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers) # 将单元格设为不可更改类型
+            for index in range(self.ui.tableWidget.columnCount()):
+                headItem = self.ui.tableWidget.horizontalHeaderItem(index)
 
+                headItem.setFont(QFont("song", 10, QFont.Bold))
+                headItem.setForeground(QBrush(Qt.darkBlue))
+                # headItem.setBackgroundColor(QColor(0, 60, 10))# 不能设置颜色，原因未知
+                headItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+            self.ui.tableWidget.setColumnWidth(3, 120)# 加宽显示时间
+            self.ui.tableWidget.verticalHeader().hide()
             data = QTableWidgetItem(str(rule.daybegintime))
             self.ui.tableWidget.setItem(0, 0, data)
+            self.ui.tableWidget.item(0, 0).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             data = QTableWidgetItem(str(rule.dayendtime))
             self.ui.tableWidget.setItem(0, 1, data)
+            self.ui.tableWidget.item(0, 1).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             data = QTableWidgetItem(str(rule.dayprice))
             self.ui.tableWidget.setItem(0, 2, data)
+            self.ui.tableWidget.item(0, 2).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             data = QTableWidgetItem(str(rule.firsthourprice))
             self.ui.tableWidget.setItem(0, 3, data)
+            self.ui.tableWidget.item(0, 3).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             self.ui.tableWidget.setCellWidget(0, 4, self.button_updatedayrule(rule))
 
     def buttonForRow3(self, rule):
@@ -244,7 +280,7 @@ class SeatManage(QWidget):
     # 删除车位信息  先根据id删除数据，然后查找所有刷新展示页面 里面的数据库需要规范化
     def DB_delete(self, id, findtype):
         pcontrol = ParkPlaceController()
-
+        self.ui.tableWidget_4.show()
         if id != '':
             try:
                 rs1 = pcontrol.deleteparkplacebyid(id)
@@ -265,6 +301,13 @@ class SeatManage(QWidget):
                     self.ui.tableWidget_4.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
                     self.ui.tableWidget_4.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
 
+                    for index in range(self.ui.tableWidget_4.columnCount()):
+                        headItem = self.ui.tableWidget_4.horizontalHeaderItem(index)
+
+                        headItem.setFont(QFont("song", 10, QFont.Bold))
+                        headItem.setForeground(QBrush(Qt.darkMagenta))
+                        # headItem.setBackgroundColor(QColor(0, 60, 10))# 不能设置颜色，原因未知
+                        headItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
                     for i in range(row):
                         for j in range(len(col)):
                             parkplace = list[i]
@@ -310,6 +353,7 @@ class SeatManage(QWidget):
         self.ui.tableWidget_2.setColumnCount(2)  # 加1，开辟一列放操作按钮
         self.ui.tableWidget_2.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
         self.ui.tableWidget_2.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
+        # self.ui.tableWidget_2.verticalHeader().hide()
         # 将查询到的数据显示在表格中
         data = QTableWidgetItem(str(innercount))  # 转换后可插入表格
         self.ui.tableWidget_2.setItem(0, 0, data)
@@ -331,7 +375,7 @@ class SeatManage(QWidget):
         # 如果输入框不为空则按车位号进行检索
         category = self.ui.comboBox.currentText()
         input = self.ui.lineEdit_4.text()
-
+        self.ui.tableWidget_4.show()
         list = []
         pcontrol = ParkPlaceController()
         if input != '':
@@ -369,7 +413,15 @@ class SeatManage(QWidget):
         self.ui.tableWidget_4.setColumnCount(len(col) + 1)  # 加1，开辟一列放操作按钮
         self.ui.tableWidget_4.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
         self.ui.tableWidget_4.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
+        self.ui.tableWidget_4.verticalHeader().hide()
+        self.ui.tableWidget_4.setColumnWidth(1, 130)
 
+        for index in range(self.ui.tableWidget_4.columnCount()):
+            headItem = self.ui.tableWidget_4.horizontalHeaderItem(index)
+            headItem.setFont(QFont("song", 10, QFont.Bold))
+            headItem.setForeground(QBrush(Qt.darkMagenta))
+            # headItem.setBackgroundColor(QColor(0, 60, 10))# 不能设置颜色，原因未知
+            headItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
         for i in range(row):
             for j in range(len(col)):
                 parkplace = list[i]
@@ -384,6 +436,7 @@ class SeatManage(QWidget):
                     temp_data = parkplace.__getattribute__(col[j])  # 临时记录，不能直接插入表格
                 data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
                 self.ui.tableWidget_4.setItem(i, j, data)
+                self.ui.tableWidget_4.item(i, j).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
                 # 数据库因为从0开始计数，所以列数减一
                 if j == len(col) - 1:
                     # print(rows[i][0])
@@ -410,6 +463,13 @@ class SeatManage(QWidget):
             self.ui.tableWidget_3.setColumnCount(len(col) + 1)  # 加1，开辟一列放操作按钮
             self.ui.tableWidget_3.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
             self.ui.tableWidget_3.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
+            # self.ui.tableWidget_3.verticalHeader().hide()
+            # for index in range(self.ui.tableWidget_3.columnCount()):
+            #     headItem = self.ui.tableWidget_3.horizontalHeaderItem(index)
+            #     headItem.setFont(QFont("song", 10, QFont.Bold))
+            #     headItem.setForeground(QBrush(Qt.darkMagenta))
+            #     # headItem.setBackgroundColor(QColor(0, 60, 10))# 不能设置颜色，原因未知
+            #     headItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             # 将查询到的数据显示在表格中
             for i in range(row):
                 for j in range(len(col)):
@@ -438,6 +498,7 @@ class SeatManage(QWidget):
                         temp_data = parkplace.__getattribute__(col[j])  # 临时记录，不能直接插入表格
                     data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
                     self.ui.tableWidget_3.setItem(i, j, data)
+                    self.ui.tableWidget_3.item(i, j).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
                     if j == len(col) - 1:
                         # print(rows[i][0])
                         # 传入id rows[i][0]
@@ -469,6 +530,7 @@ class SeatManage(QWidget):
                 self.ui.tableWidget_3.setColumnCount(len(col) + 1)  # 加1，开辟一列放操作按钮
                 self.ui.tableWidget_3.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
                 self.ui.tableWidget_3.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
+
                 # 将查询到的数据显示在表格中
             for i in range(row):
                 for j in range(len(col)):
@@ -497,6 +559,7 @@ class SeatManage(QWidget):
                         temp_data = parkplace.__getattribute__(col[j])  # 临时记录，不能直接插入表格
                     data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
                     self.ui.tableWidget_3.setItem(i, j, data)
+                    self.ui.tableWidget_3.item(i, j).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
                     if j == len(col) - 1:
                         # print(rows[i][0])
                         # 传入id rows[i][0]
@@ -530,6 +593,7 @@ class SeatManage(QWidget):
                 self.ui.tableWidget_3.setColumnCount(len(col) + 1)  # 加1，开辟一列放操作按钮
                 self.ui.tableWidget_3.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
                 self.ui.tableWidget_3.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
+
                 # 将查询到的数据显示在表格中
             for i in range(row):
                 for j in range(len(col)):
@@ -558,6 +622,7 @@ class SeatManage(QWidget):
                         temp_data = parkplace.__getattribute__(col[j])  # 临时记录，不能直接插入表格
                     data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
                     self.ui.tableWidget_3.setItem(i, j, data)
+                    self.ui.tableWidget_3.item(i, j).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
                     if j == len(col) - 1:
                         # print(rows[i][0])
                         # 传入id rows[i][0]
