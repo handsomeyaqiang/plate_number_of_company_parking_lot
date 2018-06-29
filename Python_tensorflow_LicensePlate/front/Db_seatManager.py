@@ -349,6 +349,9 @@ class SeatManage(QWidget):
         pcontrol = ParkPlaceController()
         innercount = pcontrol.getinuse_innerparlplacecount().data
         tempcount = pcontrol.getinuse_tempparkplacecount().data
+        outemptycount = pcontrol.getempty_tempparkplacecount().data
+        innerempptycount = pcontrol.getempty_innerparkplacecount().data
+
         self.ui.tableWidget_2.setRowCount(2)  # 控件的名字保持一致，切莫想当然
         self.ui.tableWidget_2.setColumnCount(2)  # 加1，开辟一列放操作按钮
         self.ui.tableWidget_2.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
@@ -359,7 +362,10 @@ class SeatManage(QWidget):
         self.ui.tableWidget_2.setItem(0, 0, data)
         data = QTableWidgetItem(str(tempcount))  # 转换后可插入表格
         self.ui.tableWidget_2.setItem(0, 1, data)
-
+        data = QTableWidgetItem(str(innerempptycount))  # 转换后可插入表格
+        self.ui.tableWidget_2.setItem(1, 0, data)
+        data = QTableWidgetItem(str(outemptycount))  # 转换后可插入表格
+        self.ui.tableWidget_2.setItem(1, 1, data)
     # 车位操作， 查看车位的状态信息
     def operateSeat(self):
         self.ui.groupBox_2.show()

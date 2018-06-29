@@ -38,6 +38,10 @@ class CarRecord(QWidget):
             #按输入的车牌查找记录实现
             sc = RecordController()
             result = sc.findRecordByPid(text)
+            if len(result.data) == 0:
+                OK = QMessageBox.information(self, ("提示："), ("""未查询到记录！"""))
+                self.ui.tableWidget.clear()
+                return
             if result.status == 200:
                 row = len(result.data)
                 col = ["platenumber", "intime", "outtime", "vehicletype"]
@@ -68,6 +72,10 @@ class CarRecord(QWidget):
             #按进入时间查找车辆记录实现
             sc = RecordController()
             result = sc.findRecordByIntime(text)
+            if len(result.data) == 0:
+                OK = QMessageBox.information(self, ("提示："), ("""未查询到记录！"""))
+                self.ui.tableWidget.clear()
+                return
             if result.status == 200:
                 row = len(result.data)
                 col = ["platenumber", "intime", "outtime", "vehicletype"]
@@ -99,6 +107,10 @@ class CarRecord(QWidget):
             #按离开时间查找车辆记录的实现
             sc = RecordController()
             result = sc.findRecordByOuttime(text)
+            if len(result.data) == 0:
+                OK = QMessageBox.information(self, ("提示："), ("""未查询到记录！"""))
+                self.ui.tableWidget.clear()
+                return
             if result.status == 200:
                 row = len(result.data)
                 col = ["platenumber", "intime", "outtime", "vehicletype"]
@@ -131,6 +143,10 @@ class CarRecord(QWidget):
             #查找内部车辆记录的实现
             sc = RecordController()
             result = sc.findRecordType(0)
+            if len(result.data) == 0:
+                OK = QMessageBox.information(self, ("提示："), ("""未查询到记录！"""))
+                self.ui.tableWidget.clear()
+                return
             if result.status == 200:
                 row = len(result.data)
                 col = ["platenumber", "intime", "outtime", "vehicletype"]
@@ -157,6 +173,10 @@ class CarRecord(QWidget):
             #查找外部车辆的记录实现
             sc = RecordController()
             result = sc.findRecordType(1)
+            if len(result.data) == 0:
+                OK = QMessageBox.information(self, ("提示："), ("""未查询到记录！"""))
+                self.ui.tableWidget.clear()
+                return
             if result.status == 200:
                 row = len(result.data)
                 col = ["platenumber", "intime", "outtime", "vehicletype"]
