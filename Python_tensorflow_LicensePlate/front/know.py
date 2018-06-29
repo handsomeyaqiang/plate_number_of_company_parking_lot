@@ -123,7 +123,15 @@ class Know_Ui(QWidget):
             for i in range(len(col)):
                 recongiseResult = result.data
                 if i == 2:
-                    temp_data = formattime.calc_time(recongiseResult.__getattribute__("outtime"), recongiseResult.__getattribute__("intime"))
+                    temp_data = ""
+                elif i == 3:
+                    temp_data = recongiseResult.vehicle_type
+                    if temp_data == 0:
+                        temp_data = "内部车"
+                    else:
+                         temp_data = "外部车"
+                elif i == 5:
+                    temp_data = ""
                 else:
                     temp_data = recongiseResult.__getattribute__(col[i])  # 临时记录，不能直接插入表格
                 data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
@@ -147,6 +155,12 @@ class Know_Ui(QWidget):
                         if i == 2:
                             temp_data = formattime.calc_time(recongiseResult.__getattribute__("outtime"),
                                                              recongiseResult.__getattribute__("intime"))
+                        elif i == 3:
+                            temp_data = recongiseResult.vehicle_type
+                            if temp_data == 0:
+                                temp_data = "内部车"
+                            else:
+                                temp_data = "外部车"
                         else:
                             temp_data = recongiseResult.__getattribute__(col[i])  # 临时记录，不能直接插入表格
                         data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
@@ -159,7 +173,7 @@ class Know_Ui(QWidget):
                 print("缴费取消")
         else:
             # 识别失败
-            OK = QMessageBox.information(self, ("警告"), ("""识别异常"""))
+            OK = QMessageBox.information(self, ("警告"), (str(result.msg)))
             return
 
 
