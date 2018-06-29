@@ -101,6 +101,17 @@ class Finance(QtWidgets.QMainWindow):
         timer.timeout.connect(self.showtime)
         timer.start()
 
+        for index in range(self.ui.tableWidget.columnCount()):
+            headItem = self.ui.tableWidget.horizontalHeaderItem(index)
+
+            headItem.setFont(QFont("song", 14, QFont.Bold))
+            headItem.setForeground(QBrush(Qt.darkMagenta))
+            # headItem.setBackgroundColor(QColor(0, 60, 10))# 不能设置颜色，原因未知
+            headItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+        self.ui.tableWidget.setColumnWidth(1, 250)
+        self.ui.tableWidget.setColumnWidth(2, 150)
+        self.ui.tableWidget.setColumnWidth(0, 149)
+
         # time = self.ui.dateTimeEdit.dateTime()
         self.ui.pushButton.clicked.connect(self.finance)
         self.ui.pushButton_4.clicked.connect(self.finance)  # 折线统计图显示
@@ -167,19 +178,22 @@ class Finance(QtWidgets.QMainWindow):
             tparkid, tchargetime, tmoney = fin
             parkid = QTableWidgetItem(str(tparkid))
             self.ui.tableWidget.setItem(i, 0, parkid)
+            self.ui.tableWidget.item(i, 0).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             chargetime = QTableWidgetItem(str(tchargetime))
             self.ui.tableWidget.setItem(i, 1, chargetime)
+            self.ui.tableWidget.item(i, 1).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             money = QTableWidgetItem(str(tmoney))
             self.ui.tableWidget.setItem(i, 2, money)
+            self.ui.tableWidget.item(i, 2).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             i = i+1
-        self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectColumns)  # 选中行
+        self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
         self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
         # table字体等布局
-        for index in range(self.ui.tableWidget.columnCount()):
-            headItem = self.ui.tableWidget.horizontalHeaderItem(index)
-            headItem.setFont(QFont("song", 10, QFont.Bold))
-            headItem.setForeground(QBrush(Qt.darkBlue))
-            headItem.setTextAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+        # for index in range(self.ui.tableWidget.columnCount()):
+        #     headItem = self.ui.tableWidget.horizontalHeaderItem(index)
+        #     headItem.setFont(QFont("song", 10, QFont.Bold))
+        #     headItem.setForeground(QBrush(Qt.darkBlue))
+        #     headItem.setTextAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
     # 查询思路：在finance获得界面输入，判断搜索的类型， 由类型判断调用Figure_Canvas()里的哪一个构图类型day(),year(),
     # month()，因为按天和按年的坐标轴不同,同时输入的数据传入 Figure_Canvas()中的方法函数中，根据这个查询数据库中数据，画图
