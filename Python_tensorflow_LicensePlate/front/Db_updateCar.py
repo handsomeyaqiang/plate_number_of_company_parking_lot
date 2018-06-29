@@ -27,10 +27,11 @@ class Update_Ui(QtWidgets.QDialog):
         self.ui.pushButton.setIcon(QIcon("sure.png"))
         self.ui.clear_pushButton.setIcon(QIcon("cancle.png"))
         # 清除
-        self.ui.car_lineEdit.setClearButtonEnabled(True)
+        # self.ui.car_lineEdit.setClearButtonEnabled(True)
         self.ui.Chejia_lineEdit.setClearButtonEnabled(True)
         self.ui.num_lineEdit.setClearButtonEnabled(True)
         self.ui.name_lineEdit.setClearButtonEnabled(True)
+        self.ui.car_lineEdit.setReadOnly(True)
 
         # 槽函数
         self.ui.pushButton.clicked.connect(self.DB_insert)
@@ -86,6 +87,6 @@ class Update_Ui(QtWidgets.QDialog):
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
-    my = Update_Ui()
+    my = Update_Ui(id)
     my.show()
     sys.exit(app.exec_())
