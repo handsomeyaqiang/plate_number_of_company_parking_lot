@@ -22,7 +22,6 @@ class RecongiseDaoImpl(RecongiseDao):
         self.plate_num += dv.predict()
 
     def recongise(self):
-        print("hello")
         p = threading.Thread(target=self.province, name='LoopThread')
         d = threading.Thread(target=self.digit, name="LoopThread1")
         l = threading.Thread(target=self.letter, name="LoopThread2")

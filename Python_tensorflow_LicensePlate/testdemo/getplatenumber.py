@@ -14,18 +14,18 @@ class getplate:
         # 高斯平滑
         gaussian = cv2.GaussianBlur(gray, (3, 3), 0, 0, cv2.BORDER_DEFAULT)
         #cv2.imshow('gaussian', gaussian)
-        #cv2.waitKey(0)
+        cv2.waitKey(0)
         # 中值滤波
         median = cv2.medianBlur(gaussian, 5)
 
         #cv2.imshow('median', median)
-        #cv2.waitKey(0)
+        cv2.waitKey(0)
 
         # Sobel算子，X方向求梯度
         sobel = cv2.Sobel(median, cv2.CV_8U, 1, 0, ksize=3)
 
         #cv2.imshow('sobel', sobel)
-        #cv2.waitKey(0)
+        cv2.waitKey(0)
         # 二值化
         ret, binary = cv2.threshold(sobel, 170, 255, cv2.THRESH_BINARY)
         # 膨胀和腐蚀操作的核函数
@@ -38,7 +38,7 @@ class getplate:
         # 再次膨胀，让轮廓明显一些
         dilation2 = cv2.dilate(erosion, element2, iterations=3)
         #cv2.imshow('dilation2', dilation2)
-        #cv2.waitKey(0)
+        cv2.waitKey(0)
         return dilation2
 
 
@@ -117,7 +117,7 @@ class getplate:
 
         # 带轮廓的图片
         cv2.imwrite(self.DIR_MIDEL_IMAGES+'/contours.png', img)
-        #cv2.waitKey(0)
+        cv2.waitKey(0)
         cv2.destroyAllWindows()
 
     def get_plateNum(self):

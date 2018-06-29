@@ -5,8 +5,8 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-from Python_tensorflow_LicensePlate.train.plateutils import getplatenumber
-from Python_tensorflow_LicensePlate.train import plateutils
+from Python_tensorflow_LicensePlate.train.plateutils.getplatenumber import getplate
+from Python_tensorflow_LicensePlate.train.plateutils.platenumbersplit import splitPlate
 from Python_tensorflow_LicensePlate.service.RecongiseService import RecongiseService
 from Python_tensorflow_LicensePlate.front.KnowTest import Ui_know
 from Python_tensorflow_LicensePlate.utils import formattime
@@ -99,9 +99,11 @@ class Know_Ui(QWidget):
         img = cv2.imread(imgName)
         cv2.imwrite(self.DIR_RECEIVED_IMAGES + "/plate.jpg", img)
         # 调用车牌获取
-        getplatenumber.get_plateNum()
+        g = getplate()
+        g.get_plateNum()
         # 调用车牌字符切割
-        plateutils.getplatenumber
+        s = splitPlate()
+        s.split_plate()
         # 调用识别业务
         recongise = RecongiseService()
         return recongise.judg_recongise()
