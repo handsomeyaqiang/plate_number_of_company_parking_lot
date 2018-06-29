@@ -214,7 +214,7 @@ class FinancialService(object):
             # print(rshour)
             #遍历 将没有出现在rshour 中的添加进dhrs
             for hour in hours:
-                if hours in rshour:
+                if hour in rshour:
                     pass
                 else:
                     dhrs.append({'totalmoney':0,'dhdatetime':hour})

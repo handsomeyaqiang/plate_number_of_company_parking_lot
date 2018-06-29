@@ -211,30 +211,30 @@ def train():
         saver.save(sess, "%smodel.ckpt" % (SAVER_DIR))
 
 def predict():
-    saver = tf.train.import_meta_graph("%smodel.ckpt.meta" % (SAVER_DIR))
-    with tf.Session() as sess:
+    sess1 = tf.Session()
+    with sess1.as_default():
+        saver = tf.train.import_meta_graph("%smodel.ckpt.meta" % (SAVER_DIR))
         model_file = tf.train.latest_checkpoint(SAVER_DIR)
-        saver.restore(sess, model_file)
-
+        saver.restore(sess1, model_file)
         # 第一个卷积层
-        W_conv1 = sess.graph.get_tensor_by_name("W_conv1:0")
-        b_conv1 = sess.graph.get_tensor_by_name("b_conv1:0")
+        W_conv1 = sess1.graph.get_tensor_by_name("W_conv1:0")
+        b_conv1 = sess1.graph.get_tensor_by_name("b_conv1:0")
         conv_strides = [1, 1, 1, 1]
         kernel_size = [1, 2, 2, 1]
         pool_strides = [1, 2, 2, 1]
         L1_pool = conv_layer(x_image, W_conv1, b_conv1, conv_strides, kernel_size, pool_strides, padding='SAME')
 
         # 第二个卷积层
-        W_conv2 = sess.graph.get_tensor_by_name("W_conv2:0")
-        b_conv2 = sess.graph.get_tensor_by_name("b_conv2:0")
+        W_conv2 = sess1.graph.get_tensor_by_name("W_conv2:0")
+        b_conv2 = sess1.graph.get_tensor_by_name("b_conv2:0")
         conv_strides = [1, 1, 1, 1]
         kernel_size = [1, 1, 1, 1]
         pool_strides = [1, 1, 1, 1]
         L2_pool = conv_layer(L1_pool, W_conv2, b_conv2, conv_strides, kernel_size, pool_strides, padding='SAME')
 
         # 全连接层
-        W_fc1 = sess.graph.get_tensor_by_name("W_fc1:0")
-        b_fc1 = sess.graph.get_tensor_by_name("b_fc1:0")
+        W_fc1 = sess1.graph.get_tensor_by_name("W_fc1:0")
+        b_fc1 = sess1.graph.get_tensor_by_name("b_fc1:0")
         h_pool2_flat = tf.reshape(L2_pool, [-1, 16 * 20 * 32])
         h_fc1 = full_connect(h_pool2_flat, W_fc1, b_fc1)
 
@@ -244,13 +244,13 @@ def predict():
         h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob)
 
         # readout层
-        W_fc2 = sess.graph.get_tensor_by_name("W_fc2:0")
-        b_fc2 = sess.graph.get_tensor_by_name("b_fc2:0")
+        W_fc2 = sess1.graph.get_tensor_by_name("W_fc2:0")
+        b_fc2 = sess1.graph.get_tensor_by_name("b_fc2:0")
 
         # 定义优化器和训练op
         conv = tf.nn.softmax(tf.matmul(h_fc1_drop, W_fc2) + b_fc2)
         license_num = ""
-        for n in range(1, 2):
+        for n in range(2, 3):
             path = PREDICT_DIR + "%s.jpg" % n
             img = Image.open(path)
             width = img.size[0]
@@ -264,7 +264,7 @@ def predict():
                     else:
                         img_data[0][w + h * width] = 0
 
-            result = sess.run(conv, feed_dict={x: np.array(img_data), keep_prob: 1.0})
+            result = sess1.run(conv, feed_dict={x: np.array(img_data), keep_prob: 1.0})
 
             max1 = 0
             max2 = 0
@@ -294,6 +294,8 @@ def predict():
             max3 * 100))
 
         print("城市代号是: 【%s】" % license_num)
+        sess1.close()
+    return license_num
 
 if __name__ == '__main__':
-    train()
+    predict()

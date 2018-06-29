@@ -203,6 +203,10 @@ class carManage(QtWidgets.QMainWindow):
             self.flag = 3
             sc = VehicleController()
             result = sc.findVehicleByid(text)
+            if len(result.data)==0:
+                OK = QMessageBox.information(self, ("提示："), ("""未查询到记录！"""))
+                self.ui.tableWidget.clear()
+                return
             if result.status == 200:
                 row = len(result.data)
                 col = ["SID", "PlateID", "owner", "vehicle_identity"]
@@ -231,6 +235,10 @@ class carManage(QtWidgets.QMainWindow):
             self.flag = 3
             sc = VehicleController()
             result = sc.findVehicleByplatenumvague(text)
+            if len(result.data)==0:
+                OK = QMessageBox.information(self, ("提示："), ("""未查询到记录！"""))
+                self.ui.tableWidget.clear()
+                return
             if result.status == 200:
                 row = len(result.data)
                 col = ["SID", "PlateID", "owner", "vehicle_identity"]
@@ -259,6 +267,10 @@ class carManage(QtWidgets.QMainWindow):
             self.flag = 3
             sc = VehicleController()
             result = sc.findVehicleByowner(text)
+            if len(result.data)==0:
+                OK = QMessageBox.information(self, ("提示："), ("""未查询到记录！"""))
+                self.ui.tableWidget.clear()
+                return
             if result.status == 200:
                 row = len(result.data)
                 col = ["SID", "PlateID", "owner", "vehicle_identity"]
@@ -287,6 +299,10 @@ class carManage(QtWidgets.QMainWindow):
             self.flag = 3
             sc = VehicleController()
             result = sc.findVehicleByvehicleid(text)
+            if len(result.data)==0:
+                OK = QMessageBox.information(self, ("提示："), ("""未查询到记录！"""))
+                self.ui.tableWidget.clear()
+                return
             if result.status == 200:
                 row = len(result.data)
                 col = ["SID", "PlateID", "owner", "vehicle_identity"]

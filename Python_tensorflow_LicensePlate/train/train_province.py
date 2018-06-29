@@ -21,8 +21,6 @@ TRAIN_DIR = "../resources/train-images/training-set/chinese-characters/"
 VALIDATION_DIR = "../resources/train-images/validation-set/chinese-characters/"
 PREDICT_DIR = "../resources/images/splitplateimages/"
 
-#PROVINCES = ("京", "闽", "粤", "苏", "沪", "浙")
-
 province_labels = ['川', '鄂', '赣', '甘', '贵', '桂', '黑', '沪', '冀', '津', '京', '吉', '辽',
                    '鲁', '蒙', '闽', '宁', '青', '琼', '陕', '苏', '晋', '皖', '湘', '新', '豫',
                    '渝', '粤', '云', '藏', '浙']
@@ -220,86 +218,87 @@ def train():
         saver_path = saver.save(sess, "%smodel.ckpt" % (SAVER_DIR))
 
 def predict():
+    sess3 = tf.Session()
     saver = tf.train.import_meta_graph("%smodel.ckpt.meta" % (SAVER_DIR))
-    with tf.Session() as sess:
-        model_file = tf.train.latest_checkpoint(SAVER_DIR)
-        saver.restore(sess, model_file)
+    model_file = tf.train.latest_checkpoint(SAVER_DIR)
+    saver.restore(sess3, model_file)
+    # 第一个卷积层
+    W_conv1 = sess3.graph.get_tensor_by_name("W_conv1:0")
+    b_conv1 = sess3.graph.get_tensor_by_name("b_conv1:0")
+    conv_strides = [1, 1, 1, 1]
+    kernel_size = [1, 2, 2, 1]
+    pool_strides = [1, 2, 2, 1]
+    L1_pool = conv_layer(x_image, W_conv1, b_conv1, conv_strides, kernel_size, pool_strides, padding='SAME')
 
-        # 第一个卷积层
-        W_conv1 = sess.graph.get_tensor_by_name("W_conv1:0")
-        b_conv1 = sess.graph.get_tensor_by_name("b_conv1:0")
-        conv_strides = [1, 1, 1, 1]
-        kernel_size = [1, 2, 2, 1]
-        pool_strides = [1, 2, 2, 1]
-        L1_pool = conv_layer(x_image, W_conv1, b_conv1, conv_strides, kernel_size, pool_strides, padding='SAME')
+    # 第二个卷积层
+    W_conv2 = sess3.graph.get_tensor_by_name("W_conv2:0")
+    b_conv2 = sess3.graph.get_tensor_by_name("b_conv2:0")
+    conv_strides = [1, 1, 1, 1]
+    kernel_size = [1, 1, 1, 1]
+    pool_strides = [1, 1, 1, 1]
+    L2_pool = conv_layer(L1_pool, W_conv2, b_conv2, conv_strides, kernel_size, pool_strides, padding='SAME')
 
-        # 第二个卷积层
-        W_conv2 = sess.graph.get_tensor_by_name("W_conv2:0")
-        b_conv2 = sess.graph.get_tensor_by_name("b_conv2:0")
-        conv_strides = [1, 1, 1, 1]
-        kernel_size = [1, 1, 1, 1]
-        pool_strides = [1, 1, 1, 1]
-        L2_pool = conv_layer(L1_pool, W_conv2, b_conv2, conv_strides, kernel_size, pool_strides, padding='SAME')
+    # 全连接层
+    W_fc1 = sess3.graph.get_tensor_by_name("W_fc1:0")
+    b_fc1 = sess3.graph.get_tensor_by_name("b_fc1:0")
+    h_pool2_flat = tf.reshape(L2_pool, [-1, 16 * 20 * 32])
+    h_fc1 = full_connect(h_pool2_flat, W_fc1, b_fc1)
 
-        # 全连接层
-        W_fc1 = sess.graph.get_tensor_by_name("W_fc1:0")
-        b_fc1 = sess.graph.get_tensor_by_name("b_fc1:0")
-        h_pool2_flat = tf.reshape(L2_pool, [-1, 16 * 20 * 32])
-        h_fc1 = full_connect(h_pool2_flat, W_fc1, b_fc1)
+    # dropout
+    keep_prob = tf.placeholder(tf.float32)
 
-        # dropout
-        keep_prob = tf.placeholder(tf.float32)
+    h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob)
 
-        h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob)
+    # readout层
+    W_fc2 = sess3.graph.get_tensor_by_name("W_fc2:0")
+    b_fc2 = sess3.graph.get_tensor_by_name("b_fc2:0")
 
-        # readout层
-        W_fc2 = sess.graph.get_tensor_by_name("W_fc2:0")
-        b_fc2 = sess.graph.get_tensor_by_name("b_fc2:0")
+    # 定义优化器和训练op
+    conv = tf.nn.softmax(tf.matmul(h_fc1_drop, W_fc2) + b_fc2)
+    nProvinceIndex = 0
+    for n in range(1, 2):
+        path = PREDICT_DIR + "%s.jpg" % n
+        img = Image.open(path)
+        width = img.size[0]
+        height = img.size[1]
 
-        # 定义优化器和训练op
-        conv = tf.nn.softmax(tf.matmul(h_fc1_drop, W_fc2) + b_fc2)
-        nProvinceIndex = 0
-        for n in range(1, 2):
-            path = PREDICT_DIR + "%s.jpg" % n
-            img = Image.open(path)
-            width = img.size[0]
-            height = img.size[1]
+        img_data = [[0] * SIZE for i in range(1)]
+        for h in range(0, height):
+            for w in range(0, width):
+                if img.getpixel((w, h)) < 190:
+                    img_data[0][w + h * width] = 1
+                else:
+                    img_data[0][w + h * width] = 0
 
-            img_data = [[0] * SIZE for i in range(1)]
-            for h in range(0, height):
-                for w in range(0, width):
-                    if img.getpixel((w, h)) < 190:
-                        img_data[0][w + h * width] = 1
-                    else:
-                        img_data[0][w + h * width] = 0
+        result = sess3.run(conv, feed_dict={x: np.array(img_data), keep_prob: 1.0})
+        max1 = 0
+        max2 = 0
+        max3 = 0
+        max1_index = 0
+        max2_index = 0
+        max3_index = 0
+        # 获取前三个概率最大的省份及其索引
+        for j in range(provice_NUM_CLASSES):
+            if result[0][j] > max1:
+                max1 = result[0][j]
+                max1_index = j
+                continue
+            if (result[0][j] > max2) and (result[0][j] <= max1):
+                max2 = result[0][j]
+                max2_index = j
+                continue
+            if (result[0][j] > max3) and (result[0][j] <= max2):
+                max3 = result[0][j]
+                max3_index = j
+                continue
 
-            result = sess.run(conv, feed_dict={x: np.array(img_data), keep_prob: 1.0})
-            max1 = 0
-            max2 = 0
-            max3 = 0
-            max1_index = 0
-            max2_index = 0
-            max3_index = 0
-            # 获取前三个概率最大的省份及其索引
-            for j in range(provice_NUM_CLASSES):
-                if result[0][j] > max1:
-                    max1 = result[0][j]
-                    max1_index = j
-                    continue
-                if (result[0][j] > max2) and (result[0][j] <= max1):
-                    max2 = result[0][j]
-                    max2_index = j
-                    continue
-                if (result[0][j] > max3) and (result[0][j] <= max2):
-                    max3 = result[0][j]
-                    max3_index = j
-                    continue
+        nProvinceIndex = max1_index
+        print("概率：  [%s %0.2f%%]    [%s %0.2f%%]    [%s %0.2f%%]" % (
+            province_labels[max1_index], max1 * 100, province_labels[max2_index], max2 * 100, province_labels[max3_index], max3 * 100))
 
-            nProvinceIndex = max1_index
-            print("概率：  [%s %0.2f%%]    [%s %0.2f%%]    [%s %0.2f%%]" % (
-                province_labels[max1_index], max1 * 100, province_labels[max2_index], max2 * 100, province_labels[max3_index], max3 * 100))
-
-        print("省份简称是: %s" % province_labels[nProvinceIndex])
+    print("省份简称是: %s" % province_labels[nProvinceIndex])
+    sess3.close()
+    return province_labels[nProvinceIndex]
 
 if __name__ == '__main__':
-    train()
+    predict()
