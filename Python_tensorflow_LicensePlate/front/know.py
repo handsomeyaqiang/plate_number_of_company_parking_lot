@@ -1,9 +1,10 @@
 import cv2
 from Python_tensorflow_LicensePlate.front.hand_Register import *
 from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+
 from Python_tensorflow_LicensePlate.train.plateutils import getplatenumber
 from Python_tensorflow_LicensePlate.train import plateutils
 from Python_tensorflow_LicensePlate.service.RecongiseService import RecongiseService

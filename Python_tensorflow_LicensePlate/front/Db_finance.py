@@ -82,7 +82,7 @@ class Finance(QtWidgets.QMainWindow):
         self.setFixedSize(self.width(), self.height())  # 实现禁止窗口最大化和禁止窗口拉伸
 
         palette = QPalette()
-        icon = QPixmap('f1.gif').scaled(850, 550)
+        icon = QPixmap('cw.jpg').scaled(850, 550)
         palette.setBrush(self.backgroundRole(), QBrush(icon))
         self.setPalette(palette)
         self.ui.tableWidget.verticalHeader().hide()  # 水平表头隐藏
@@ -100,7 +100,8 @@ class Finance(QtWidgets.QMainWindow):
         timer = QtCore.QTimer(self)
         timer.timeout.connect(self.showtime)
         timer.start()
-
+        self.ui.comboBox.setFixedWidth(80)
+        self.ui.label_3.setFixedWidth(778)
         for index in range(self.ui.tableWidget.columnCount()):
             headItem = self.ui.tableWidget.horizontalHeaderItem(index)
 
@@ -114,8 +115,8 @@ class Finance(QtWidgets.QMainWindow):
 
         # time = self.ui.dateTimeEdit.dateTime()
         self.ui.pushButton.clicked.connect(self.finance)
-        self.ui.pushButton_4.clicked.connect(self.finance)  # 折线统计图显示
-        self.ui.pushButton_3.clicked.connect(self.table)  # table显示财务
+         # 折线统计图显示
+         # table显示财务
 
     def mousePressEvent(self, QMouseEvent):
         self.ui.label_3.hide()
