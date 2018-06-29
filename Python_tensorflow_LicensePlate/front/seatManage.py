@@ -206,6 +206,9 @@ class Ui_seat(object):
         self.label_9 = QtWidgets.QLabel(seat)
         self.label_9.setGeometry(QtCore.QRect(230, 110, 111, 16))
         self.label_9.setObjectName("label_9")
+        self.label_10 = QtWidgets.QLabel(seat)
+        self.label_10.setGeometry(QtCore.QRect(230, 110, 81, 20))
+        self.label_10.setObjectName("label_10")
 
         self.retranslateUi(seat)
         QtCore.QMetaObject.connectSlotsByName(seat)
@@ -278,4 +281,5 @@ class Ui_seat(object):
         item.setText(_translate("seat", "操作"))
         self.label_8.setText(_translate("seat", "白天收费规则"))
         self.label_9.setText(_translate("seat", "车位锁状态详情"))
+        self.label_10.setText(_translate("seat", "TextLabel"))
 

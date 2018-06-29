@@ -32,6 +32,7 @@ class SeatManage(QWidget):
         self.ui.tableWidget_4.hide()
         self.ui.label_8.hide()# 收费规则标签
         self.ui.label_9.hide() # 车位状态标签
+        self.ui.label_10.hide()
         self.ui.label_8.setFixedWidth(180)
 
         # 设置lineEdit的删除
@@ -69,12 +70,12 @@ class SeatManage(QWidget):
                                            "QPushButton{border-radius:10px}")
         self.ui.pushButton_9.setStyleSheet("QPushButton{color:black}"
                                            "QPushButton:hover{color:Lime}"
-                                           "QPushButton{background-color:GoldEnrod}"
+                                           "QPushButton{background-color:hotpink}"
                                            "QPushButton{border:2px}"
                                            "QPushButton{border-radius:10px}")
         self.ui.pushButton_10.setStyleSheet("QPushButton{color:black}"
                                            "QPushButton:hover{color:blue}"
-                                           "QPushButton{background-color:Tomato}"
+                                           "QPushButton{background-color:Yellow}"
                                            "QPushButton{border:2px}"
                                            "QPushButton{border-radius:10px}")
         self.ui.label_2.setStyleSheet("QLabel{background:white;}"
@@ -85,6 +86,9 @@ class SeatManage(QWidget):
                                       )
         self.ui.label_9.setStyleSheet(
                                        "QLabel{color:DeepPink;font-size:12px;font-weight:bold;font-family:宋体;}"
+        )
+        self.ui.label_10.setStyleSheet(
+            "QLabel{color:DeepPink;font-size:12px;font-weight:bold;font-family:宋体;}"
         )
         self.ui.pushButton_5.setStyleSheet('text-align: center;'
                                            'width:40;'
@@ -134,6 +138,7 @@ class SeatManage(QWidget):
         self.ui.tableWidget_5.show()
         self.ui.tableWidget.hide()
         self.ui.label_9.hide()
+        self.ui.label_10.hide()
         self.ui.label_8.setText("车位晚上收费规则")
         self.ui.label_8.show()
 
@@ -179,6 +184,7 @@ class SeatManage(QWidget):
         self.ui.groupBox_3.hide()
         self.ui.tableWidget_3.hide()
         self.ui.tableWidget_5.hide()
+        self.ui.label_10.hide()
         self.ui.tableWidget.show()
         rulecontrol = ChargeController()
         result = rulecontrol.showrule()
@@ -400,6 +406,8 @@ class SeatManage(QWidget):
         self.ui.tableWidget.hide()
         self.ui.label_8.hide()
         self.ui.label_9.hide()
+        self.ui.label_10.setText("车位信息")
+        self.ui.label_10.show()
         # 操作数据库 需要规范化
 
         pcontrol = ParkPlaceController()
@@ -432,6 +440,7 @@ class SeatManage(QWidget):
         self.ui.tableWidget.hide()
         self.ui.label_8.hide()
         self.ui.label_9.hide()
+        self.ui.label_10.hide()
 
     # 车位操作的控制逻辑
     def operateSeat2(self):
@@ -518,6 +527,7 @@ class SeatManage(QWidget):
         self.ui.tableWidget_5.hide()
         self.ui.tableWidget.hide()
         self.ui.label_8.hide()
+        self.ui.label_10.hide()
         pcontrol = ParkPlaceController()
         result = pcontrol.showparkplaceinformation()
         if result.status == 200:
