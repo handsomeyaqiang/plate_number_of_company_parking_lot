@@ -2,9 +2,9 @@ import sys
 import cv2
 import numpy as np
 
-DIR_RECEIVED_IMAGES = "../../resources/images/receivedplateimages"
-DIR_MIDEL_IMAGES = "../../resources/images/midledimages"
-DIR_SPLIT_IMAGES = "../../resources/images/splitplateimages"
+DIR_RECEIVED_IMAGES = "../resources/images/receivedplateimages"
+DIR_MIDEL_IMAGES = "../resources/images/midledimages"
+DIR_SPLIT_IMAGES = "../resources/images/splitplateimages"
 
 # 车牌预处理
 def preprocess(gray):

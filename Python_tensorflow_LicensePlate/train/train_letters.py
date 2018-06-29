@@ -11,7 +11,7 @@ import tensorflow as tf
 
 from PIL import Image
 
-class letter:
+class trainLetter:
     def __init__(self):
         self.SIZE = 1280
         self.WIDTH = 32

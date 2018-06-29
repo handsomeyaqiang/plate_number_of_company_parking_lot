@@ -10,7 +10,7 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 from PIL import Image
 
-class digit:
+class trainDigit:
     def __init__(self):
         self.SIZE = 1280
         self.WIDTH = 32

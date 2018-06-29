@@ -11,7 +11,7 @@ import tensorflow as tf
 
 from PIL import Image
 
-class province:
+class trainProvince:
     def __init__(self):
         self.SIZE = 1280
         self.WIDTH = 32

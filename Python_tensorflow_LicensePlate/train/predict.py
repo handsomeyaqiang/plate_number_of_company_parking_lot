@@ -57,7 +57,7 @@ class predict:
 
     def predict_license(self):
         license_num = ""
-        for p in range(1):
+        for p in range(3):
             if p == 0:
                 with tf.Session() as sess:
                     saver = tf.train.import_meta_graph("%smodel.ckpt.meta" % (self.SAVER_DIR_PROVINCE))
