@@ -74,7 +74,6 @@ class Know_Ui(QWidget):
 
     # 视频识别
     def capPicture(self):
-        self.cap = cv2.VideoCapture(0)
         if (self.cap.isOpened()):
             # get a frame
             ret, img = self.cap.read()
@@ -91,7 +90,6 @@ class Know_Ui(QWidget):
 
     # 关闭视频显示
     def closeVideo(self):
-
         self.cap.release()
 
     # 进入识别
