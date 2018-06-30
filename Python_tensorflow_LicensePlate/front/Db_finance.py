@@ -112,11 +112,19 @@ class Finance(QtWidgets.QMainWindow):
         self.ui.tableWidget.setColumnWidth(1, 250)
         self.ui.tableWidget.setColumnWidth(2, 150)
         self.ui.tableWidget.setColumnWidth(0, 149)
-
+        self.ui.pushButton_2.hide()
+        self.ui.pushButton_3.hide()
         # time = self.ui.dateTimeEdit.dateTime()
         self.ui.pushButton.clicked.connect(self.finance)
+        self.ui.pushButton_3.clicked.connect(self.nextPage) # 下一页槽函数
+        self.ui.pushButton_2.clicked.connect(self.lastPage) # 上一页槽函数
          # 折线统计图显示
          # table显示财务
+    # 上一页
+    def lastPage(self):
+    #
+    # # 下一页
+    def nextPage(self):
 
     def mousePressEvent(self, QMouseEvent):
         self.ui.label_3.hide()
@@ -130,6 +138,8 @@ class Finance(QtWidgets.QMainWindow):
         self.ui.label_2.setText("  " + text)
 
     def table(self):
+        self.ui.pushButton_2.show()
+        self.ui.pushButton_3.show()
         self.ui.label_3.hide()
         self.ui.groupBox_3.show()
         self.ui.tableWidget.show()
