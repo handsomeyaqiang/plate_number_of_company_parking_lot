@@ -16,6 +16,7 @@ class Figure_Canvas(
     FigureCanvas):  # 通过继承FigureCanvas类，使得该类既是一个PyQt5的Qwidget，又是一个matplotlib的FigureCanvas，这是连接pyqt5与matplot                                          lib的关键
     # width和height控制画布的大小,画布太小容易出现数据显示不全的情况
     def __init__(self, parent=None, width=5, height=2, dpi=100):
+
         fig = Figure(figsize=(width, height),
                      dpi=100)  # 创建一个Figure，注意：该Figure为matplotlib下的figure，不是matplotlib.pyplot下面的figure
         FigureCanvas.__init__(self, fig)  # 初始化父类
@@ -30,7 +31,8 @@ class Figure_Canvas(
 
         self.axes.set_title("公司停车系统财务走势图")
 
-    # 按天查询
+
+        # 按天查询
     def day(self, year_month_day):
         self.axes.set_xlabel("时间(小时)")
         self.axes.set_ylabel("收入(元)")
@@ -77,6 +79,8 @@ class Finance(QtWidgets.QMainWindow):
         super(Finance, self).__init__()
         self.ui = Ui_finance()
         self.ui.setupUi(self)
+        self.nCurScroller = 0
+        self.pageValue = 5
 
         self.setWindowTitle("财务管理")
         self.setFixedSize(self.width(), self.height())  # 实现禁止窗口最大化和禁止窗口拉伸
@@ -120,12 +124,25 @@ class Finance(QtWidgets.QMainWindow):
         self.ui.pushButton_2.clicked.connect(self.lastPage) # 上一页槽函数
          # 折线统计图显示
          # table显示财务
-    # 上一页
-    def lastPage(self):
-    #
-    # # 下一页
-    def nextPage(self):
 
+    def lastPage(self):
+        max_value = self.ui.tableWidget.verticalScrollBar().maximum()
+        self.nCurScroller = self.ui.tableWidget.verticalScrollBar().value()
+
+        if self.nCurScroller > 0:
+            self.ui.tableWidget.verticalScrollBar().setSliderPosition(self.nCurScroller - self.pageValue)
+        else:
+            self.ui.tableWidget.verticalScrollBar().setSliderPosition(max_value)
+
+
+    #  # 下一页
+    def nextPage(self):
+        max_value = self.ui.tableWidget.verticalScrollBar().maximum()
+        self.nCurScroller = self.ui.tableWidget.verticalScrollBar().value()
+        if self.nCurScroller < max_value:
+            self.ui.tableWidget.verticalScrollBar().setSliderPosition(self.pageValue + self.nCurScroller)
+        else:
+            self.ui.tableWidget.verticalScrollBar().setSliderPosition(0)
     def mousePressEvent(self, QMouseEvent):
         self.ui.label_3.hide()
 

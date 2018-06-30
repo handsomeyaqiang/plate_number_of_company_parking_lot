@@ -34,6 +34,8 @@ class SeatManage(QtWidgets.QDialog):
         self.ui.label_9.hide() # 车位状态标签
         self.ui.label_10.hide()
         self.ui.label_8.setFixedWidth(180)
+        self.nCurScroller = 0
+        self.pageValue = 5  # 这个你的框一面能放下多少条就填几
 
         # 设置lineEdit的删除
 
@@ -148,22 +150,47 @@ class SeatManage(QtWidgets.QDialog):
         self.ui.pushButton_7.clicked.connect(self.addSeat)  # 添加车位
         self.ui.pushButton_9.clicked.connect(self.dayTimeFee)
         self.ui.pushButton_10.clicked.connect(self.nightFee)
-        # self.ui.pushButton_11.clicked.connect(self.lock_lastPage) # 车位锁上一页
-        # self.ui.pushButton_12.clicked.connect(self.lock_nextPage) #  车位锁下一页
-        # self.ui.pushButton_13.clicked.connect(self.seat_lastPage) # 车位操作上一页
-        # self.ui.pushButton_14.clicked.connect(self.seat_nextPage) # 车位操作下一页
-    # # 车位锁上一页
-    # def lock_lastPage(self):
-    #
-    # # 下一页
-    # def lock_nextPage(self):
+        self.ui.pushButton_11.clicked.connect(self.lock_lastPage) # 车位锁上一页
+        self.ui.pushButton_12.clicked.connect(self.lock_nextPage) #  车位锁下一页
+        self.ui.pushButton_13.clicked.connect(self.seat_lastPage) # 车位操作上一页
+        self.ui.pushButton_14.clicked.connect(self.seat_nextPage) # 车位操作下一页
+    # 车位锁上一页
+    def lock_lastPage(self):
+        max_value = self.ui.tableWidget_3.verticalScrollBar().maximum()
+        self.nCurScroller = self.ui.tableWidget_3.verticalScrollBar().value()
+
+        if self.nCurScroller > 0:
+            self.ui.tableWidget_3.verticalScrollBar().setSliderPosition(self.nCurScroller - self.pageValue)
+        else:
+            self.ui.tableWidget_3.verticalScrollBar().setSliderPosition(max_value)
+    # 下一页
+    def lock_nextPage(self):
+        max_value = self.ui.tableWidget_3.verticalScrollBar().maximum()
+        self.nCurScroller = self.ui.tableWidget_3.verticalScrollBar().value()
+        if self.nCurScroller < max_value:
+            self.ui.tableWidget_3.verticalScrollBar().setSliderPosition(self.pageValue + self.nCurScroller)
+        else:
+            self.ui.tableWidget_3.verticalScrollBar().setSliderPosition(0)
 
 
     # 车位操作上一页
-    # def seat_lastPage(self):
+    def seat_lastPage(self):
+        max_value = self.ui.tableWidget_4.verticalScrollBar().maximum()
+        self.nCurScroller = self.ui.tableWidget_4.verticalScrollBar().value()
+
+        if self.nCurScroller > 0:
+            self.ui.tableWidget_4.verticalScrollBar().setSliderPosition(self.nCurScroller - self.pageValue)
+        else:
+            self.ui.tableWidget_4.verticalScrollBar().setSliderPosition(max_value)
     #
     # # 下一页
-    # def seat_nextPage(self):
+    def seat_nextPage(self):
+        max_value = self.ui.tableWidget_4.verticalScrollBar().maximum()
+        self.nCurScroller = self.ui.tableWidget_4.verticalScrollBar().value()
+        if self.nCurScroller < max_value:
+            self.ui.tableWidget_4.verticalScrollBar().setSliderPosition(self.pageValue + self.nCurScroller)
+        else:
+            self.ui.tableWidget_4.verticalScrollBar().setSliderPosition(0)
 
 
 
