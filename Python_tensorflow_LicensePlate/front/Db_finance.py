@@ -175,19 +175,22 @@ class Finance(QtWidgets.QMainWindow):
                     year_month_day = temp_year + '-' + temp_month.zfill(2) + '-' + temp_day.zfill(2)
                 except Exception:
                     QMessageBox.warning(self, '提示', '输入数据有误！')
+                    flag = 0
+
                 else:
                      data = fcontrol.listbyday(year_month_day)
             elif category == '按月':
                 try:
                     temp_year, temp_month= input.split('-')
                     temp_day = '01'
-                    print(temp_year, temp_month, temp_day)
                     datetime.date(int(temp_year), int(temp_month), int(temp_day))
                     year_month = temp_year + '-' + temp_month.zfill(2)
                 except Exception:
+                    flag = 0
                     QMessageBox.warning(self, '提示', '输入数据有误！')
                 else:
                     data = fcontrol.listbymonth(year_month)
+
             elif category == '按年':
                 try:
                     temp_year = input
@@ -196,8 +199,16 @@ class Finance(QtWidgets.QMainWindow):
                     datetime.date(int(temp_year), int(temp_month), int(temp_day))
                 except Exception:
                     QMessageBox.warning(self, '提示', '输入数据有误！')
+                    flag = 0
+
                 else:
                     data = fcontrol.listbyyear(input)
+        if data is None:
+            print(data)
+            QMessageBox.warning(self, '提示', '未查询到数据！')
+            flag = 0
+            return flag
+        print('1213')
         self.ui.tableWidget.setRowCount(len(data))
         self.ui.tableWidget.setColumnCount(3)
         self.ui.tableWidget.setHorizontalHeaderLabels(['车位号', '收费时间', '金额（元）'])  # 设置table的表头信息
@@ -215,7 +226,9 @@ class Finance(QtWidgets.QMainWindow):
             self.ui.tableWidget.item(i, 2).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             i = i+1
         self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
-        self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
+        self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类
+        flag = 1
+        return  flag
         # table字体等布局
         # for index in range(self.ui.tableWidget.columnCount()):
         #     headItem = self.ui.tableWidget.horizontalHeaderItem(index)
@@ -228,67 +241,36 @@ class Finance(QtWidgets.QMainWindow):
     def finance(self):
         # 获得输入
         self.ui.label_3.hide()
-
-
-        category = self.ui.comboBox.currentText()
-        input = self.ui.lineEdit.text()
-
-
-
-        dr = Figure_Canvas()
-        # 实例化一个FigureCanvas
-        if input != '':
+        flag = self.table()
+        if flag ==1:
+            category = self.ui.comboBox.currentText()
+            input = self.ui.lineEdit.text()
+            dr = Figure_Canvas()
+            self.ui.groupBox_2.show()
+            self.ui.graphicsView.show()
+            # 实例化一个FigureCanvas
             if category == '按日':
-                    try:
-                        temp_year,temp_month,temp_day = input.split('-')
-                        print(temp_year,temp_month,temp_day )
-                        a= datetime.date(int(temp_year),int(temp_month),int(temp_day))
-                        year_month_day = temp_year+'-'+temp_month.zfill(2)+'-'+temp_day.zfill(2)
+                temp_year,temp_month,temp_day = input.split('-')
+                year_month_day = temp_year+'-'+temp_month.zfill(2)+'-'+temp_day.zfill(2)
 
-
-
-                    except Exception:
-                        QMessageBox.warning(self, '提示', '输入数据有误！')
-                    else:
-                        self.ui.groupBox_2.show()
-                        self.ui.graphicsView.show()
-                        dr.day(year_month_day)  # 画图
+                dr.day(year_month_day)  # 画图
             elif category == '按月':
-                try:
-                    temp_year, temp_month= input.split('-')
-                    temp_day = '01'
-                    print(temp_year, temp_month, temp_day)
-                    datetime.date(int(temp_year), int(temp_month), int(temp_day))
-                    year_month = temp_year + '-' + temp_month.zfill(2)
-                except Exception:
-                    QMessageBox.warning(self, '提示', '输入数据有误！')
-                else:
-                    self.ui.groupBox_2.show()
-                    self.ui.graphicsView.show()
-                    dr.month(year_month)
+                temp_year, temp_month= input.split('-')
+                year_month = temp_year + '-' + temp_month.zfill(2)
+                self.ui.groupBox_2.show()
+                self.ui.graphicsView.show()
+                dr.month(year_month)
             elif category == '按年':
-                try:
-                    temp_year = input
-                    temp_day = '01'
-                    temp_month ='01'
-                    datetime.date(int(temp_year), int(temp_month), int(temp_day))
-                except Exception:
-                    QMessageBox.warning(self, '提示', '输入数据有误！')
-                else:
-                    self.ui.groupBox_2.show()
-                    self.ui.graphicsView.show()
+                temp_year = input
+                self.ui.groupBox_2.show()
+                self.ui.graphicsView.show()
+                dr.year(input)
 
-                    dr.year(input)
+            graphicscene = QtWidgets.QGraphicsScene()  # 第三步，创建一个QGraphicsScene，因为加载的图形（FigureCanvas）不能直接放到graphicview控件中，必须先放到graphicScene，然后再把graphicscene放到graphicview中
+            graphicscene.addWidget(dr)  # 第四步，把图形放到QGraphicsScene中，注意：图形是作为一个QWidget放到QGraphicsScene中的
+            self.ui.graphicsView.setScene(graphicscene)  # 第五步，把QGraphicsScene放入QGraphicsView
+            self.ui.graphicsView.show()  # 最后，调用show方法呈现图形
 
-
-            # else:
-            #     QMessageBox.information(self, ("提示"), ("修改成功！"))
-
-        graphicscene = QtWidgets.QGraphicsScene()  # 第三步，创建一个QGraphicsScene，因为加载的图形（FigureCanvas）不能直接放到graphicview控件中，必须先放到graphicScene，然后再把graphicscene放到graphicview中
-        graphicscene.addWidget(dr)  # 第四步，把图形放到QGraphicsScene中，注意：图形是作为一个QWidget放到QGraphicsScene中的
-        self.ui.graphicsView.setScene(graphicscene)  # 第五步，把QGraphicsScene放入QGraphicsView
-        self.ui.graphicsView.show()  # 最后，调用show方法呈现图形
-        self.table()
 
 
 if __name__ == '__main__':

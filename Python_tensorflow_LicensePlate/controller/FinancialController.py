@@ -69,7 +69,11 @@ class FinancialController(object):
                 finlist.append(findic.chargetime)
                 finlist.append(findic.money)
                 resultlist.append(finlist)
-        return resultlist
+            return resultlist
+        else:
+            return None
+
+
 
     def listbyparkolaceid(self, parkplaceid):
         """
