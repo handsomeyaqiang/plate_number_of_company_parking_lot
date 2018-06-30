@@ -323,7 +323,7 @@ class tableB(QtWidgets.QMainWindow):
                 elif result.status == 400:
                     OK = QMessageBox.information(self, ("提示："), ("""添加失败！"""))  # 单引号包围font 井号会报错
         else:
-            OK = QMessageBox.information(self, ("提示："), ("""电话号位数不正确，请检查您的输入！"""))
+            OK = QMessageBox.information(self, ("提示："), ("""电话号位数不正确，应为7位或11位，请检查您的输入！"""))
             return
 
 
