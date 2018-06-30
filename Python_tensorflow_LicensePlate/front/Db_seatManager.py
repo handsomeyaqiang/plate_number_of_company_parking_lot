@@ -52,7 +52,7 @@ class SeatManage(QWidget):
         self.ui.pushButton_4.setFixedSize(90, 28)
         self.ui.pushButton_9.setFixedSize(90, 28)
         self.ui.pushButton_10.setFixedSize(90, 28)
-        self.ui.groupBox.setStyleSheet("QGroupBox{color:HotPink;font-family:宋体}")
+        self.ui.groupBox.setStyleSheet("QGroupBox{color:red;font-family:宋体}")
         self.ui.pushButton_2.setStyleSheet("QPushButton{color:black}"
                                                "QPushButton:hover{color:red}"
                                                "QPushButton{background-color:lightblue}"
@@ -78,6 +78,26 @@ class SeatManage(QWidget):
                                            "QPushButton{background-color:Yellow}"
                                            "QPushButton{border:2px}"
                                            "QPushButton{border-radius:10px}")
+        self.ui.pushButton_11.setStyleSheet("QPushButton{color:black}"
+                                            "QPushButton:hover{color:blue}"
+                                            "QPushButton{background-color:Yellow}"
+                                            "QPushButton{border:2px}"
+                                            "QPushButton{border-radius:10px}")
+        self.ui.pushButton_12.setStyleSheet("QPushButton{color:black}"
+                                            "QPushButton:hover{color:blue}"
+                                            "QPushButton{background-color:Yellow}"
+                                            "QPushButton{border:2px}"
+                                            "QPushButton{border-radius:10px}")
+        self.ui.pushButton_13.setStyleSheet("QPushButton{color:black}"
+                                            "QPushButton:hover{color:blue}"
+                                            "QPushButton{background-color:Yellow}"
+                                            "QPushButton{border:2px}"
+                                            "QPushButton{border-radius:10px}")
+        self.ui.pushButton_14.setStyleSheet("QPushButton{color:black}"
+                                            "QPushButton:hover{color:blue}"
+                                            "QPushButton{background-color:Yellow}"
+                                            "QPushButton{border:2px}"
+                                            "QPushButton{border-radius:10px}")
         self.ui.label_2.setStyleSheet("QLabel{background:white;}"
                                       "QLabel{color:rgb(300,300,300,120);font-size:12px;font-weight:bold;font-family:宋体;}"
                                       )
@@ -111,6 +131,12 @@ class SeatManage(QWidget):
             headItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
         # 车位初始设置按钮隐藏
         self.ui.pushButton.hide()
+        # 车位锁分页
+        self.ui.pushButton_11.hide() # 上
+        self.ui.pushButton_12.hide() # 下
+        # 车位操作
+        self.ui.pushButton_13.hide() # 上
+        self.ui.pushButton_14.hide() # 下
         # 槽函数
         self.ui.pushButton.clicked.connect(self.seatSet)  # 显示车位设置窗口
         self.ui.pushButton_2.clicked.connect(self.lockState)  # 显示车位锁状态窗口
@@ -122,6 +148,24 @@ class SeatManage(QWidget):
         self.ui.pushButton_7.clicked.connect(self.addSeat)  # 添加车位
         self.ui.pushButton_9.clicked.connect(self.dayTimeFee)
         self.ui.pushButton_10.clicked.connect(self.nightFee)
+        self.ui.pushButton_11.clicked.connect(self.lock_lastPage) # 车位锁上一页
+        self.ui.pushButton_12.clicked.connect(self.lock_nextPage) #  车位锁下一页
+        self.ui.pushButton_13.clicked.connect(self.seat_lastPage) # 车位操作上一页
+        self.ui.pushButton_14.clicked.connect(self.seat_nextPage) # 车位操作下一页
+    # # 车位锁上一页
+    # def lock_lastPage(self):
+    #
+    # # 下一页
+    # def lock_nextPage(self):
+
+
+    # 车位操作上一页
+    # def seat_lastPage(self):
+    #
+    # # 下一页
+    # def seat_nextPage(self):
+
+
 
 
     # 添加车位
@@ -130,7 +174,12 @@ class SeatManage(QWidget):
         self.m2.exec()
 
     def nightFee(self):
+
         """夜间价格显示"""
+        self.ui.pushButton_11.hide()
+        self.ui.pushButton_12.hide()
+        self.ui.pushButton_13.hide()
+        self.ui.pushButton_14.hide()
         self.ui.tableWidget_2.hide()
         self.ui.groupBox_2.hide()
         self.ui.groupBox_3.hide()
@@ -176,6 +225,10 @@ class SeatManage(QWidget):
 
     def dayTimeFee(self):
         """白天价格显示"""
+        self.ui.pushButton_11.hide()
+        self.ui.pushButton_12.hide()
+        self.ui.pushButton_13.hide()
+        self.ui.pushButton_14.hide()
         self.ui.label_9.hide()
         self.ui.label_8.setText("车位白天收费规则")
         self.ui.label_8.show()
@@ -398,6 +451,10 @@ class SeatManage(QWidget):
 
     # 车位初始详情
     def seatDetailed(self):
+        self.ui.pushButton_11.hide()
+        self.ui.pushButton_12.hide()
+        self.ui.pushButton_13.hide()
+        self.ui.pushButton_14.hide()
         self.ui.tableWidget_2.show()
         self.ui.groupBox_2.hide()
         self.ui.groupBox_3.hide()
@@ -432,6 +489,9 @@ class SeatManage(QWidget):
         self.ui.tableWidget_2.setItem(1, 1, data)
     # 车位操作， 查看车位的状态信息
     def operateSeat(self):
+        self.ui.pushButton_11.hide()
+        self.ui.pushButton_12.hide()
+
         self.ui.groupBox_2.show()
         self.ui.groupBox_3.hide()
         self.ui.tableWidget_2.hide()
@@ -449,6 +509,8 @@ class SeatManage(QWidget):
         category = self.ui.comboBox.currentText()
         input = self.ui.lineEdit_4.text()
         self.ui.tableWidget_4.show()
+        self.ui.pushButton_13.show()
+        self.ui.pushButton_14.show()
         list = []
         pcontrol = ParkPlaceController()
         if input != '':
@@ -528,6 +590,10 @@ class SeatManage(QWidget):
         self.ui.tableWidget.hide()
         self.ui.label_8.hide()
         self.ui.label_10.hide()
+        self.ui.pushButton_11.show()
+        self.ui.pushButton_12.show()
+        self.ui.pushButton_13.hide()
+        self.ui.pushButton_14.hide()
         pcontrol = ParkPlaceController()
         result = pcontrol.showparkplaceinformation()
         if result.status == 200:
@@ -709,6 +775,10 @@ class SeatManage(QWidget):
 
     # 车位设置 用来显示车位设置的窗口
     def seatSet(self):
+        self.ui.pushButton_11.hide()
+        self.ui.pushButton_12.hide()
+        self.ui.pushButton_13.hide()
+        self.ui.pushButton_14.hide()
         self.ui.groupBox_3.show()
         self.ui.groupBox_2.hide()
         self.ui.tableWidget_2.hide()
