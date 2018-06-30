@@ -17,6 +17,9 @@ class tableB(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self.flag=0
 
+        self.nCurScroller = 0  # 翻页时的当时滑动条位置
+        self.pageValue = 6  # 一页显示条数
+
         self.setWindowTitle("员工信息管理")
         self.setFixedSize(self.width(), self.height())  # 实现禁止窗口最大化和禁止窗口拉伸
         # 控制tableWidget item文字风格
@@ -50,12 +53,26 @@ class tableB(QtWidgets.QMainWindow):
         self.ui.pushButton_3.clicked.connect(self.clearInput)
         self.ui.pushButton_4.clicked.connect(self.lastPage) # 上一页
         self.ui.pushButton_5.clicked.connect(self.nextPage)  # 下一页
+
     # 上一页
-    # def lastPage(self):
-    #
-    #
+    def lastPage(self):
+        max_value = self.ui.tableWidget.verticalScrollBar().maximum()  # 当前SCROLLER最大显示值
+        self.nCurScroller = self.ui.tableWidget.verticalScrollBar().value()  # 获得当前scroller值
+
+        if self.nCurScroller > 0:
+            self.ui.tableWidget.verticalScrollBar().setSliderPosition(self.nCurScroller - self.pageValue)
+        else:
+            self.ui.tableWidget.verticalScrollBar().setSliderPosition(max_value)
+
     #  # 下一页
-    # def nextPage(self):
+    def nextPage(self):
+        max_value =self.ui.tableWidget.verticalScrollBar().maximum()
+        self.nCurScroller = self.ui.tableWidget.verticalScrollBar().value()  # 获得当前scroller值
+        if self.nCurScroller < max_value:
+            self.ui.tableWidget.verticalScrollBar().setSliderPosition(self.pageValue + self.nCurScroller)
+        else:
+            self.ui.tableWidget.verticalScrollBar().setSliderPosition(0)
+
 
     def buttonForRow(self, id):
         widget = QWidget()
