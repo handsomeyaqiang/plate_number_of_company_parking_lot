@@ -47,10 +47,10 @@ class ChargeRulesDaoImpl(ChargeRulesDao):
         # 白天计费开始时间
         a1 = "{0}-{1}-{2} {3}".format(st.year, st.month, st.day, rule.daybegintime)
         # 晚上计费结束时间
-        e = "{0}-{1}-{2} {3}".format(st.year, st.month, st.day + 1, rule.nightendtime)
+        # e = "{0}-{1}-{2} {3}".format(st.year, st.month, st.day + 1, rule.nightendtime)
         at = totime(a)  # 晚上开始时间戳即白天计费结束时间戳
         at1 = totime(a1)  # 白天开始计费时间戳
-        et = totime(e)  # 晚上计费结束时间戳
+        et =at1+86400.0  # 晚上计费结束时间戳
         # 开始时间在0:00到7：00时
         if starttime < at1:
             et = at1
@@ -88,3 +88,7 @@ class ChargeRulesDaoImpl(ChargeRulesDao):
         elif (starttime >= at) and (endtime <= et):
             money = rule.nightprice
         return money
+if __name__ == '__main__':
+    rule = ChargeRulesDaoImpl().showRules()
+    m =  ChargeRulesDaoImpl().chargemoney(rule,totime('2018-06-30 5:40:20'),totime('2018-7-01 08:40:20'))
+    print(m)

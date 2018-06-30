@@ -20,18 +20,18 @@ class splitPlate:
         # 1、读取图像，并把图像转换为灰度图像并显示
         img = cv2.imread(self.DIR_MIDEL_IMAGES+'/number_plate.jpg')  # 读取图片
         img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # 转换了灰度化
-        #cv2.imshow('gray', img_gray)  # 显示图片
-        #cv2.waitKey(0)
+        cv2.imshow('gray', img_gray)  # 显示图片
+        cv2.waitKey(0)
 
         # 高斯平滑
         gaussian = cv2.GaussianBlur(img_gray, (1, 1), 0, 0, cv2.BORDER_DEFAULT)
-        #cv2.imshow('gaussian', gaussian)
-        #cv2.waitKey(0)
+        cv2.imshow('gaussian', gaussian)
+        cv2.waitKey(0)
         # 中值滤波
         median = cv2.medianBlur(gaussian, 3)
 
-        #cv2.imshow('median', median)
-        #cv2.waitKey(0)
+        cv2.imshow('median', median)
+        cv2.waitKey(0)
 
 
         # 二值化
@@ -41,12 +41,12 @@ class splitPlate:
         # # 定阈值是100
         # img_thre = img_gray
         # cv2.threshold(img_gray, 106, 255, cv2.THRESH_BINARY_INV, img_thre)
-        #cv2.imshow('threshold', img_thre)
-        #cv2.waitKey(0)
+        cv2.imshow('threshold', img_thre)
+        cv2.waitKey(0)
 
         # 3、保存黑白图片
         cv2.imwrite(self.DIR_MIDEL_IMAGES+'/thre_res.png', img_thre)
-        #print(img_thre)
+        print(img_thre)
         # 4、分割字符
 
         self.height = img_thre.shape[0]
@@ -93,9 +93,9 @@ class splitPlate:
                     self.white.append(sumWhite)
                     self.black.append(sumBlack)
                     # print(str(sumWhite) + "\t" + str(sumBlack))
-        #cv2.imshow("really", img_thre)
+        cv2.imshow("really", img_thre)
 
-        #print(str(self.white_max), str(self.black_max))
+        print(str(self.white_max), str(self.black_max))
         if self.black_max > self.white_max:
             self.arg = True
 
@@ -109,7 +109,7 @@ class splitPlate:
                 col_end = self.find_end(col_start)
                 if col_end - col_start > 5:
                     cj = img_thre[20:76, col_start:col_end]
-                    #cv2.imshow('caijian', cj)
+                    cv2.imshow('caijian', cj)
                     newImage = cv2.resize(cj, (32, 40), interpolation=cv2.INTER_CUBIC)
                     cv2.imwrite(self.DIR_SPLIT_IMAGES + "/" + str(count) + ".jpg", newImage)
                     count += 1

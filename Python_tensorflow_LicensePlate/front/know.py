@@ -2,12 +2,11 @@ import cv2
 from PyQt5.QtWidgets import *
 from Python_tensorflow_LicensePlate.front.hand_Register import *
 from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import QWidget
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
-
-from Python_tensorflow_LicensePlate.train.plateutils import getplatenumber
-from Python_tensorflow_LicensePlate.train import plateutils
+from Python_tensorflow_LicensePlate.train.plateutils.getplatenumber import getplate
+from Python_tensorflow_LicensePlate.train.plateutils.platenumbersplit import splitPlate
 from Python_tensorflow_LicensePlate.service.RecongiseService import RecongiseService
 from Python_tensorflow_LicensePlate.front.KnowTest import Ui_know
 from Python_tensorflow_LicensePlate.utils import formattime
@@ -75,7 +74,7 @@ class Know_Ui(QWidget):
 
     # 视频识别
     def capPicture(self):
-        # self.cap = cv2.VideoCapture(0)
+        self.cap = cv2.VideoCapture(0)
         if (self.cap.isOpened()):
             # get a frame
             ret, img = self.cap.read()
@@ -100,9 +99,11 @@ class Know_Ui(QWidget):
         img = cv2.imread(imgName)
         cv2.imwrite(self.DIR_RECEIVED_IMAGES + "/plate.jpg", img)
         # 调用车牌获取
-        getplatenumber.get_plateNum()
+        g = getplate()
+        g.get_plateNum()
         # 调用车牌字符切割
-        plateutils.getplatenumber
+        s = splitPlate()
+        s.split_plate()
         # 调用识别业务
         recongise = RecongiseService()
         return recongise.judg_recongise()
@@ -122,7 +123,15 @@ class Know_Ui(QWidget):
             for i in range(len(col)):
                 recongiseResult = result.data
                 if i == 2:
-                    temp_data = formattime.calc_time(recongiseResult.__getattribute__("outtime"), recongiseResult.__getattribute__("intime"))
+                    temp_data = ""
+                elif i == 3:
+                    temp_data = recongiseResult.vehicle_type
+                    if temp_data == 0:
+                        temp_data = "内部车"
+                    else:
+                         temp_data = "外部车"
+                elif i == 5:
+                    temp_data = ""
                 else:
                     temp_data = recongiseResult.__getattribute__(col[i])  # 临时记录，不能直接插入表格
                 data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
@@ -146,6 +155,12 @@ class Know_Ui(QWidget):
                         if i == 2:
                             temp_data = formattime.calc_time(recongiseResult.__getattribute__("outtime"),
                                                              recongiseResult.__getattribute__("intime"))
+                        elif i == 3:
+                            temp_data = recongiseResult.vehicle_type
+                            if temp_data == 0:
+                                temp_data = "内部车"
+                            else:
+                                temp_data = "外部车"
                         else:
                             temp_data = recongiseResult.__getattribute__(col[i])  # 临时记录，不能直接插入表格
                         data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
@@ -158,7 +173,7 @@ class Know_Ui(QWidget):
                 print("缴费取消")
         else:
             # 识别失败
-            OK = QMessageBox.information(self, ("警告"), ("""识别异常"""))
+            OK = QMessageBox.information(self, ("警告"), (str(result.msg)))
             return
 
 
