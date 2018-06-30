@@ -165,7 +165,7 @@ class carManage(QtWidgets.QMainWindow):
         len2 = len(result1.data)
         if len2==0:                     #该员工不存在，不能添加
             OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>该员工不存在，无法添加他的车辆信息!</font>"""))
-            self.Clear()
+            # self.Clear()
             return
         else:
             staff = result1.data[0]
