@@ -11,6 +11,10 @@ class CarRecord(QWidget):
         super(CarRecord, self).__init__()
         self.ui = Ui_carRecord()
         self.ui.setupUi(self)
+
+        self.nCurScroller = 0  # 翻页时的当时滑动条位置
+        self.pageValue = 4  # 一页显示条数
+
         self.setWindowTitle("车辆历史记录查询")
         self.setFixedSize(self.width(), self.height())  # 实现禁止窗口最大化和禁止窗口拉伸
         palette = QPalette()
@@ -24,23 +28,26 @@ class CarRecord(QWidget):
         self.ui.pushButton.clicked.connect(self.Query)
         self.ui.pushButton_2.clicked.connect(self.lastPage)
         self.ui.pushButton_3.clicked.connect(self.nextPage)
-    # 上一页函数
-    # def lastPage(self):
-    #     row = len(result.data)
-    #     col = ["platenumber", "intime", "outtime", "vehicletype"]
-    #     self.ui.tableWidget.setRowCount(row)  # 控件的名字保持一致，切莫想当然
-    #     self.ui.tableWidget.setColumnCount(len(col))  # 加1，开辟一列放操作按钮
-    #     self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
-    #     self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers)
-    # #下一页函数
-    # def nextPage(self):
-    #     row = len(result.data)
-    #     col = ["platenumber", "intime", "outtime", "vehicletype"]
-    #     self.ui.tableWidget.setRowCount(row)  # 控件的名字保持一致，切莫想当然
-    #     self.ui.tableWidget.setColumnCount(len(col))  # 加1，开辟一列放操作按钮
-    #     self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
-    #     self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers)
 
+
+    # 上一页
+    def lastPage(self):
+        max_value = self.ui.tableWidget.verticalScrollBar().maximum()  # 当前SCROLLER最大显示值
+        self.nCurScroller = self.ui.tableWidget.verticalScrollBar().value()  # 获得当前scroller值
+
+        if self.nCurScroller > 0:
+            self.ui.tableWidget.verticalScrollBar().setSliderPosition(self.nCurScroller - self.pageValue)
+        else:
+            self.ui.tableWidget.verticalScrollBar().setSliderPosition(max_value)
+
+    #  # 下一页
+    def nextPage(self):
+        max_value =self.ui.tableWidget.verticalScrollBar().maximum()
+        self.nCurScroller = self.ui.tableWidget.verticalScrollBar().value()  # 获得当前scroller值
+        if self.nCurScroller < max_value:
+            self.ui.tableWidget.verticalScrollBar().setSliderPosition(self.pageValue + self.nCurScroller)
+        else:
+            self.ui.tableWidget.verticalScrollBar().setSliderPosition(0)
 
 
     def closeEvent(self, QCloseEvent):
