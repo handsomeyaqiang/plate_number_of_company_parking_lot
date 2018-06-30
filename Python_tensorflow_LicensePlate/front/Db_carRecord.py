@@ -22,6 +22,26 @@ class CarRecord(QWidget):
         self.ui.tableWidget.setColumnWidth(1, 140)
         # 槽函数
         self.ui.pushButton.clicked.connect(self.Query)
+        self.ui.pushButton_2.clicked.connect(self.lastPage)
+        self.ui.pushButton_3.clicked.connect(self.nextPage)
+    # 上一页函数
+    # def lastPage(self):
+    #     row = len(result.data)
+    #     col = ["platenumber", "intime", "outtime", "vehicletype"]
+    #     self.ui.tableWidget.setRowCount(row)  # 控件的名字保持一致，切莫想当然
+    #     self.ui.tableWidget.setColumnCount(len(col))  # 加1，开辟一列放操作按钮
+    #     self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
+    #     self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers)
+    # #下一页函数
+    # def nextPage(self):
+    #     row = len(result.data)
+    #     col = ["platenumber", "intime", "outtime", "vehicletype"]
+    #     self.ui.tableWidget.setRowCount(row)  # 控件的名字保持一致，切莫想当然
+    #     self.ui.tableWidget.setColumnCount(len(col))  # 加1，开辟一列放操作按钮
+    #     self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
+    #     self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers)
+
+
 
     def closeEvent(self, QCloseEvent):
         reply = QMessageBox.question(self, '提示',"确定退出？", QMessageBox.Yes |QMessageBox.No, QMessageBox.No)

@@ -50,6 +50,12 @@ class Ui_carRecord(object):
         self.pushButton = QtWidgets.QPushButton(self.horizontalLayoutWidget)
         self.pushButton.setObjectName("pushButton")
         self.horizontalLayout.addWidget(self.pushButton)
+        self.pushButton_2 = QtWidgets.QPushButton(carRecord)
+        self.pushButton_2.setGeometry(QtCore.QRect(90, 330, 75, 23))
+        self.pushButton_2.setObjectName("pushButton_2")
+        self.pushButton_3 = QtWidgets.QPushButton(carRecord)
+        self.pushButton_3.setGeometry(QtCore.QRect(430, 330, 75, 23))
+        self.pushButton_3.setObjectName("pushButton_3")
 
         self.retranslateUi(carRecord)
         QtCore.QMetaObject.connectSlotsByName(carRecord)
@@ -72,4 +78,6 @@ class Ui_carRecord(object):
         self.comboBox.setItemText(4, _translate("carRecord", "内部车"))
         self.comboBox.setItemText(5, _translate("carRecord", "外部车"))
         self.pushButton.setText(_translate("carRecord", "查询"))
+        self.pushButton_2.setText(_translate("carRecord", "上一页"))
+        self.pushButton_3.setText(_translate("carRecord", "下一页"))
 

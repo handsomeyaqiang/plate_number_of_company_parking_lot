@@ -40,6 +40,15 @@ class carManage(QtWidgets.QMainWindow):
         self.ui.query_pushButton.clicked.connect(self.QueryBySid)
         self.ui.pushButton.clicked.connect(self.DB_queryAll)
         self.ui.exit_pushButton.clicked.connect(self.close)
+        self.ui.pushButton_2.clicked.connect(self.lastPage)# 上一页
+        self.ui.pushButton_3.clicked.connect(self.nextPage)# 下一页
+
+    # 上一页
+    # def lastPage(self):
+    #
+    # # 下一页
+    # def nextPage(self):
+
     # 退出
     def closeEvent(self, QCloseEvent):
         reply = QMessageBox.question(self, '提示',

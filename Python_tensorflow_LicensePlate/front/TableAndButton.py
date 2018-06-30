@@ -7,14 +7,15 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 600)
+        MainWindow.resize(800, 608)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
-        self.tableWidget.setGeometry(QtCore.QRect(30, 340, 721, 221))
+        self.tableWidget.setGeometry(QtCore.QRect(30, 320, 721, 221))
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(7)
         self.tableWidget.setRowCount(0)
@@ -129,6 +130,12 @@ class Ui_MainWindow(object):
         self.line_2.setFrameShape(QtWidgets.QFrame.VLine)
         self.line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line_2.setObjectName("line_2")
+        self.pushButton_4 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_4.setGeometry(QtCore.QRect(100, 540, 75, 23))
+        self.pushButton_4.setObjectName("pushButton_4")
+        self.pushButton_5 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_5.setGeometry(QtCore.QRect(570, 540, 75, 23))
+        self.pushButton_5.setObjectName("pushButton_5")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 23))
@@ -137,9 +144,9 @@ class Ui_MainWindow(object):
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
+
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -175,6 +182,8 @@ class Ui_MainWindow(object):
         self.label_6.setText(_translate("MainWindow", "请输入"))
         self.comboBox.setItemText(0, _translate("MainWindow", "按姓名"))
         self.comboBox.setItemText(1, _translate("MainWindow", "按部门"))
-        self.comboBox.setItemText(2, _translate("MainWindow", "按工号"))
+        self.comboBox.setItemText(2, _translate("MainWindow", "按车牌号"))
         self.pushButton_2.setText(_translate("MainWindow", "确定"))
+        self.pushButton_4.setText(_translate("MainWindow", "上一页"))
+        self.pushButton_5.setText(_translate("MainWindow", "下一页"))
 

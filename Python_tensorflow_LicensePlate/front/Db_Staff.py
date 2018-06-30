@@ -48,7 +48,14 @@ class tableB(QtWidgets.QMainWindow):
         self.ui.pushButton_2.clicked.connect(self.QueryBySid)
         self.ui.exit_pushButton.clicked.connect(self.close)  # 直接调用closeEvent函数报错，用自带的close方法间接调用
         self.ui.pushButton_3.clicked.connect(self.clearInput)
-
+        self.ui.pushButton_4.clicked.connect(self.lastPage) # 上一页
+        self.ui.pushButton_5.clicked.connect(self.nextPage)  # 下一页
+    # 上一页
+    # def lastPage(self):
+    #
+    #
+    #  # 下一页
+    # def nextPage(self):
 
     def buttonForRow(self, id):
         widget = QWidget()
