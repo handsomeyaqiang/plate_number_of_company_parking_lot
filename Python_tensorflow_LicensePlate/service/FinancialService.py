@@ -56,15 +56,7 @@ class FinancialService(object):
             print(e)
             return result.error("获取报表失败！")
 
-    def listallfinancial(self):
-        """返回所有报表"""
-        result = ParkResult.ParkResult()
-        try:
-            list = FinancialDaoImpl().listallfinancial()
-            return result.ok(list)
-        except Exception as e:
-            print(e)
-            return result.errror("获取报表失败！")
+
 
     def listmonthsumbyyear(self, year):
         """
@@ -74,7 +66,7 @@ class FinancialService(object):
         """
 
         # 月份
-        months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']
+        months = [1,2,3,4,5,6,7,8,9,10,11,12]
         result = ParkResult.ParkResult()
         # 获取当前时间
         localtime = time.localtime(time.time())
@@ -82,11 +74,7 @@ class FinancialService(object):
         if tempyear == year:
             # 取月份
             temp = localtime.tm_mon
-            if temp < 10:
-                nowmonth = '0{0}'.format(temp)
-            else:
-                nowmonth = str(temp)
-            print(temp)
+            nowmonth = temp
 
             pastmonths = []
             for i in months:
@@ -104,9 +92,9 @@ class FinancialService(object):
                     pass
                 else:
                     ymresult.append({'totalmoney': 0, 'ymdatetime': i})
-            print(ymresult)
+            # print(ymresult)
             sortedym = sorted(ymresult, key=lambda e: e.__getitem__('ymdatetime'))
-            print(sortedym)
+            # print(sortedym)
             return result.ok(sortedym)
         except Exception as e:
             print(e)
@@ -122,14 +110,14 @@ class FinancialService(object):
 
         # 分割字符串 将年份和月份分离出来
         tempyearmonth = year_month.split('-')
-        print(tempyearmonth)
+        # print(tempyearmonth)
         # 转换为int 类型
         year = int(tempyearmonth[0])
         month = int(tempyearmonth[1])
 
         # 利用日历模块求某月天数
         monthdays = calendar.monthrange(year, month)[1]
-        print(monthdays)
+        # print(monthdays)
 
         # 获取当前日期
         nowtime = time.localtime(time.time())
@@ -146,9 +134,9 @@ class FinancialService(object):
         for i in range(1, monthdaysrange + 1):
             day = str(i)
             day = day.zfill(2)
-            print(day)
+            # print(day)
             days.append(day)
-        print(days)
+        # print(days)
         try:
             dmresult = FinancialDaoImpl().listsumeachdaybymonth(year_month)
             print(dmresult)
@@ -161,11 +149,11 @@ class FinancialService(object):
                     pass
                 else:
                     dmresult.append({'totalmoney': 0, 'mddatetime': day})
-            print(dmresult)
+            # print(dmresult)
             # sortedym = sorted(dmresult, key=lambda e: e.__getitem__('mddatetime'))
             sorteddmresult = sorted(dmresult, key=lambda e: e.__getitem__('mddatetime'))
             # print(sortedym)
-            print(sorteddmresult)
+            # print(sorteddmresult)
             return result.ok(sorteddmresult)
         except Exception as e:
             print(e)

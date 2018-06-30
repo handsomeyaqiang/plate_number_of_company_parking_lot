@@ -9,17 +9,17 @@ class FinancialDao(object):
     def insertfinancial(self,finalcial):
         pass
 
-    @abstractmethod
-    def deletefinancial(self,finalcialid):
-        pass
+    # @abstractmethod
+    # def deletefinancial(self,finalcialid):
+    #     pass
+    #
+    # @abstractmethod
+    # def updatefinancial(self,finalcial):
+    #     pass
 
-    @abstractmethod
-    def updatefinancial(self,finalcial):
-        pass
-
-    @abstractmethod
-    def listfinancialbyparkplaceid(self,parkplaceid):
-        pass
+    # @abstractmethod
+    # def listfinancialbyparkplaceid(self,parkplaceid):
+    #     pass
 
     @abstractmethod
     def listfinancialbyyear(self,year):
