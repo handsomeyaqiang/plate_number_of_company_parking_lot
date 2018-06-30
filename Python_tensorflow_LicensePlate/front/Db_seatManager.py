@@ -13,7 +13,7 @@ from Python_tensorflow_LicensePlate.controller.ParkPlaceController import ParkPl
 from Python_tensorflow_LicensePlate.controller.ChargeController import ChargeController
 
 
-class SeatManage(QWidget):
+class SeatManage(QtWidgets.QDialog):
     def __init__(self):
         super(SeatManage, self).__init__()
         self.ui = Ui_seat()
@@ -148,10 +148,10 @@ class SeatManage(QWidget):
         self.ui.pushButton_7.clicked.connect(self.addSeat)  # 添加车位
         self.ui.pushButton_9.clicked.connect(self.dayTimeFee)
         self.ui.pushButton_10.clicked.connect(self.nightFee)
-        self.ui.pushButton_11.clicked.connect(self.lock_lastPage) # 车位锁上一页
-        self.ui.pushButton_12.clicked.connect(self.lock_nextPage) #  车位锁下一页
-        self.ui.pushButton_13.clicked.connect(self.seat_lastPage) # 车位操作上一页
-        self.ui.pushButton_14.clicked.connect(self.seat_nextPage) # 车位操作下一页
+        # self.ui.pushButton_11.clicked.connect(self.lock_lastPage) # 车位锁上一页
+        # self.ui.pushButton_12.clicked.connect(self.lock_nextPage) #  车位锁下一页
+        # self.ui.pushButton_13.clicked.connect(self.seat_lastPage) # 车位操作上一页
+        # self.ui.pushButton_14.clicked.connect(self.seat_nextPage) # 车位操作下一页
     # # 车位锁上一页
     # def lock_lastPage(self):
     #

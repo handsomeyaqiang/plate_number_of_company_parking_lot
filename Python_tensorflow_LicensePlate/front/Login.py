@@ -1,18 +1,17 @@
+import sys
+import pymysql
+from Python_tensorflow_LicensePlate.utils.Pymysql import *
 from PyQt5.QtWidgets import *
 from Python_tensorflow_LicensePlate.front.FPwd import *   # 导入文件的顺序不同会导致文件类识别异常，原因未知
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-from Python_tensorflow_LicensePlate.front.loginUI import *
-from Python_tensorflow_LicensePlate.front.register import *
-from Python_tensorflow_LicensePlate.front.Db_finance import *
-from Python_tensorflow_LicensePlate.front.ComInfoManager import *
-from Python_tensorflow_LicensePlate.front.Db_seatManager import *
-from Python_tensorflow_LicensePlate.front.loginUI import *
-from Python_tensorflow_LicensePlate.front.register import *
-from Python_tensorflow_LicensePlate.front.Db_finance import *
-from Python_tensorflow_LicensePlate.front.ComInfoManager import *
-from Python_tensorflow_LicensePlate.front.Db_seatManager import *
+from loginUI import *
+from register import *
+from Db_finance import *
+from ComInfoManager import *
+from Db_seatManager import *
+from Db_admin import *
 
 
 from PyQt5.QtWidgets import QWidget
@@ -132,57 +131,76 @@ class Login(QtWidgets.QDialog):
         db = PyMySQLHelper()  # 不能直接用conn = PyMySQLHelper.getConnection
         identity = self.ui.comboBox.currentIndex() # 获取下标
         identity = str(identity)
+
+        # print(identity)
+        # #  因为数据库登录人员的身份设计为整形，0表示财务管理，1表示信息管理，2表示停车场管理
         if name != '' and pwd != '':
-            if identity == '0':
-                sql = "select * from administrater where username = '" + name + "' and " \
-                     "password = '" + pwd + "' and identity= '" + identity + "' "
-                print(sql)
-                results = db.selectALL(sql)
-                if results:
-                    self.ui1 = Finance()
-                    # self.ui1.exec()
-                    self.ui1.show()
-                    self.close()
-                else:
-                    OK = QMessageBox.warning(self, ("警告"), ("""账号或密码错误！"""))
+            if name == 'admin' and pwd == '123':
+                self.a = Admin()
+                self.a.show()
+                self.close()
+            else:
+                if identity == '0':
 
-            if identity == '1':
-                sql = "select * from administrater where username = '" + name + "' and " \
-                       "password = '" + pwd + "' and identity= '" + identity + "' "
-                print(sql)
+                    sql = "select * from administrater where username = '" + name + "' and " \
+                                                                                    "password = '" + pwd + "' and identity= '" + identity + "' "
+                    print(sql)
+                    # cursor.execute(sql)
+                    # results = cursor.fetchall()
+                    results = db.selectALL(sql)
 
-                results = db.selectALL(sql)
-                if results:
-                    self.ui2 = InfoManage()
-                    self.ui2.show()
-                    self.close()
-                else:
-                    OK = QMessageBox.warning(self, ("警告"), ("""账号或密码错误！"""))
+                    if results:
+                        self.ui1 = Finance()
+                        # self.ui1.exec()
+                        self.ui1.show()
+                        self.close()
+                    else:
+                        OK = QMessageBox.warning(self, ("警告"), ("""账号或密码错误！"""))
+                    # cursor.close()
+                    # conn.close()
+                elif identity == '1':
 
-            if identity == '2':
-                sql = "select * from administrater where username = '" + name + "' and " \
-                       "password = '" + pwd + "' and identity= '" + identity + "' "
-                print(sql)
+                    sql = "select * from administrater where username = '" + name + "' and " \
+                                                                                    "password = '" + pwd + "' and identity= '" + identity + "' "
+                    print(sql)
+                    # cursor.execute(sql)
+                    # results = cursor.fetchall()
+                    results = db.selectALL(sql)
+                    if results:
+                        self.ui2 = InfoManage()
+                        self.ui2.show()
+                        self.close()
+                    else:
+                        OK = QMessageBox.warning(self, ("警告"), ("""账号或密码错误！"""))
 
-                results = db.selectALL(sql)
-                # print(identity)
-                if results:
-                    self.ui3 = SeatManage()
-                    self.ui3.show()
-                    self.close()
-                else:
-                    OK = QMessageBox.warning(self, ("警告"), ("""账号或密码错误！"""))
+                elif identity == '2':
+                    sql = "select * from administrater where username = '" + name + "' and " \
+                                                                                    "password = '" + pwd + "' and identity= '" + identity + "' "
+                    print(sql)
+
+                    results = db.selectALL(sql)
+                    # print(identity)
+
+                    if results:
+                        self.uu = SeatManage()
+                        self.uu.exec()
+                        self.close()
+                    else:
+                        OK = QMessageBox.warning(self, ("警告"), ("""账号或密码错误！"""))
+
+
         else:
             if name == '':
                 OK = QMessageBox.warning(self, ("警告"), ("""请输入账号！"""))
             if pwd == '':
                 OK = QMessageBox.warning(self, ("警告"), ("""请输入密码！"""))
-
-
-
+        # cursor.close()
+        # conn.close()
     def slotRegister(self):
         self.i = reUi()  # self.i的窗口命名不能重复
         self.i.exec_()
+
+
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
