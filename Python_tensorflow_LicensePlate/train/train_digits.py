@@ -170,7 +170,7 @@ class trainDigit:
             print("读取图片文件耗费时间：%d秒" % time_elapsed)
             time_begin = time.time()
 
-            print("一共读取了 %s 个训练图像， %s 个标签" % (input_count, digit_NUM_CLASSES))
+            print("一共读取了 %s 个训练图像， %s 个标签" % (input_count, self.digit_NUM_CLASSES))
 
             # 设置每次训练op的输入个数和迭代次数，这里为了支持任意图片总数，定义了一个余数remainder，譬如，如果每次训练op的输入个数为60，图片总数为150张，则前面两次各输入60张，最后一次输入30张（余数30）
             batch_size = 60
@@ -294,5 +294,5 @@ class trainDigit:
         return license_num
 
 if __name__ == '__main__':
-    p = digit()
+    p = trainDigit()
     p.predict()

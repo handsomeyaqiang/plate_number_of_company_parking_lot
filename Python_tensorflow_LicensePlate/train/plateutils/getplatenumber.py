@@ -1,31 +1,28 @@
 import sys
 import cv2
 import numpy as np
-
+from Python_tensorflow_LicensePlate.utils.ParkResult import ParkResult
 
 class getplate:
     def __init__(self):
         self.DIR_RECEIVED_IMAGES = "../resources/images/receivedplateimages"
         self.DIR_MIDEL_IMAGES = "../resources/images/midledimages"
         self.DIR_SPLIT_IMAGES = "../resources/images/splitplateimages"
-
+        self.result = ParkResult()
     # 车牌预处理
     def preprocess(self, gray):
         # 高斯平滑
         gaussian = cv2.GaussianBlur(gray, (3, 3), 0, 0, cv2.BORDER_DEFAULT)
-        #cv2.imshow('gaussian', gaussian)
-        #cv2.waitKey(0)
+
         # 中值滤波
         median = cv2.medianBlur(gaussian, 5)
 
-        #cv2.imshow('median', median)
-        #cv2.waitKey(0)
+
 
         # Sobel算子，X方向求梯度
         sobel = cv2.Sobel(median, cv2.CV_8U, 1, 0, ksize=3)
 
-        #cv2.imshow('sobel', sobel)
-        #cv2.waitKey(0)
+
         # 二值化
         ret, binary = cv2.threshold(sobel, 170, 255, cv2.THRESH_BINARY)
         # 膨胀和腐蚀操作的核函数
@@ -37,8 +34,7 @@ class getplate:
         erosion = cv2.erode(dilation, element1, iterations=1)
         # 再次膨胀，让轮廓明显一些
         dilation2 = cv2.dilate(erosion, element2, iterations=3)
-        #cv2.imshow('dilation2', dilation2)
-        #cv2.waitKey(0)
+
         return dilation2
 
 
@@ -62,8 +58,7 @@ class getplate:
 
             # 找到最小的矩形，该矩形可能有方向
             rect = cv2.minAreaRect(cnt)
-            #print("rect is: ")
-            #print(rect)
+
 
             # box是四个点的坐标 这个函数在opencv2里面需要cv2.cv.BoxPoints(rect)
             box = cv2.boxPoints(rect)
@@ -72,10 +67,10 @@ class getplate:
             # 计算高和宽
             height = abs(box[0][1] - box[2][1])
             width = abs(box[0][0] - box[2][0])
-            #print(height, width)
+
             # 车牌正常情况下长高比在2.7-5之间
             ratio = float(width) / float(height)
-            #print(ratio)
+
             if (ratio > 4.8 or ratio < 2):
                 continue
             region.append(box)
@@ -84,46 +79,44 @@ class getplate:
 
 
     def detect(self, img):
-        # 转化成灰度图
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-        # 形态学变换的预处理
-        dilation = self.preprocess(gray)
+        try:
+            # 转化成灰度图
+            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            # 形态学变换的预处理
+            dilation = self.preprocess(gray)
+            # 查找车牌区域
+            region = self.findPlateNumberRegion(dilation)
+            # 用绿线画出这些找到的轮廓
+            for box in region:
+                cv2.drawContours(img, [box], 0, (0, 255, 0), 2)
+            ys = [box[0, 1], box[1, 1], box[2, 1], box[3, 1]]
+            xs = [box[0, 0], box[1, 0], box[2, 0], box[3, 0]]
+            ys_sorted_index = np.argsort(ys)
+            xs_sorted_index = np.argsort(xs)
 
-        # 查找车牌区域
-        region = self.findPlateNumberRegion(dilation)
+            x1 = box[xs_sorted_index[0], 0]
+            x2 = box[xs_sorted_index[3], 0]
 
-        # 用绿线画出这些找到的轮廓
-        for box in region:
-            cv2.drawContours(img, [box], 0, (0, 255, 0), 2)
-        ys = [box[0, 1], box[1, 1], box[2, 1], box[3, 1]]
-        xs = [box[0, 0], box[1, 0], box[2, 0], box[3, 0]]
-        ys_sorted_index = np.argsort(ys)
-        xs_sorted_index = np.argsort(xs)
+            y1 = box[ys_sorted_index[0], 1]
+            y2 = box[ys_sorted_index[3], 1]
 
-        x1 = box[xs_sorted_index[0], 0]
-        x2 = box[xs_sorted_index[3], 0]
+            img_org2 = img.copy()
+            img_plate = img_org2[y1:y2, x1:x2]
+            cv2.imwrite(self.DIR_MIDEL_IMAGES+'/number_plate.jpg', img_plate)
 
-        y1 = box[ys_sorted_index[0], 1]
-        y2 = box[ys_sorted_index[3], 1]
-
-        img_org2 = img.copy()
-        img_plate = img_org2[y1:y2, x1:x2]
-        #cv2.imshow('number plate', img_plate)
-        cv2.imwrite(self.DIR_MIDEL_IMAGES+'/number_plate.jpg', img_plate)
-
-        #cv2.namedWindow('img', cv2.WINDOW_NORMAL)
-        #cv2.imshow('img', img)
-
-        # 带轮廓的图片
-        cv2.imwrite(self.DIR_MIDEL_IMAGES+'/contours.png', img)
-        #cv2.waitKey(0)
-        cv2.destroyAllWindows()
+            # 带轮廓的图片
+            cv2.imwrite(self.DIR_MIDEL_IMAGES+'/contours.png', img)
+            cv2.destroyAllWindows()
+            return self.result.ok2()
+        except Exception as e:
+            print(e)
+            return self.result.error("没有定位到车牌")
 
     def get_plateNum(self):
         imagePath = self.DIR_RECEIVED_IMAGES + "/plate.jpg"
         img = cv2.imread(imagePath)
-        self.detect(img)
+        return self.detect(img)
 
 if __name__ == '__main__':
     g = getplate()
