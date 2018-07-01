@@ -36,7 +36,7 @@ class splitPlate:
 
         # 二值化
         img_thre = img_gray
-        cv2.threshold(median, self.init_fazhi, 255, cv2.THRESH_BINARY, img_thre)
+        cv2.threshold(median, self.init_fazhi, 256, cv2.THRESH_BINARY, img_thre)
         # # 2、将灰度图像二值化，设
         # # 定阈值是100
         # img_thre = img_gray
@@ -121,7 +121,7 @@ class splitPlate:
     def find_end(self, start_):
         end_ = start_ + 1
         for m in range(start_ + 1, self.width - 6):
-            if (self.black[m] if self.arg else self.white[m]) > (0.89 * self.black_max if self.arg else 0.89 * self.white_max):  # 0.95这个参数请多调整，对应下面的0.05
+            if (self.black[m] if self.arg else self.white[m]) > (0.90 * self.black_max if self.arg else 0.90 * self.white_max):  # 0.95这个参数请多调整，对应下面的0.05
                 end_ = m
                 break
         return end_

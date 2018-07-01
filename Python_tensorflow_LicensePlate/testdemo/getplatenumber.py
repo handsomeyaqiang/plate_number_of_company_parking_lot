@@ -53,7 +53,7 @@ class getplate:
             area = cv2.contourArea(cnt)
 
             # 面积小的都筛选掉
-            if (area < 2300):
+            if (area < 2700):
                 continue
 
             # 轮廓近似，作用很小
@@ -121,7 +121,7 @@ class getplate:
         cv2.destroyAllWindows()
 
     def get_plateNum(self):
-        imagePath = self.DIR_RECEIVED_IMAGES + "/plate.jpg"
+        imagePath = self.DIR_RECEIVED_IMAGES + "/1.jpg"
         img = cv2.imread(imagePath)
         self.detect(img)
 

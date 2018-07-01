@@ -111,6 +111,16 @@ class splitPlate:
                     split_pic += 1
             if split_pic == 7:
                 return self.result.ok2()
+            elif split_pic == 8:
+                count = 1
+                for rt, dirs, files in os.walk(self.DIR_SPLIT_IMAGES):
+                    for filename in files:
+                        if count == 3:
+                            os.remove(rt + "/" + filename)
+                        elif count > 3:
+                            os.rename(rt + "/" + filename, rt + "/" + str(count-1) + ".jpg")
+                        count += 1
+                return self.result.ok2()
             else:
                 return self.result.error("车牌切割图片读取失败")
         except Exception as e:

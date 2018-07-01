@@ -26,27 +26,27 @@ class trainLetter:
         self.letter_Train_Dirs = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L',
                                   'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
         self.letter_NUM_CLASSES = len(self.letter_lables)
-        # 定义输入节点，对应于图片像素值矩阵集合和图片标签(即所代表的数字)
+        # 定义输入节点
         self.x = tf.placeholder(tf.float32, shape=[None, self.SIZE])
         self.y_ = tf.placeholder(tf.float32, shape=[None, self.letter_NUM_CLASSES])
         self.x_image = tf.reshape(self.x, [-1, self.WIDTH, self.HEIGHT, 1])
 
 
-    # 定义卷积函数
+    # 卷积函数
     def conv_layer(self, inputs, W, b, conv_strides, kernel_size, pool_strides, padding):
         L1_conv = tf.nn.conv2d(inputs, W, strides=conv_strides, padding=padding)
         L1_relu = tf.nn.relu(L1_conv + b)
         return tf.nn.max_pool(L1_relu, ksize=kernel_size, strides=pool_strides, padding='SAME')
 
 
-    # 定义全连接层函数
+    # 全连接层函数
     def full_connect(self, inputs, W, b):
         return tf.nn.relu(tf.matmul(inputs, W) + b)
 
-
+    # 训练函数
     def train(self):
         time_begin = time.time()
-        # 第一次遍历图片目录是为了获取图片总数
+        # 遍历获取训练图片的数量
         input_count = 0
         for dir_name in self.letter_Train_Dirs:
             dir = self.TRAIN_DIR + "%s/" % dir_name  #
@@ -58,7 +58,7 @@ class trainLetter:
         input_images = np.array([[0] * self.SIZE for i in range(input_count)])
         input_labels = np.array([[0] * self.letter_NUM_CLASSES for i in range(input_count)])
 
-        # 第二次遍历图片目录是为了生成图片数据和标签
+        # 遍历训练目录生成图片及图片对应的标签数据
         index = 0
         hot = 0
         for dir_name in self.letter_Train_Dirs:
@@ -84,7 +84,7 @@ class trainLetter:
                     # print(hot, input_labels[index])
                     index += 1
             hot += 1
-        # 第一次遍历图片目录是为了获取图片总数
+        # 遍历获取预测图片的数量
         val_count = 0
         for dir_name in self.letter_Train_Dirs:
             dir = self.VALIDATION_DIR + "%s/" % dir_name  # i为分类目录
@@ -92,11 +92,11 @@ class trainLetter:
                 for filename in files:
                     val_count += 1
 
-                    # 定义对应维数和各维长度的数组
+        # 定义对应维数和各维长度的数组
         val_images = np.array([[0] * self.SIZE for i in range(val_count)])
         val_labels = np.array([[0] * self.letter_NUM_CLASSES for i in range(val_count)])
 
-        # 第二次遍历图片目录是为了生成验证图片数据和标签
+        # 遍历预测目录生成图片及图片对应的标签数据
         index = 0
         hot = 0
         for dir_name in self.letter_Train_Dirs:
@@ -186,7 +186,8 @@ class trainLetter:
                     train_step.run(feed_dict={self.x: input_images[start_index:input_count - 1],
                                               self.y_: input_labels[start_index:input_count - 1], keep_prob: 0.5})
 
-                # 每完成五次迭代，判断准确度是否已达到100%，达到则退出迭代循环
+                # 完成五次迭代，判断准确度是否已达到99%并且判断
+                # 迭代次数大于等于350轮，达到则退出迭代循环
                 iterate_accuracy = 0
                 if it % 5 == 0:
                     iterate_accuracy = accuracy.eval(feed_dict={self.x: val_images, self.y_: val_labels, keep_prob: 1.0})
@@ -293,5 +294,5 @@ class trainLetter:
         return license_num
 
 if __name__ == '__main__':
-    l = letter()
+    l = trainLetter()
     l.predict()
