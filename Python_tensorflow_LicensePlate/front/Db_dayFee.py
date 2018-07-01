@@ -4,8 +4,8 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtGui import *
-
-
+from PyQt5.QtCore import QTime
+import time
 class dayfee(QtWidgets.QDialog):
     def __init__(self, rule):
         super(dayfee, self).__init__()
@@ -14,14 +14,14 @@ class dayfee(QtWidgets.QDialog):
         self.rule = rule
         self.setWindowTitle("修改白天停车收费")
         self.setFixedSize(self.width(), self.height())  # 实现禁止窗口最大化和禁止窗口拉伸
-        self.ui.lineEdit.setClearButtonEnabled(True)
-        self.ui.lineEdit_2.setClearButtonEnabled(True)
+        # self.ui.lineEdit.setClearButtonEnabled(True)
+        # self.ui.lineEdit_2.setClearButtonEnabled(True)
         self.ui.lineEdit_3.setClearButtonEnabled(True)
         self.ui.lineEdit_4.setClearButtonEnabled(True)
         # self.ui.lineEdit.setFrame(False)
 
-        self.ui.lineEdit.setFixedSize(160, 24)
-        self.ui.lineEdit_2.setFixedSize(160, 24)
+        self.ui.starttimeedit.setFixedSize(160, 24)
+        self.ui.endtimeedit.setFixedSize(160, 24)
         self.ui.lineEdit_3.setFixedSize(160, 24)
         self.ui.lineEdit_4.setFixedSize(160, 24)
         self.setWindowIcon(QIcon('2.png'))
@@ -42,19 +42,19 @@ class dayfee(QtWidgets.QDialog):
         self.ShowUpdate()
 
     def clearInput(self):
-        self.ui.lineEdit.clear()
-        self.ui.lineEdit_2.clear()
+        # self.ui.lineEdit.clear()
+        # self.ui.lineEdit_2.clear()
         self.ui.lineEdit_3.clear()
         self.ui.lineEdit_4.clear()
 
     def updateFee(self):
         """更新白天收费规则"""
-        startTime = self.ui.lineEdit_2.text()
-        endTime = self.ui.lineEdit.text()
+        startTime = self.ui.starttimeedit.text()
+        endTime = self.ui.endtimeedit.text()
         price = self.ui.lineEdit_3.text()
         firsthourprice = self.ui.lineEdit_4.text()
         rulecontrol = ChargeController()
-        if startTime != '' and endTime != '' and price != '' and firsthourprice != '':
+        if price != '' and firsthourprice != '':
             # 操作数据库
             self.rule.dayprice = price
             self.rule.firsthourprice = firsthourprice
@@ -66,10 +66,6 @@ class dayfee(QtWidgets.QDialog):
             QMessageBox.information(self, ("提示"), ("修改成功！"))
             self.close()
         else:
-            if startTime == '':
-                QMessageBox.warning(self, ("提示"), ("开始时间不能为空！"))
-            if endTime == '':
-                QMessageBox.warning(self, ("提示"), ("结束时间不能为空！"))
             if price == '':
                 QMessageBox.warning(self, ("提示"), ("每小时单价不能为空！"))
             if firsthourprice == '':
@@ -82,12 +78,19 @@ class dayfee(QtWidgets.QDialog):
                                      QMessageBox.No, QMessageBox.No)
         if reply == QMessageBox.Yes:
             self.updateFee()
-
-
     def ShowUpdate(self):
         """修改页面"""
-        self.ui.lineEdit_2.setText(str(self.rule.daybegintime))
-        self.ui.lineEdit.setText(str(self.rule.dayendtime))
+        # self.ui.starttimeedit.setTime()
+        # print(type(self.rule.daybegintime))
+        beginhour,beginmin,beginsec = str(self.rule.daybegintime).split(':')
+        self.ui.starttimeedit.setTime(QTime(eval(beginhour),eval(beginmin),eval(beginsec)))
+        # print(self.rule.dayendtime)
+        endhour,endmin,endsec = str(self.rule.dayendtime).split(':')
+        self.ui.endtimeedit.setTime(QTime(eval(endhour),eval(endmin),eval(endsec)))
+
+        #
+        # print(type(self.rule.daybegintime))
+        # self.ui.endtimeedit.setTime('10:20:10')
         self.ui.lineEdit_3.setText(str(self.rule.dayprice))
         self.ui.lineEdit_4.setText(str(self.rule.firsthourprice))
 

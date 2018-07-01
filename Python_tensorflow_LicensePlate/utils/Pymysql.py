@@ -79,7 +79,20 @@ class PyMySQLHelper:
         finally:
             cur.close()
             conn.close()
-
+    # 返回数据条数
+    def selectALL1(self, sql):
+        try:
+            conn = self.getConnection()
+            cur = conn.cursor()
+            count = cur.execute(sql)
+            row = cur.rowcount
+            result = cur.fetchall()
+            return result, row
+        except pymysql.Error as e:
+            print("pymysql Error:%s" % e)
+        finally:
+            cur.close()
+            conn.close()
     # 带参数的更新方法eg:sql='insert into pythontest values(%s,%s,%s,now())',
     # params=(6,'C#','good book')
     def updateByParam(self, sql, params):

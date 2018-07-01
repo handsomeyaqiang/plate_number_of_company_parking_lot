@@ -16,6 +16,7 @@ class Figure_Canvas(
     FigureCanvas):  # 通过继承FigureCanvas类，使得该类既是一个PyQt5的Qwidget，又是一个matplotlib的FigureCanvas，这是连接pyqt5与matplot                                          lib的关键
     # width和height控制画布的大小,画布太小容易出现数据显示不全的情况
     def __init__(self, parent=None, width=5, height=2, dpi=100):
+
         fig = Figure(figsize=(width, height),
                      dpi=100)  # 创建一个Figure，注意：该Figure为matplotlib下的figure，不是matplotlib.pyplot下面的figure
         FigureCanvas.__init__(self, fig)  # 初始化父类
@@ -30,7 +31,8 @@ class Figure_Canvas(
 
         self.axes.set_title("公司停车系统财务走势图")
 
-    # 按天查询
+
+        # 按天查询
     def day(self, year_month_day):
         self.axes.set_xlabel("时间(小时)")
         self.axes.set_ylabel("收入(元)")
@@ -77,6 +79,8 @@ class Finance(QtWidgets.QMainWindow):
         super(Finance, self).__init__()
         self.ui = Ui_finance()
         self.ui.setupUi(self)
+        self.nCurScroller = 0
+        self.pageValue = 5
 
         self.setWindowTitle("财务管理")
         self.setFixedSize(self.width(), self.height())  # 实现禁止窗口最大化和禁止窗口拉伸
@@ -120,12 +124,25 @@ class Finance(QtWidgets.QMainWindow):
         self.ui.pushButton_2.clicked.connect(self.lastPage) # 上一页槽函数
          # 折线统计图显示
          # table显示财务
-    # 上一页
-    def lastPage(self):
-    #
-    # # 下一页
-    def nextPage(self):
 
+    def lastPage(self):
+        max_value = self.ui.tableWidget.verticalScrollBar().maximum()
+        self.nCurScroller = self.ui.tableWidget.verticalScrollBar().value()
+
+        if self.nCurScroller > 0:
+            self.ui.tableWidget.verticalScrollBar().setSliderPosition(self.nCurScroller - self.pageValue)
+        else:
+            self.ui.tableWidget.verticalScrollBar().setSliderPosition(max_value)
+
+
+    #  # 下一页
+    def nextPage(self):
+        max_value = self.ui.tableWidget.verticalScrollBar().maximum()
+        self.nCurScroller = self.ui.tableWidget.verticalScrollBar().value()
+        if self.nCurScroller < max_value:
+            self.ui.tableWidget.verticalScrollBar().setSliderPosition(self.pageValue + self.nCurScroller)
+        else:
+            self.ui.tableWidget.verticalScrollBar().setSliderPosition(0)
     def mousePressEvent(self, QMouseEvent):
         self.ui.label_3.hide()
 
@@ -138,11 +155,7 @@ class Finance(QtWidgets.QMainWindow):
         self.ui.label_2.setText("  " + text)
 
     def table(self):
-        self.ui.pushButton_2.show()
-        self.ui.pushButton_3.show()
         self.ui.label_3.hide()
-        self.ui.groupBox_3.show()
-        self.ui.tableWidget.show()
         # 根据需求自己自己设置table的行列数
         category = self.ui.comboBox.currentText()
         input = self.ui.lineEdit.text()
@@ -158,19 +171,23 @@ class Finance(QtWidgets.QMainWindow):
                     year_month_day = temp_year + '-' + temp_month.zfill(2) + '-' + temp_day.zfill(2)
                 except Exception:
                     QMessageBox.warning(self, '提示', '输入数据有误！')
+                    flag = 0
+                    return flag
                 else:
                      data = fcontrol.listbyday(year_month_day)
             elif category == '按月':
                 try:
                     temp_year, temp_month= input.split('-')
                     temp_day = '01'
-                    print(temp_year, temp_month, temp_day)
                     datetime.date(int(temp_year), int(temp_month), int(temp_day))
                     year_month = temp_year + '-' + temp_month.zfill(2)
                 except Exception:
+                    flag = 0
                     QMessageBox.warning(self, '提示', '输入数据有误！')
+                    return flag
                 else:
                     data = fcontrol.listbymonth(year_month)
+
             elif category == '按年':
                 try:
                     temp_year = input
@@ -179,27 +196,46 @@ class Finance(QtWidgets.QMainWindow):
                     datetime.date(int(temp_year), int(temp_month), int(temp_day))
                 except Exception:
                     QMessageBox.warning(self, '提示', '输入数据有误！')
+                    flag = 0
+                    return flag
+
                 else:
                     data = fcontrol.listbyyear(input)
-        self.ui.tableWidget.setRowCount(len(data))
-        self.ui.tableWidget.setColumnCount(3)
-        self.ui.tableWidget.setHorizontalHeaderLabels(['车位号', '收费时间', '金额（元）'])  # 设置table的表头信息
-        i = 0
-        for fin in data:
-            tparkid, tchargetime, tmoney = fin
-            parkid = QTableWidgetItem(str(tparkid))
-            self.ui.tableWidget.setItem(i, 0, parkid)
-            self.ui.tableWidget.item(i, 0).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-            chargetime = QTableWidgetItem(str(tchargetime))
-            self.ui.tableWidget.setItem(i, 1, chargetime)
-            self.ui.tableWidget.item(i, 1).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-            money = QTableWidgetItem(str(tmoney))
-            self.ui.tableWidget.setItem(i, 2, money)
-            self.ui.tableWidget.item(i, 2).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-            i = i+1
-        self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
-        self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
-        # table字体等布局
+            if data is None:
+                print(data)
+                QMessageBox.warning(self, '提示', '未查询到数据！')
+                self.ui.tableWidget.setRowCount(0)
+                flag = 0
+                return flag
+            else:
+                self.ui.pushButton_2.show()
+                self.ui.pushButton_3.show()
+
+                self.ui.groupBox_3.show()
+                self.ui.tableWidget.show()
+                self.ui.tableWidget.setRowCount(len(data))
+                self.ui.tableWidget.setColumnCount(3)
+                self.ui.tableWidget.setHorizontalHeaderLabels(['车位号', '收费时间', '金额（元）'])  # 设置table的表头信息
+                i = 0
+                for fin in data:
+                    tparkid, tchargetime, tmoney = fin
+                    parkid = QTableWidgetItem(str(tparkid))
+                    self.ui.tableWidget.setItem(i, 0, parkid)
+                    self.ui.tableWidget.item(i, 0).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+                    chargetime = QTableWidgetItem(str(tchargetime))
+                    self.ui.tableWidget.setItem(i, 1, chargetime)
+                    self.ui.tableWidget.item(i, 1).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+                    money = QTableWidgetItem(str(tmoney))
+                    self.ui.tableWidget.setItem(i, 2, money)
+                    self.ui.tableWidget.item(i, 2).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+                    i = i+1
+                self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
+                self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类
+                flag = 1
+                return  flag
+            # table字体等布局
+        else:
+            QMessageBox.warning(self, '提示', '输入不能为空！')
         # for index in range(self.ui.tableWidget.columnCount()):
         #     headItem = self.ui.tableWidget.horizontalHeaderItem(index)
         #     headItem.setFont(QFont("song", 10, QFont.Bold))
@@ -211,67 +247,36 @@ class Finance(QtWidgets.QMainWindow):
     def finance(self):
         # 获得输入
         self.ui.label_3.hide()
-
-
-        category = self.ui.comboBox.currentText()
-        input = self.ui.lineEdit.text()
-
-
-
-        dr = Figure_Canvas()
-        # 实例化一个FigureCanvas
-        if input != '':
+        flag = self.table()
+        if flag ==1:
+            category = self.ui.comboBox.currentText()
+            input = self.ui.lineEdit.text()
+            dr = Figure_Canvas()
+            self.ui.groupBox_2.show()
+            self.ui.graphicsView.show()
+            # 实例化一个FigureCanvas
             if category == '按日':
-                    try:
-                        temp_year,temp_month,temp_day = input.split('-')
-                        print(temp_year,temp_month,temp_day )
-                        a= datetime.date(int(temp_year),int(temp_month),int(temp_day))
-                        year_month_day = temp_year+'-'+temp_month.zfill(2)+'-'+temp_day.zfill(2)
+                temp_year,temp_month,temp_day = input.split('-')
+                year_month_day = temp_year+'-'+temp_month.zfill(2)+'-'+temp_day.zfill(2)
 
-
-
-                    except Exception:
-                        QMessageBox.warning(self, '提示', '输入数据有误！')
-                    else:
-                        self.ui.groupBox_2.show()
-                        self.ui.graphicsView.show()
-                        dr.day(year_month_day)  # 画图
+                dr.day(year_month_day)  # 画图
             elif category == '按月':
-                try:
-                    temp_year, temp_month= input.split('-')
-                    temp_day = '01'
-                    print(temp_year, temp_month, temp_day)
-                    datetime.date(int(temp_year), int(temp_month), int(temp_day))
-                    year_month = temp_year + '-' + temp_month.zfill(2)
-                except Exception:
-                    QMessageBox.warning(self, '提示', '输入数据有误！')
-                else:
-                    self.ui.groupBox_2.show()
-                    self.ui.graphicsView.show()
-                    dr.month(year_month)
+                temp_year, temp_month= input.split('-')
+                year_month = temp_year + '-' + temp_month.zfill(2)
+                self.ui.groupBox_2.show()
+                self.ui.graphicsView.show()
+                dr.month(year_month)
             elif category == '按年':
-                try:
-                    temp_year = input
-                    temp_day = '01'
-                    temp_month ='01'
-                    datetime.date(int(temp_year), int(temp_month), int(temp_day))
-                except Exception:
-                    QMessageBox.warning(self, '提示', '输入数据有误！')
-                else:
-                    self.ui.groupBox_2.show()
-                    self.ui.graphicsView.show()
+                temp_year = input
+                self.ui.groupBox_2.show()
+                self.ui.graphicsView.show()
+                dr.year(input)
 
-                    dr.year(input)
+            graphicscene = QtWidgets.QGraphicsScene()  # 第三步，创建一个QGraphicsScene，因为加载的图形（FigureCanvas）不能直接放到graphicview控件中，必须先放到graphicScene，然后再把graphicscene放到graphicview中
+            graphicscene.addWidget(dr)  # 第四步，把图形放到QGraphicsScene中，注意：图形是作为一个QWidget放到QGraphicsScene中的
+            self.ui.graphicsView.setScene(graphicscene)  # 第五步，把QGraphicsScene放入QGraphicsView
+            self.ui.graphicsView.show()  # 最后，调用show方法呈现图形
 
-
-            # else:
-            #     QMessageBox.information(self, ("提示"), ("修改成功！"))
-
-        graphicscene = QtWidgets.QGraphicsScene()  # 第三步，创建一个QGraphicsScene，因为加载的图形（FigureCanvas）不能直接放到graphicview控件中，必须先放到graphicScene，然后再把graphicscene放到graphicview中
-        graphicscene.addWidget(dr)  # 第四步，把图形放到QGraphicsScene中，注意：图形是作为一个QWidget放到QGraphicsScene中的
-        self.ui.graphicsView.setScene(graphicscene)  # 第五步，把QGraphicsScene放入QGraphicsView
-        self.ui.graphicsView.show()  # 最后，调用show方法呈现图形
-        self.table()
 
 
 if __name__ == '__main__':

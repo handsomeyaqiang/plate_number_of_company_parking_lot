@@ -1,5 +1,5 @@
 # coding=utf-8
-import pymssql
+import pymysql
 
 '''
 	python的对SQLserver数据库的操作

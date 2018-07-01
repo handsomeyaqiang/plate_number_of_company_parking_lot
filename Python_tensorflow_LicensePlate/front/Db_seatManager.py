@@ -13,7 +13,7 @@ from Python_tensorflow_LicensePlate.controller.ParkPlaceController import ParkPl
 from Python_tensorflow_LicensePlate.controller.ChargeController import ChargeController
 
 
-class SeatManage(QWidget):
+class SeatManage(QtWidgets.QDialog):
     def __init__(self):
         super(SeatManage, self).__init__()
         self.ui = Ui_seat()
@@ -34,6 +34,8 @@ class SeatManage(QWidget):
         self.ui.label_9.hide() # 车位状态标签
         self.ui.label_10.hide()
         self.ui.label_8.setFixedWidth(180)
+        self.nCurScroller = 0
+        self.pageValue = 5  # 这个你的框一面能放下多少条就填几
 
         # 设置lineEdit的删除
 
@@ -152,18 +154,43 @@ class SeatManage(QWidget):
         self.ui.pushButton_12.clicked.connect(self.lock_nextPage) #  车位锁下一页
         self.ui.pushButton_13.clicked.connect(self.seat_lastPage) # 车位操作上一页
         self.ui.pushButton_14.clicked.connect(self.seat_nextPage) # 车位操作下一页
-    # # 车位锁上一页
-    # def lock_lastPage(self):
-    #
-    # # 下一页
-    # def lock_nextPage(self):
+    # 车位锁上一页
+    def lock_lastPage(self):
+        max_value = self.ui.tableWidget_3.verticalScrollBar().maximum()
+        self.nCurScroller = self.ui.tableWidget_3.verticalScrollBar().value()
+
+        if self.nCurScroller > 0:
+            self.ui.tableWidget_3.verticalScrollBar().setSliderPosition(self.nCurScroller - self.pageValue)
+        else:
+            self.ui.tableWidget_3.verticalScrollBar().setSliderPosition(max_value)
+    # 下一页
+    def lock_nextPage(self):
+        max_value = self.ui.tableWidget_3.verticalScrollBar().maximum()
+        self.nCurScroller = self.ui.tableWidget_3.verticalScrollBar().value()
+        if self.nCurScroller < max_value:
+            self.ui.tableWidget_3.verticalScrollBar().setSliderPosition(self.pageValue + self.nCurScroller)
+        else:
+            self.ui.tableWidget_3.verticalScrollBar().setSliderPosition(0)
 
 
     # 车位操作上一页
-    # def seat_lastPage(self):
+    def seat_lastPage(self):
+        max_value = self.ui.tableWidget_4.verticalScrollBar().maximum()
+        self.nCurScroller = self.ui.tableWidget_4.verticalScrollBar().value()
+
+        if self.nCurScroller > 0:
+            self.ui.tableWidget_4.verticalScrollBar().setSliderPosition(self.nCurScroller - self.pageValue)
+        else:
+            self.ui.tableWidget_4.verticalScrollBar().setSliderPosition(max_value)
     #
     # # 下一页
-    # def seat_nextPage(self):
+    def seat_nextPage(self):
+        max_value = self.ui.tableWidget_4.verticalScrollBar().maximum()
+        self.nCurScroller = self.ui.tableWidget_4.verticalScrollBar().value()
+        if self.nCurScroller < max_value:
+            self.ui.tableWidget_4.verticalScrollBar().setSliderPosition(self.pageValue + self.nCurScroller)
+        else:
+            self.ui.tableWidget_4.verticalScrollBar().setSliderPosition(0)
 
 
 
@@ -400,47 +427,49 @@ class SeatManage(QWidget):
                 if rs1.status == 200:
                     # QMessageBox.information(self, ("提示"), ("删除成功"))
                     # 刷新页面
+                    OK = QMessageBox.information(self, ("提示"), ("删除成功"))
                     if findtype == -1:
-                        rs = pcontrol.findbyid(eval(id))
-                        list = rs.data
+
+                        list = None
+                        self.ui.tableWidget_4.setRowCount(0)
                     else:
                         rs = pcontrol.findbytype(findtype)
                         list = rs.data
 
-                    row = len(list)
-                    col = ["parkPlaceID", "parkPlaceType"]
-                    self.ui.tableWidget_4.setRowCount(row)  # 控件的名字保持一致，切莫想当然
-                    self.ui.tableWidget_4.setColumnCount(len(col) + 1)  # 加1，开辟一列放操作按钮
-                    self.ui.tableWidget_4.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
-                    self.ui.tableWidget_4.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
+                        row = len(list)
+                        col = ["parkPlaceID", "parkPlaceType"]
+                        self.ui.tableWidget_4.setRowCount(row)  # 控件的名字保持一致，切莫想当然
+                        self.ui.tableWidget_4.setColumnCount(len(col) + 1)  # 加1，开辟一列放操作按钮
+                        self.ui.tableWidget_4.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
+                        self.ui.tableWidget_4.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
 
-                    for index in range(self.ui.tableWidget_4.columnCount()):
-                        headItem = self.ui.tableWidget_4.horizontalHeaderItem(index)
+                        for index in range(self.ui.tableWidget_4.columnCount()):
+                            headItem = self.ui.tableWidget_4.horizontalHeaderItem(index)
 
-                        headItem.setFont(QFont("song", 10, QFont.Bold))
-                        headItem.setForeground(QBrush(Qt.darkMagenta))
-                        # headItem.setBackgroundColor(QColor(0, 60, 10))# 不能设置颜色，原因未知
-                        headItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-                    for i in range(row):
-                        for j in range(len(col)):
-                            parkplace = list[i]
-                            if col[j] == "parkPlaceType":
-                                if parkplace.parkPlaceType == 0:
-                                    temp_data = "员工车位"
-                                elif parkplace.parkPlaceType == 1:
-                                    temp_data = "临时车位"
+                            headItem.setFont(QFont("song", 10, QFont.Bold))
+                            headItem.setForeground(QBrush(Qt.darkMagenta))
+                            # headItem.setBackgroundColor(QColor(0, 60, 10))# 不能设置颜色，原因未知
+                            headItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+                        for i in range(row):
+                            for j in range(len(col)):
+                                parkplace = list[i]
+                                if col[j] == "parkPlaceType":
+                                    if parkplace.parkPlaceType == 0:
+                                        temp_data = "员工车位"
+                                    elif parkplace.parkPlaceType == 1:
+                                        temp_data = "临时车位"
+                                    else:
+                                        temp_data = "error"
                                 else:
-                                    temp_data = "error"
-                            else:
-                                temp_data = parkplace.__getattribute__(col[j])  # 临时记录，不能直接插入表格
-                            data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
-                            self.ui.tableWidget_4.setItem(i, j, data)
-                            # 数据库因为从0开始计数，所以列数减一
-                            if j == len(col) - 1:
-                                # print(rows[i][0])
-                                # 传入id rows[i][0]
-                                self.ui.tableWidget_4.setCellWidget(i, j + 1, self.buttonForRow(parkplace, findtype))
-                    OK = QMessageBox.information(self, ("提示"), ("删除成功"))
+                                    temp_data = parkplace.__getattribute__(col[j])  # 临时记录，不能直接插入表格
+                                data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
+                                self.ui.tableWidget_4.setItem(i, j, data)
+                                # 数据库因为从0开始计数，所以列数减一
+                                if j == len(col) - 1:
+                                    # print(rows[i][0])
+                                    # 传入id rows[i][0]
+                                    self.ui.tableWidget_4.setCellWidget(i, j + 1, self.buttonForRow(parkplace, findtype))
+
             except Exception:
                 QMessageBox.information(self, ("提示"), ("发生错误！"))
 
