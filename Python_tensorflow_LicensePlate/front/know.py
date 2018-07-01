@@ -36,7 +36,7 @@ class Know_Ui(QWidget):
         # 刷新摄像头的显示时间，实时显示
         self.timer = QTimer()
         self.timer.start()
-        self.timer.setInterval(100)
+        self.timer.setInterval(2300)
 
         self.ui.pushButton.clicked.connect(self.openimage)
         self.ui.pushButton_3.clicked.connect(self.handRegister)
@@ -63,15 +63,6 @@ class Know_Ui(QWidget):
         self.ui1 = hand_Ui()
         self.ui1.show()
 
-    def chargeEvent(self):
-        reply = QMessageBox.question(self, '提示',
-                                     "确定缴费？", QMessageBox.Yes |
-                                     QMessageBox.No, QMessageBox.No)
-        if reply == QMessageBox.Yes:
-            self.accept()
-        else:
-            self.ignore()
-
     # 视频识别
     def capPicture(self):
 
@@ -85,25 +76,88 @@ class Know_Ui(QWidget):
             # 转为QImage对象
             self.image = QImage(img.data, width, height, bytesPerLine, QImage.Format_RGB888)
             self.ui.label.setPixmap(QPixmap.fromImage(self.image).scaled(self.ui.label.width(), self.ui.label.height()))
+            col = ["plate_num", "intime", "outtime", "vehicle_type", "park_place_id", "money"]
+            self.ui.tableWidget.setRowCount(1)
+            self.ui.tableWidget.setColumnCount(len(col))
+            self.ui.tableWidget.verticalHeader().hide()
+            result = self.judg_recongise(img)
+            if result.status == 200:
+                # 识别成功
+                for i in range(len(col)):
+                    recongiseResult = result.data
+                    if i == 2:
+                        temp_data = ""
+                    elif i == 3:
+                        temp_data = recongiseResult.vehicle_type
+                        if temp_data == 0:
+                            temp_data = "内部车"
+                        else:
+                            temp_data = "外部车"
+                    elif i == 5:
+                        temp_data = ""
+                    else:
+                        temp_data = recongiseResult.__getattribute__(col[i])  # 临时记录，不能直接插入表格
+                    data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
+                    self.ui.tableWidget.setItem(0, i, data)
 
-    def mousePressEvent(self, QMouseEvent):
-        self.cap.release()
+            elif result.status == 300:
+                # 缴费
+                reply = QMessageBox.question(self, '提示',
+                                             "需交费" + str(result.data.financial.money) + "元", QMessageBox.Yes |
+                                             QMessageBox.No, QMessageBox.No)
+                if reply == QMessageBox.Yes:
+                    # 调用缴费业务
+                    recongise = RecongiseService()
+                    result = recongise.charge(result.data)
+                    if result.status == 200:
+                        # 缴费成功
+                        OK = QMessageBox.information(self, ("提示"), ("""缴费成功"""))
+                        # 识别成功
+                        for i in range(len(col)):
+                            recongiseResult = result.data
+                            if i == 2:
+                                temp_data = formattime.calc_time(recongiseResult.__getattribute__("outtime"),
+                                                                 recongiseResult.__getattribute__("intime"))
+                            elif i == 3:
+                                temp_data = recongiseResult.vehicle_type
+                                if temp_data == 0:
+                                    temp_data = "内部车"
+                                else:
+                                    temp_data = "外部车"
+                            else:
+                                temp_data = recongiseResult.__getattribute__(col[i])  # 临时记录，不能直接插入表格
+                            data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
+                            self.ui.tableWidget.setItem(0, i, data)
+                    else:
+                        # 缴费失败
+                        OK = QMessageBox.information(self, ("警告"), ("""缴费异常"""))
+                        return
+                else:
+                    # print("缴费取消")
+                    OK = QMessageBox.information(self, ("警告"), ("""已取消缴费"""))
+                    return
+            else:
+                # 识别失败
+                #OK = QMessageBox.information(self, ("警告"), (str(result.msg)))
+                return
 
     # 关闭视频显示
     def closeVideo(self):
-
         self.cap.release()
 
-    # 进入识别
-    def judg_recongise(self,imgName):
-        img = cv2.imread(imgName)
+    # 识别
+    def judg_recongise(self, img):
         cv2.imwrite(self.DIR_RECEIVED_IMAGES + "/plate.jpg", img)
         # 调用车牌获取
         g = getplate()
-        g.get_plateNum()
+        result = g.get_plateNum()
+        if result.status != 200:
+            return result
         # 调用车牌字符切割
         s = splitPlate()
-        s.split_plate()
+        result = s.split_plate()
+        if result.status != 200:
+            return result
         # 调用识别业务
         recongise = RecongiseService()
         return recongise.judg_recongise()
@@ -111,13 +165,16 @@ class Know_Ui(QWidget):
     # 打开图片识别
     def openimage(self):
         imgName, imgType = QFileDialog.getOpenFileName(self, "打开图片", "", "*.jpg;;*.png;;All Files(*)")
+        if imgName == None or imgName == "":
+            return
         jpg = QtGui.QPixmap(imgName).scaled(self.ui.label.width(), self.ui.label.height())
         self.ui.label.setPixmap(jpg)
         col = ["plate_num", "intime", "outtime", "vehicle_type", "park_place_id", "money"]
         self.ui.tableWidget.setRowCount(1)
         self.ui.tableWidget.setColumnCount(len(col))
         self.ui.tableWidget.verticalHeader().hide()
-        result = self.judg_recongise(imgName)
+        img = cv2.imread(imgName)
+        result = self.judg_recongise(img)
         if result.status == 200:
             # 识别成功
             for i in range(len(col)):
@@ -143,12 +200,12 @@ class Know_Ui(QWidget):
                                          "需交费"+str(result.data.financial.money)+"元", QMessageBox.Yes |
                                          QMessageBox.No, QMessageBox.No)
             if reply == QMessageBox.Yes:
-                print("缴费")
                 # 调用缴费业务
                 recongise = RecongiseService()
                 result = recongise.charge(result.data)
                 if result.status == 200:
                     # 缴费成功
+                    OK = QMessageBox.information(self, ("提示"), ("""缴费成功"""))
                     # 识别成功
                     for i in range(len(col)):
                         recongiseResult = result.data
@@ -170,7 +227,9 @@ class Know_Ui(QWidget):
                     OK = QMessageBox.information(self, ("警告"), ("""缴费异常"""))
                     return
             else:
-                print("缴费取消")
+                #print("缴费取消")
+                OK = QMessageBox.information(self, ("警告"), ("""已取消缴费"""))
+                return
         else:
             # 识别失败
             OK = QMessageBox.information(self, ("警告"), (str(result.msg)))

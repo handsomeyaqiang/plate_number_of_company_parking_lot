@@ -125,7 +125,11 @@ class RecongiseService:
     def judg_recongise(self):
         recongiseDao = RecongiseDaoImpl()
         # 调用车牌识别的实现DaoImpl
-        plate_num = recongiseDao.recongise()
+        try:
+            plate_num = recongiseDao.recongise()
+        except Exception as e:
+            print(e)
+            return ParkResult().error("没有识别出车牌号")
         recordService = RecordService()
         # 根据车牌号查找进入的车辆的停车记录
         result = recordService.getSingleRecordByPlateId(plate_num)

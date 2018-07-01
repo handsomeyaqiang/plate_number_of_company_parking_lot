@@ -6,12 +6,12 @@ from Python_tensorflow_LicensePlate.front.FPwd import *   # 导入文件的顺�
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
-from loginUI import *
-from register import *
-from Db_finance import *
-from ComInfoManager import *
-from Db_seatManager import *
-from Db_admin import *
+from Python_tensorflow_LicensePlate.front.loginUI import *
+from Python_tensorflow_LicensePlate.front.register import *
+from Python_tensorflow_LicensePlate.front.Db_finance import *
+from Python_tensorflow_LicensePlate.front.ComInfoManager import *
+from Python_tensorflow_LicensePlate.front.Db_seatManager import *
+from Python_tensorflow_LicensePlate.front.Db_admin import *
 
 
 from PyQt5.QtWidgets import QWidget
