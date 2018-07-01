@@ -137,7 +137,7 @@ class Know_Ui(QWidget):
                     OK = QMessageBox.information(self, ("警告"), ("""已取消缴费"""))
                     return
             else:
-                # 识别失败
+                # 识别失败 过滤
                 #OK = QMessageBox.information(self, ("警告"), (str(result.msg)))
                 return
 
