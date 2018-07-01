@@ -155,11 +155,7 @@ class Finance(QtWidgets.QMainWindow):
         self.ui.label_2.setText("  " + text)
 
     def table(self):
-        self.ui.pushButton_2.show()
-        self.ui.pushButton_3.show()
         self.ui.label_3.hide()
-        self.ui.groupBox_3.show()
-        self.ui.tableWidget.show()
         # 根据需求自己自己设置table的行列数
         category = self.ui.comboBox.currentText()
         input = self.ui.lineEdit.text()
@@ -176,7 +172,7 @@ class Finance(QtWidgets.QMainWindow):
                 except Exception:
                     QMessageBox.warning(self, '提示', '输入数据有误！')
                     flag = 0
-
+                    return flag
                 else:
                      data = fcontrol.listbyday(year_month_day)
             elif category == '按月':
@@ -188,6 +184,7 @@ class Finance(QtWidgets.QMainWindow):
                 except Exception:
                     flag = 0
                     QMessageBox.warning(self, '提示', '输入数据有误！')
+                    return flag
                 else:
                     data = fcontrol.listbymonth(year_month)
 
@@ -200,36 +197,42 @@ class Finance(QtWidgets.QMainWindow):
                 except Exception:
                     QMessageBox.warning(self, '提示', '输入数据有误！')
                     flag = 0
+                    return flag
 
                 else:
                     data = fcontrol.listbyyear(input)
-        if data is None:
-            print(data)
-            QMessageBox.warning(self, '提示', '未查询到数据！')
-            flag = 0
-            return flag
-        print('1213')
-        self.ui.tableWidget.setRowCount(len(data))
-        self.ui.tableWidget.setColumnCount(3)
-        self.ui.tableWidget.setHorizontalHeaderLabels(['车位号', '收费时间', '金额（元）'])  # 设置table的表头信息
-        i = 0
-        for fin in data:
-            tparkid, tchargetime, tmoney = fin
-            parkid = QTableWidgetItem(str(tparkid))
-            self.ui.tableWidget.setItem(i, 0, parkid)
-            self.ui.tableWidget.item(i, 0).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-            chargetime = QTableWidgetItem(str(tchargetime))
-            self.ui.tableWidget.setItem(i, 1, chargetime)
-            self.ui.tableWidget.item(i, 1).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-            money = QTableWidgetItem(str(tmoney))
-            self.ui.tableWidget.setItem(i, 2, money)
-            self.ui.tableWidget.item(i, 2).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-            i = i+1
-        self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
-        self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类
-        flag = 1
-        return  flag
-        # table字体等布局
+            if data is None:
+                print(data)
+                QMessageBox.warning(self, '提示', '未查询到数据！')
+                flag = 0
+                return flag
+            else:
+                self.ui.pushButton_2.show()
+                self.ui.pushButton_3.show()
+
+                self.ui.groupBox_3.show()
+                self.ui.tableWidget.show()
+                self.ui.tableWidget.setRowCount(len(data))
+                self.ui.tableWidget.setColumnCount(3)
+                self.ui.tableWidget.setHorizontalHeaderLabels(['车位号', '收费时间', '金额（元）'])  # 设置table的表头信息
+                i = 0
+                for fin in data:
+                    tparkid, tchargetime, tmoney = fin
+                    parkid = QTableWidgetItem(str(tparkid))
+                    self.ui.tableWidget.setItem(i, 0, parkid)
+                    self.ui.tableWidget.item(i, 0).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+                    chargetime = QTableWidgetItem(str(tchargetime))
+                    self.ui.tableWidget.setItem(i, 1, chargetime)
+                    self.ui.tableWidget.item(i, 1).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+                    money = QTableWidgetItem(str(tmoney))
+                    self.ui.tableWidget.setItem(i, 2, money)
+                    self.ui.tableWidget.item(i, 2).setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+                    i = i+1
+                self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
+                self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类
+                flag = 1
+                return  flag
+            # table字体等布局
         # for index in range(self.ui.tableWidget.columnCount()):
         #     headItem = self.ui.tableWidget.horizontalHeaderItem(index)
         #     headItem.setFont(QFont("song", 10, QFont.Bold))
