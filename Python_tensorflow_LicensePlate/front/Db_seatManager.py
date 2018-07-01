@@ -427,47 +427,49 @@ class SeatManage(QtWidgets.QDialog):
                 if rs1.status == 200:
                     # QMessageBox.information(self, ("提示"), ("删除成功"))
                     # 刷新页面
+                    OK = QMessageBox.information(self, ("提示"), ("删除成功"))
                     if findtype == -1:
-                        rs = pcontrol.findbyid(eval(id))
-                        list = rs.data
+
+                        list = None
+                        self.ui.tableWidget_4.setRowCount(0)
                     else:
                         rs = pcontrol.findbytype(findtype)
                         list = rs.data
 
-                    row = len(list)
-                    col = ["parkPlaceID", "parkPlaceType"]
-                    self.ui.tableWidget_4.setRowCount(row)  # 控件的名字保持一致，切莫想当然
-                    self.ui.tableWidget_4.setColumnCount(len(col) + 1)  # 加1，开辟一列放操作按钮
-                    self.ui.tableWidget_4.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
-                    self.ui.tableWidget_4.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
+                        row = len(list)
+                        col = ["parkPlaceID", "parkPlaceType"]
+                        self.ui.tableWidget_4.setRowCount(row)  # 控件的名字保持一致，切莫想当然
+                        self.ui.tableWidget_4.setColumnCount(len(col) + 1)  # 加1，开辟一列放操作按钮
+                        self.ui.tableWidget_4.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
+                        self.ui.tableWidget_4.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
 
-                    for index in range(self.ui.tableWidget_4.columnCount()):
-                        headItem = self.ui.tableWidget_4.horizontalHeaderItem(index)
+                        for index in range(self.ui.tableWidget_4.columnCount()):
+                            headItem = self.ui.tableWidget_4.horizontalHeaderItem(index)
 
-                        headItem.setFont(QFont("song", 10, QFont.Bold))
-                        headItem.setForeground(QBrush(Qt.darkMagenta))
-                        # headItem.setBackgroundColor(QColor(0, 60, 10))# 不能设置颜色，原因未知
-                        headItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-                    for i in range(row):
-                        for j in range(len(col)):
-                            parkplace = list[i]
-                            if col[j] == "parkPlaceType":
-                                if parkplace.parkPlaceType == 0:
-                                    temp_data = "员工车位"
-                                elif parkplace.parkPlaceType == 1:
-                                    temp_data = "临时车位"
+                            headItem.setFont(QFont("song", 10, QFont.Bold))
+                            headItem.setForeground(QBrush(Qt.darkMagenta))
+                            # headItem.setBackgroundColor(QColor(0, 60, 10))# 不能设置颜色，原因未知
+                            headItem.setTextAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
+                        for i in range(row):
+                            for j in range(len(col)):
+                                parkplace = list[i]
+                                if col[j] == "parkPlaceType":
+                                    if parkplace.parkPlaceType == 0:
+                                        temp_data = "员工车位"
+                                    elif parkplace.parkPlaceType == 1:
+                                        temp_data = "临时车位"
+                                    else:
+                                        temp_data = "error"
                                 else:
-                                    temp_data = "error"
-                            else:
-                                temp_data = parkplace.__getattribute__(col[j])  # 临时记录，不能直接插入表格
-                            data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
-                            self.ui.tableWidget_4.setItem(i, j, data)
-                            # 数据库因为从0开始计数，所以列数减一
-                            if j == len(col) - 1:
-                                # print(rows[i][0])
-                                # 传入id rows[i][0]
-                                self.ui.tableWidget_4.setCellWidget(i, j + 1, self.buttonForRow(parkplace, findtype))
-                    OK = QMessageBox.information(self, ("提示"), ("删除成功"))
+                                    temp_data = parkplace.__getattribute__(col[j])  # 临时记录，不能直接插入表格
+                                data = QTableWidgetItem(str(temp_data))  # 转换后可插入表格
+                                self.ui.tableWidget_4.setItem(i, j, data)
+                                # 数据库因为从0开始计数，所以列数减一
+                                if j == len(col) - 1:
+                                    # print(rows[i][0])
+                                    # 传入id rows[i][0]
+                                    self.ui.tableWidget_4.setCellWidget(i, j + 1, self.buttonForRow(parkplace, findtype))
+
             except Exception:
                 QMessageBox.information(self, ("提示"), ("发生错误！"))
 

@@ -204,6 +204,7 @@ class Finance(QtWidgets.QMainWindow):
             if data is None:
                 print(data)
                 QMessageBox.warning(self, '提示', '未查询到数据！')
+                self.ui.tableWidget.setRowCount(0)
                 flag = 0
                 return flag
             else:
@@ -233,6 +234,8 @@ class Finance(QtWidgets.QMainWindow):
                 flag = 1
                 return  flag
             # table字体等布局
+        else:
+            QMessageBox.warning(self, '提示', '输入不能为空！')
         # for index in range(self.ui.tableWidget.columnCount()):
         #     headItem = self.ui.tableWidget.horizontalHeaderItem(index)
         #     headItem.setFont(QFont("song", 10, QFont.Bold))
