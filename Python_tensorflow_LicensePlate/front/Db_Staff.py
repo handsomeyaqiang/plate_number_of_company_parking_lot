@@ -3,7 +3,7 @@ from Python_tensorflow_LicensePlate.front.staffUpdate import *
 from Python_tensorflow_LicensePlate.front.TableAndButton import *
 from PyQt5.QtWidgets import *
 from Python_tensorflow_LicensePlate.controller.StaffController import StaffController
-
+import re
 # 导入文件的顺序不同会导致文件类识别异常，原因未知
 from PyQt5 import QtWidgets, QtCore, QtGui
 
@@ -307,21 +307,31 @@ class tableB(QtWidgets.QMainWindow):
             OK = QMessageBox.information(self, ("提示："), ("""员工号最多8位，请检查您的输入！"""))
             return
         if len(str(phone))==11 or len(str(phone))==7:                 #电话号长度检查判断
-            # 开始添加员工信息的数据库操作
-            sc = StaffController()
-            isexist = sc.findStaffByid(StaffNum)                    #判断该员工号是否存在
-            exist = len(isexist.data)
-            if exist>0:
-                OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>该员工号已经存在，请仔细检查您的输入！</font>"""))
-                return
+            if re.match("^[\u4E00-\u9FA5]{2,4}$|^[a-zA-Z\/]{2,20}$", name):    #姓名格式限制
+                if re.match("[\u4e00-\u9fa5]{3,8}$", department):   #部门格式限制
+
+                    # 开始添加员工信息的数据库操作
+                    sc = StaffController()
+                    isexist = sc.findStaffByid(StaffNum)                    #判断该员工号是否存在
+                    exist = len(isexist.data)
+                    if exist>0:
+                        OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>该员工号已经存在，请仔细检查您的输入！</font>"""))
+                        return
+                    else:
+                        result = sc.insertStaff(StaffNum, carNum, name, phone, gender, department)
+                        if result.status == 200:
+                            OK = QMessageBox.information(self, ("提示："), ("""添加成功！"""))
+                            self.clearInput()
+                            self.DB_query()
+                        elif result.status == 400:
+                            OK = QMessageBox.information(self, ("提示："), ("""添加失败！"""))  # 单引号包围font 井号会报错
+
+                else:
+                    OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>部门格式错误，请检查您的输入！</font>"""))
+                    return
             else:
-                result = sc.insertStaff(StaffNum, carNum, name, phone, gender, department)
-                if result.status == 200:
-                    OK = QMessageBox.information(self, ("提示："), ("""添加成功！"""))
-                    self.clearInput()
-                    self.DB_query()
-                elif result.status == 400:
-                    OK = QMessageBox.information(self, ("提示："), ("""添加失败！"""))  # 单引号包围font 井号会报错
+                OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>姓名格式错误，输入为中文或英文名字！</font>"""))
+                return
         else:
             OK = QMessageBox.information(self, ("提示："), ("""电话号位数不正确，应为7位或11位，请检查您的输入！"""))
             return
