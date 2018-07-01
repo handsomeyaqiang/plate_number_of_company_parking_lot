@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import *
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtGui import *
+from PyQt5.QtCore import QTime
 
 
 class nightfee(QtWidgets.QDialog):
@@ -16,12 +17,12 @@ class nightfee(QtWidgets.QDialog):
 
         self.setWindowTitle("修改夜晚停车收费")
         self.setFixedSize(self.width(), self.height())  # 实现禁止窗口最大化和禁止窗口拉伸
-        self.ui.lineEdit.setClearButtonEnabled(True)
-        self.ui.lineEdit_2.setClearButtonEnabled(True)
+        # self.ui.lineEdit.setClearButtonEnabled(True)
+        # self.ui.lineEdit_2.setClearButtonEnabled(True)
         self.ui.lineEdit_3.setClearButtonEnabled(True)
 
-        self.ui.lineEdit.setFixedSize(160, 24)
-        self.ui.lineEdit_2.setFixedSize(160, 24)
+        self.ui.timeEditend.setFixedSize(160, 24)
+        self.ui.timeEditstart.setFixedSize(160, 24)
         self.ui.lineEdit_3.setFixedSize(160, 24)
         self.setWindowIcon(QIcon('2.png'))
 
@@ -40,14 +41,13 @@ class nightfee(QtWidgets.QDialog):
         self.ui.pushButton_2.clicked.connect(self.clearInput)
         self.ShowUpdate()
     def clearInput(self):
-        self.ui.lineEdit.clear()
-        self.ui.lineEdit_2.clear()
+
         self.ui.lineEdit_3.clear()
 
     def updateFee(self):
 
-        startTime = self.ui.lineEdit_2.text()
-        endTime = self.ui.lineEdit.text()
+        startTime = self.ui.timeEditstart.text()
+        endTime = self.ui.timeEditend.text()
         price = self.ui.lineEdit_3.text()
         rulecontrol = ChargeController()
         self.rule.nightbegintime = startTime
@@ -62,10 +62,10 @@ class nightfee(QtWidgets.QDialog):
             self.close()
 
         else:
-            if startTime == '':
-                OK = QMessageBox.warning(self, ("提示"), ("开始时间不能为空！"))
-            if endTime == '':
-                OK = QMessageBox.warning(self, ("提示"), ("结束时间不能为空！"))
+            # if startTime == '':
+            #     OK = QMessageBox.warning(self, ("提示"), ("开始时间不能为空！"))
+            # if endTime == '':
+            #     OK = QMessageBox.warning(self, ("提示"), ("结束时间不能为空！"))
             if price == '':
                 OK = QMessageBox.warning(self, ("提示"), ("每次单价不能为空！"))
 
@@ -81,8 +81,11 @@ class nightfee(QtWidgets.QDialog):
 
     def ShowUpdate(self):
         """更新页面"""
-        self.ui.lineEdit_2.setText(str(self.rule.nightbegintime))
-        self.ui.lineEdit.setText(str(self.rule.nightendtime))
+        beginhour, beginmin, beginsec = str(self.rule.nightbegintime).split(':')
+        self.ui.timeEditstart.setTime(QTime(eval(beginhour), eval(beginmin), eval(beginsec)))
+        # print(self.rule.dayendtime)
+        endhour, endmin, endsec = str(self.rule.nightendtime).split(':')
+        self.ui.timeEditend.setTime(QTime(eval(endhour), eval(endmin), eval(endsec)))
         self.ui.lineEdit_3.setText(str(self.rule.nightprice))
 
 
