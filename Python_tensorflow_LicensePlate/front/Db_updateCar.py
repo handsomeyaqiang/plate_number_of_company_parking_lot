@@ -64,41 +64,45 @@ class Update_Ui(QtWidgets.QDialog):
         if name == '':
             OK = QMessageBox.information(self, ("警告"), ("""车主姓名不能为空"""))
             return
-        if CarNum == '':
-            OK = QMessageBox.information(self, ("警告"), ("""车牌号不能为空"""))
-            return
         if chejia == '':
             OK = QMessageBox.information(self, ("警告"), ("""车架号不能为空"""))
             return
 
-        if re.match("[\u4e00-\u9fa5]{1}[A-Z]{1}[0-9]{4,5}", CarNum):  # 车牌号格式限制
-            if re.match("^[\u4E00-\u9FA5]{2,4}$|^[a-zA-Z\/]{2,20}$", name):  # 姓名格式限制
-                if re.match("[A-Z]+[0-9]", chejia):  # 车架号格式限制
+        if re.match("^[\u4E00-\u9FA5]{2,4}$|^[a-zA-Z\/]{2,20}$", name):  # 姓名格式限制
+            if re.match("[A-Z]+[0-9]", chejia):  # 车架号格式限制
 
-                    sc = StaffController()
-                    result1 = sc.findStaffByid(staffNum)
-                    len2 = len(result1.data)
-                    if len2 == 0:                   # 该员工不存在，不能添加
-                        OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>该员工不存在，无法添加他的车辆信息!</font>"""))
+                vc = VehicleController()
+                sc = StaffController()
+                result1 = sc.findStaffByid(staffNum)
+                len2 = len(result1.data)
+
+                if len2 == 0:                   # 该员工不存在，不能添加
+                    OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>该员工不存在，无法添加他的车辆信息!</font>"""))
+                    return
+                else:
+                    isexist = vc.findVehicleByvehicleid(chejia)     #判断车架号是否唯一
+                    exist = len(isexist.data)
+                    if exist > 1:
+                        OK = QMessageBox.information(self, ("提示："),
+                                                     ("""<font color='red'>该车牌号或车架号已经存在，请仔细检查您的输入！</font>"""))
                         return
                     else:
-                        vc = VehicleController()
                         result = vc.updVehicle(CarNum, name, chejia, staffNum)
                         if result.status == 200:
                             OK = QMessageBox.information(self, ("提示："), ("""修改成功！"""))
                             self.close()
                         elif result.status == 400:
-                            OK = QMessageBox.information(self, ("提示："), ("""修改失败！"""))
+                            OK = QMessageBox.information(self, ("提示："), (
+                                """<font color='red'>修改失败！</font>"""))  # 单引号包围font 井号会报错
+                            self.close()
 
-                else:
-                    OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>车架号格式错误，输入应为字母和数字！</font>"""))
-                    return
             else:
-                OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>姓名格式错误，输入为中文或英文名字！</font>"""))
+                OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>车架号格式错误，输入应为大写字母和数字！</font>"""))
                 return
         else:
-            OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>车牌号格式错误，请检查您的输入！</font>"""))
+            OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>姓名格式错误，输入为中文或英文名字！</font>"""))
             return
+
 
 
     def update(self, id):
