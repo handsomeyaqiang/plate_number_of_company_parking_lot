@@ -31,7 +31,6 @@ class Update_Ui(QtWidgets.QDialog):
         self.setFixedSize(self.width(), self.height())
         # 清除
         self.ui.car_lineEdit.setClearButtonEnabled(True)
-        # self.ui.lineEdit.setClearButtonEnabled(True)
         self.ui.phone_lineEdit.setClearButtonEnabled(True)
         self.ui.name_lineEdit.setClearButtonEnabled(True)
 
@@ -57,7 +56,7 @@ class Update_Ui(QtWidgets.QDialog):
         self.ui.radioButton_2.setChecked(False)
         self.ui.radioButton.setFocusPolicy(Qt.NoFocus)
         self.ui.radioButton_2.setFocusPolicy(Qt.NoFocus)
-    # 更改员工信息， 更改成功后，应该在把更改的信息展示出来，调用Db_Staff函数里的查询所有
+
     def DB_insert(self):
         # 获得界面输入
         StaffNum = self.ui.lineEdit.text()
@@ -85,9 +84,6 @@ class Update_Ui(QtWidgets.QDialog):
         if carNum.isdigit() == False:  # 车辆数检查判断
             OK = QMessageBox.information(self, ("提示："), ("""车辆数必须为数字，请检查您的输入！"""))
             return
-        if StaffNum.isdigit() == False:  # 员工号是否为数字检查判断
-            OK = QMessageBox.information(self, ("提示："), ("""员工号必须为数字，请检查您的输入！"""))
-            return
         if phone.isdigit() == False:  # 电话号是否为数字检查判断
             OK = QMessageBox.information(self, ("提示："), ("""电话号必须为数字，请检查您的输入！"""))
             return
@@ -95,14 +91,22 @@ class Update_Ui(QtWidgets.QDialog):
             OK = QMessageBox.information(self, ("提示："), ("""员工号最多8位，请检查您的输入！"""))
             return
         if len(str(phone)) == 11 or len(str(phone)) == 7:  # 电话号长度检查判断
-            # 开始添加员工信息的数据库操作
-            sc = StaffController()
-            result = sc.updStaff(StaffNum, int(carNum), name, phone, gender, department)
-            if result.status == 200:
-                OK = QMessageBox.information(self, ("提示："), ("""修改成功！"""))
-                self.close()
-            elif result.status == 400:
-                OK = QMessageBox.information(self, ("提示："), ("""修改失败！"""))  # 单引号包围font 井号会报错
+            if re.match("^[\u4E00-\u9FA5]{2,4}$|^[a-zA-Z\/]{2,20}$", name):    #姓名格式限制
+                if re.match("[\u4e00-\u9fa5]{3,8}$", department):   #部门格式限制
+                    # 开始添加员工信息的数据库操作
+                    sc = StaffController()
+                    result = sc.updStaff(StaffNum, int(carNum), name, phone, gender, department)
+                    if result.status == 200:
+                        OK = QMessageBox.information(self, ("提示："), ("""修改成功！"""))
+                        self.close()
+                    elif result.status == 400:
+                        OK = QMessageBox.information(self, ("提示："), ("""修改失败！"""))  # 单引号包围font 井号会报错
+                else:
+                    OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>部门格式错误，请检查您的输入！</font>"""))
+                    return
+            else:
+                OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>姓名格式错误，输入为中文或英文名字！</font>"""))
+                return
         else:
             OK = QMessageBox.information(self, ("提示："), ("""电话号位数不正确，请检查您的输入！"""))
             return
