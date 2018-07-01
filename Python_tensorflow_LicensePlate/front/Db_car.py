@@ -6,6 +6,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from Python_tensorflow_LicensePlate.controller.VehicleController import VehicleController
 from Python_tensorflow_LicensePlate.controller.StaffController import StaffController
+import re
 
 class carManage(QtWidgets.QMainWindow):
     def __init__(self):
@@ -36,7 +37,6 @@ class carManage(QtWidgets.QMainWindow):
         self.ui.num_lineEdit.setClearButtonEnabled(True)
         self.ui.driverNum_lineEdit.setClearButtonEnabled(True)
 
-
         # 槽函数
         self.ui.clear_pushButton.clicked.connect(self.Clear)
         self.ui.add_pushButton.clicked.connect(self.DB_Add)
@@ -46,14 +46,12 @@ class carManage(QtWidgets.QMainWindow):
         self.ui.pushButton_2.clicked.connect(self.lastPage)# 上一页
         self.ui.pushButton_3.clicked.connect(self.nextPage)# 下一页
 
-
     # 上一页
     def lastPage(self):
-        max_value = self.ui.tableWidget.verticalScrollBar().maximum()  # 当前SCROLLER最大显示值
+        max_value = self.ui.tableWidget.verticalScrollBar().maximum()  # 当前SCROLLER垂直滚动条最大显示值   scoller类封装了滚动操作
         self.nCurScroller = self.ui.tableWidget.verticalScrollBar().value()  # 获得当前scroller值
-
         if self.nCurScroller > 0:
-            self.ui.tableWidget.verticalScrollBar().setSliderPosition(self.nCurScroller - self.pageValue)
+            self.ui.tableWidget.verticalScrollBar().setSliderPosition(self.nCurScroller - self.pageValue)    #设置滑动条的位置
         else:
             self.ui.tableWidget.verticalScrollBar().setSliderPosition(max_value)
 
@@ -112,7 +110,7 @@ class carManage(QtWidgets.QMainWindow):
 
     def DB_update(self, id):
         # 引入更新界面
-        self.m = Update_Ui(id)
+        self.m = Update_Ui(id)         #此处传入的参数为车牌号
         self.m.exec()
         if self.flag == 0:
             self.DB_queryAll()
@@ -160,68 +158,84 @@ class carManage(QtWidgets.QMainWindow):
             OK = QMessageBox.information(self, ("警告"), ("""车架号不能为空"""))
             return
 
-        sc = StaffController()
-        result1 = sc.findStaffByid(staffNum)
-        len2 = len(result1.data)
-        if len2==0:                     #该员工不存在，不能添加
-            OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>该员工不存在，无法添加他的车辆信息!</font>"""))
-            # self.Clear()
-            return
-        else:
-            staff = result1.data[0]
-            vnum = staff.vehicleQuantity    #想要添加的员工登记的车辆数
-            vc = VehicleController()
-            result2 = vc.findVehicleByid(staffNum)
-            num = len(result2.data)
+        if re.match("[\u4e00-\u9fa5]{1}[A-Z]{1}[0-9]{4,5}$",carNum):                 #车牌号格式限制
+            if re.match("^[\u4E00-\u9FA5]{2,4}$|^[a-zA-Z\/]{2,20}$", name):  #姓名格式限制
+                if re.match("[A-Z]+[0-9]", driverNum):                          #车架号格式限制
 
-            if num < vnum:                  #登记数量大于已添加的该员工名下的车辆的数量
-                print("可以继续添加")
-                isexist1=vc.findVehicleByplatenumvague(carNum)
-                isexist2=vc.findVehicleByvehicleid(driverNum)
-                exist= len(isexist1.data)
-                exist2=len(isexist2.data)
-                if exist>0 or exist2>0:                    #判断车牌号和车架号是否唯一
-                    OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>该车牌号或车架号已经存在，请仔细检查您的输入！</font>"""))
-                    self.Clear()
-                    return
-                else:
-                    result = vc.insertVehicle(carNum, name, driverNum, staffNum)
-                    if result.status == 200:
-                        OK = QMessageBox.information(self, ("提示："), (""" 添加成功！"""))
-                        self.DB_queryAll()
-                    elif result.status == 400:
-                        OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>添加失败！</font>"""))  # 单引号包围font 井号会报错
-                    self.Clear()
+                    sc = StaffController()
+                    result1 = sc.findStaffByid(staffNum)
+                    len2 = len(result1.data)
+                    if len2 == 0:  # 该员工不存在，不能添加
+                        OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>该员工不存在，无法添加他的车辆信息!</font>"""))
+                        return
+                    else:
+                        staff = result1.data[0]
+                        vnum = staff.vehicleQuantity  # 想要添加的员工登记的车辆数
+                        vc = VehicleController()
+                        result2 = vc.findVehicleByid(staffNum)
+                        num = len(result2.data)
 
-            elif num == vnum:                #登记数量等于已添加的该员工名下的车辆的数量，添加车辆后员工的车辆数也要添加
-                print("该员工已添加满")
-                isexist = vc.findVehicleByplatenumvague(carNum)
-                isexist2 = vc.findVehicleByvehicleid(driverNum)
-                exist = len(isexist.data)
-                exist2 = len(isexist2.data)
-                if exist > 0 or exist2>0:                  #判断车牌号是否唯一
-                    OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>该车牌号或车架号已经存在，请仔细检查您的输入！</font>"""))
-                    self.Clear()
-                    return
+                        if num < vnum:  # 登记数量大于已添加的该员工名下的车辆的数量
+                            print("可以继续添加")
+                            isexist1 = vc.findVehicleByplatenumvague(carNum)
+                            isexist2 = vc.findVehicleByvehicleid(driverNum)
+                            exist = len(isexist1.data)
+                            exist2 = len(isexist2.data)
+                            if exist > 0 or exist2 > 0:  # 判断车牌号和车架号是否唯一
+                                OK = QMessageBox.information(self, ("提示："),
+                                                             ("""<font color='red'>该车牌号或车架号已经存在，请仔细检查您的输入！</font>"""))
+                                return
+                            else:
+                                result = vc.insertVehicle(carNum, name, driverNum, staffNum)
+                                if result.status == 200:
+                                    OK = QMessageBox.information(self, ("提示："), (""" 添加成功！"""))
+                                    self.DB_queryAll()
+                                elif result.status == 400:
+                                    OK = QMessageBox.information(self, ("提示："), (
+                                    """<font color='red'>添加失败！</font>"""))  # 单引号包围font 井号会报错
+                                self.Clear()
+
+                        elif num == vnum:  # 登记数量等于已添加的该员工名下的车辆的数量，添加车辆后员工的车辆数也要添加
+                            print("该员工已添加满")
+                            isexist = vc.findVehicleByplatenumvague(carNum)
+                            isexist2 = vc.findVehicleByvehicleid(driverNum)
+                            exist = len(isexist.data)
+                            exist2 = len(isexist2.data)
+                            if exist > 0 or exist2 > 0:  # 判断车牌号是否唯一
+                                OK = QMessageBox.information(self, ("提示："),
+                                                             ("""<font color='red'>该车牌号或车架号已经存在，请仔细检查您的输入！</font>"""))
+                                return
+                            else:
+                                result = vc.insertVehicle(carNum, name, driverNum, staffNum)
+                                if result.status == 200:
+                                    stanum = num + 1
+                                    sc.updStaff(staff.SID, stanum, staff.name, staff.phoneNumber, staff.gender,
+                                                staff.department)
+                                    OK = QMessageBox.information(self, ("提示："), (""" 添加成功！"""))
+                                    self.DB_queryAll()
+                                elif result.status == 400:
+                                    OK = QMessageBox.information(self, ("提示："), (
+                                    """<font color='red'>添加失败！</font>"""))  # 单引号包围font 井号会报错
+                                self.Clear()
+                        else:
+                            print("错误！")
+                            OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>数据出现问题！未能添加</font>"""))
+                            self.Clear()
+                            return
+
                 else:
-                    result = vc.insertVehicle(carNum, name, driverNum, staffNum)
-                    if result.status == 200:
-                        stanum = num + 1
-                        sc.updStaff(staff.SID, stanum, staff.name, staff.phoneNumber, staff.gender, staff.department)
-                        OK = QMessageBox.information(self, ("提示："), (""" 添加成功！"""))
-                        self.DB_queryAll()
-                    elif result.status == 400:
-                        OK = QMessageBox.information(self, ("提示："),("""<font color='red'>添加失败！</font>"""))  # 单引号包围font 井号会报错
-                    self.Clear()
+                    OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>车架号格式错误，输入应为大写字母和数字！</font>"""))
+                    return
             else:
-                print("错误！")
-                self.Clear()
+                OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>姓名格式错误，输入为中文或英文名字！</font>"""))
                 return
+        else:
+            OK = QMessageBox.information(self, ("提示："), ("""<font color='red'>车牌号格式错误，请检查您的输入！</font>"""))
+            return
 
         # 查询
 
     def QueryBySid(self):
-
         # 获得输入  最好提供姓名和工号都可以查询，或者模糊查询
         text = self.ui.lineEdit_5.text()
 
@@ -249,8 +263,6 @@ class carManage(QtWidgets.QMainWindow):
                         self.ui.tableWidget.setItem(i, j, data)
                         # 数据库因为从0开始计数，所以列数减一
                         if j == len(col) - 1:
-                                    # print(rows[i][0])
-                                    # 传入id rows[i][0]
                             vehicle = result.data[i]
                             self.ui.tableWidget.setCellWidget(i, j + 1,self.buttonForRow(str(vehicle.__getattribute__(col[1]))))
                 self.ui.statusbar.showMessage("查询成功")
@@ -281,8 +293,6 @@ class carManage(QtWidgets.QMainWindow):
                         self.ui.tableWidget.setItem(i, j, data)
                                 # 数据库因为从0开始计数，所以列数减一
                         if j == len(col) - 1:
-                                    # print(rows[i][0])
-                                    # 传入id rows[i][0]
                             vehicle = result.data[i]
                             self.ui.tableWidget.setCellWidget(i, j + 1, self.buttonForRow(
                                 str(vehicle.__getattribute__(col[1]))))
@@ -313,8 +323,6 @@ class carManage(QtWidgets.QMainWindow):
                         self.ui.tableWidget.setItem(i, j, data)
                         # 数据库因为从0开始计数，所以列数减一
                         if j == len(col) - 1:
-                            # print(rows[i][0])
-                            # 传入id rows[i][0]
                             vehicle = result.data[i]
                             self.ui.tableWidget.setCellWidget(i, j + 1, self.buttonForRow(
                                 str(vehicle.__getattribute__(col[1]))))
@@ -345,8 +353,6 @@ class carManage(QtWidgets.QMainWindow):
                         self.ui.tableWidget.setItem(i, j, data)
                         # 数据库因为从0开始计数，所以列数减一
                         if j == len(col) - 1:
-                            # print(rows[i][0])
-                            # 传入id rows[i][0]
                             vehicle = result.data[i]
                             self.ui.tableWidget.setCellWidget(i, j + 1, self.buttonForRow(
                                 str(vehicle.__getattribute__(col[1]))))
@@ -382,8 +388,6 @@ class carManage(QtWidgets.QMainWindow):
                     self.ui.tableWidget.setItem(i, j, data)
                     # 数据库因为从0开始计数，所以列数减一
                     if j == len(col) - 1:
-                        # print(rows[i][0])
-                        # 传入id rows[i][0]
                         vehicle = result.data[i]
                         self.ui.tableWidget.setCellWidget(i, j + 1,self.buttonForRow(str(vehicle.__getattribute__(col[1]))))
             self.ui.statusbar.showMessage("查询成功")
