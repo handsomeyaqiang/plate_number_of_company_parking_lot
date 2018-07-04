@@ -41,9 +41,9 @@ class SeatManage(QtWidgets.QDialog):
 
         self.ui.lineEdit_3.setClearButtonEnabled(True)
         self.ui.lineEdit_2.setClearButtonEnabled(True)
-        pixmap = QPixmap("cz2.jpg")  # 按指定路径找到图片，注意路径必须用双引号包围，不能用单引号
-        self.ui.label.setPixmap(pixmap)  # 在label上显示图片
-        self.ui.label.setScaledContents(True)  # 让图片自适应label大小
+        # pixmap = QPixmap("cz2.jpg")  # 按指定路径找到图片，注意路径必须用双引号包围，不能用单引号
+        # self.ui.label.setPixmap(pixmap)  # 在label上显示图片
+        # self.ui.label.setScaledContents(True)  # 让图片自适应label大小
 
         palette = QPalette()
         icon = QPixmap('cz2.jpg').scaled(800, 600)

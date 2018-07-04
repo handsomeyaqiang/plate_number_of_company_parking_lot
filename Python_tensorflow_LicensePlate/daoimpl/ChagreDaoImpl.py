@@ -56,8 +56,8 @@ class ChargeRulesDaoImpl(ChargeRulesDao):
             et = at1
             st = datetime.datetime.fromtimestamp(starttime)
             # 白天计费结束时间
-            a = "{0}-{1}-{2} {3}".format(st.year, st.month, st.day - 1, rule.dayendtime)
-            at = totime(a)
+            a = "{0}-{1}-{2} {3}".format(st.year, st.month, st.day, rule.dayendtime)
+            at = totime(a)-86400.0
         if endtime > et:
             print(endtime,et)
             money += ChargeRulesDaoImpl().chargemoney(rule, starttime, et)
@@ -90,5 +90,5 @@ class ChargeRulesDaoImpl(ChargeRulesDao):
         return money
 if __name__ == '__main__':
     rule = ChargeRulesDaoImpl().showRules()
-    m =  ChargeRulesDaoImpl().chargemoney(rule,totime('2018-06-30 5:40:20'),totime('2018-7-01 08:40:20'))
+    m =  ChargeRulesDaoImpl().chargemoney(rule,totime('2018-07-01 5:40:20'),totime('2018-7-03 08:40:20'))
     print(m)

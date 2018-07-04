@@ -96,10 +96,10 @@ class Finance(QtWidgets.QMainWindow):
         self.ui.graphicsView.hide()
         self.ui.tableWidget.hide()
 
-        self.gif = QMovie('f5.gif')
-        self.ui.label_3.setScaledContents(True)
-        self.ui.label_3.setMovie(self.gif)
-        self.gif.start()
+        # self.gif = QMovie('f5.gif')
+        # self.ui.label_3.setScaledContents(True)
+        # self.ui.label_3.setMovie(self.gif)
+        # self.gif.start()
         # 动态显示时间在label上
         timer = QtCore.QTimer(self)
         timer.timeout.connect(self.showtime)
