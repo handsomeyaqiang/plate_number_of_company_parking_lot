@@ -32,9 +32,11 @@ class trainLetter:
         self.x_image = tf.reshape(self.x, [-1, self.WIDTH, self.HEIGHT, 1])
 
 
-    # 卷积函数
+    # 隐藏层函数
     def conv_layer(self, inputs, W, b, conv_strides, kernel_size, pool_strides, padding):
+        # 卷积
         L1_conv = tf.nn.conv2d(inputs, W, strides=conv_strides, padding=padding)
+        # 池化
         L1_relu = tf.nn.relu(L1_conv + b)
         return tf.nn.max_pool(L1_relu, ksize=kernel_size, strides=pool_strides, padding='SAME')
 
@@ -120,7 +122,7 @@ class trainLetter:
             hot += 1
 
         with tf.Session() as sess:
-            # 第一个卷积层
+            # 隐藏层一
             W_conv1 = tf.Variable(tf.truncated_normal([8, 8, 1, 16], stddev=0.1), name="W_conv1")
             b_conv1 = tf.Variable(tf.constant(0.1, shape=[16]), name="b_conv1")
             conv_strides = [1, 1, 1, 1]
@@ -128,7 +130,7 @@ class trainLetter:
             pool_strides = [1, 2, 2, 1]
             L1_pool = self.conv_layer(self.x_image, W_conv1, b_conv1, conv_strides, kernel_size, pool_strides, padding='SAME')
 
-            # 第二个卷积层
+            # 隐藏层二
             W_conv2 = tf.Variable(tf.truncated_normal([5, 5, 16, 32], stddev=0.1), name="W_conv2")
             b_conv2 = tf.Variable(tf.constant(0.1, shape=[32]), name="b_conv2")
             conv_strides = [1, 1, 1, 1]
@@ -136,18 +138,27 @@ class trainLetter:
             pool_strides = [1, 1, 1, 1]
             L2_pool = self.conv_layer(L1_pool, W_conv2, b_conv2, conv_strides, kernel_size, pool_strides, padding='SAME')
 
+            # 隐藏层三
+            # W_conv3 = tf.Variable(tf.truncated_normal([5, 5, 32, 64], stddev=0.1), name="W_conv3")
+            # b_conv3 = tf.Variable(tf.constant(0.1, shape=[64]), name="b_conv3")
+            # conv_strides = [1, 1, 1, 1]
+            # kernel_size = [1, 1, 1, 1]
+            # pool_strides = [1, 1, 1, 1]
+            # L3_pool = self.conv_layer(L2_pool, W_conv3, b_conv3, conv_strides, kernel_size, pool_strides, padding='SAME')
+            #
+
             # 全连接层
             W_fc1 = tf.Variable(tf.truncated_normal([16 * 20 * 32, 512], stddev=0.1), name="W_fc1")
             b_fc1 = tf.Variable(tf.constant(0.1, shape=[512]), name="b_fc1")
             h_pool2_flat = tf.reshape(L2_pool, [-1, 16 * 20 * 32])
             h_fc1 = self.full_connect(h_pool2_flat, W_fc1, b_fc1)
 
-            # dropout
+            # dropout过拟合
             keep_prob = tf.placeholder(tf.float32)
 
             h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob)
 
-            # readout层
+            # 输出层
             W_fc2 = tf.Variable(tf.truncated_normal([512, self.letter_NUM_CLASSES], stddev=0.1), name="W_fc2")
             b_fc2 = tf.Variable(tf.constant(0.1, shape=[self.letter_NUM_CLASSES]), name="b_fc2")
 
