@@ -90,5 +90,5 @@ class ChargeRulesDaoImpl(ChargeRulesDao):
         return money
 if __name__ == '__main__':
     rule = ChargeRulesDaoImpl().showRules()
-    m =  ChargeRulesDaoImpl().chargemoney(rule,totime('2018-06-30 5:40:20'),totime('2018-7-01 08:40:20'))
+    m =  ChargeRulesDaoImpl().chargemoney(rule,totime('2018-07-01 5:40:20'),totime('2018-7-03 08:40:20'))
     print(m)

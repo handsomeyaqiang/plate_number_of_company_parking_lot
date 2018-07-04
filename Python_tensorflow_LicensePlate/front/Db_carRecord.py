@@ -111,7 +111,7 @@ class CarRecord(QWidget):
                 self.ui.tableWidget.setSelectionBehavior(QTableWidget.SelectRows)  # 选中行
                 self.ui.tableWidget.setEditTriggers(QTableWidget.NoEditTriggers)  # 将单元格设为不可更改类型
                 for i in range(row):
-                    for j in range(len(col)-1):
+                    for j in range(len(col)):
                         record = result.data[i]
                         temp_data = record.__getattribute__(col[j])  # 临时记录，不能直接插入表格
                         if temp_data == 0:
